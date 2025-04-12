@@ -75,11 +75,12 @@ public class JframeEmpManagement extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(86, 98, 106));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jPanel2.setBackground(new java.awt.Color(86, 98, 106));
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 2, true));
         jPanel2.setPreferredSize(new java.awt.Dimension(586, 50));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 183, 229));
         jLabel1.setText("EMPLOYEE LIST");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -101,6 +102,7 @@ public class JframeEmpManagement extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         jPanel2.add(jButton1, gridBagConstraints);
 
         jTextField1.setText("Search by ID..");
@@ -108,6 +110,7 @@ public class JframeEmpManagement extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         jPanel2.add(jTextField1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -120,7 +123,7 @@ public class JframeEmpManagement extends javax.swing.JFrame {
         jPanel1.add(jPanel2, gridBagConstraints);
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 2, true));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -157,7 +160,7 @@ public class JframeEmpManagement extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(15, 15, 15, 15);
+        gridBagConstraints.insets = new java.awt.Insets(8, 8, 8, 8);
         jPanel3.add(jScrollPane1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();

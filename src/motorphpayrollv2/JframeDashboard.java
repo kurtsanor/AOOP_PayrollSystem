@@ -5,6 +5,8 @@
 package motorphpayrollv2;
 
 import java.awt.Image;
+import java.time.LocalDate;
+import java.time.Month;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
@@ -22,7 +24,8 @@ public class JframeDashboard extends javax.swing.JFrame {
         setExtendedState(MAXIMIZED_BOTH);
         addPic();
         loadInfo();
-       
+        
+ 
     }
     
     private void addPic () {
@@ -256,6 +259,11 @@ public class JframeDashboard extends javax.swing.JFrame {
         jPanelLeft.add(jButtonAttendance, gridBagConstraints);
 
         jButtonPayroll.setText("Payroll");
+        jButtonPayroll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPayrollActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -266,6 +274,11 @@ public class JframeDashboard extends javax.swing.JFrame {
         jPanelLeft.add(jButtonPayroll, gridBagConstraints);
 
         jButtonLeave.setText("Leave");
+        jButtonLeave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonLeaveActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -301,6 +314,11 @@ public class JframeDashboard extends javax.swing.JFrame {
         jPanelLeft.add(jButtonAttendanceManagement, gridBagConstraints);
 
         jButtonLeaveManagement.setText("Leave Management");
+        jButtonLeaveManagement.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonLeaveManagementActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
@@ -682,6 +700,21 @@ public class JframeDashboard extends javax.swing.JFrame {
         this.dispose();
         new JframeEmpManagement().setVisible(true);
     }//GEN-LAST:event_jButtonEmployeeManagementActionPerformed
+
+    private void jButtonLeaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLeaveActionPerformed
+        this.dispose();
+        new JframeLeave().setVisible(true);
+    }//GEN-LAST:event_jButtonLeaveActionPerformed
+
+    private void jButtonLeaveManagementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLeaveManagementActionPerformed
+        this.dispose();
+        new JframeLeaveManagement().setVisible(true);
+    }//GEN-LAST:event_jButtonLeaveManagementActionPerformed
+
+    private void jButtonPayrollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPayrollActionPerformed
+        this.dispose();
+        new JframePayslip().setVisible(true);
+    }//GEN-LAST:event_jButtonPayrollActionPerformed
 
     /**
      * @param args the command line arguments

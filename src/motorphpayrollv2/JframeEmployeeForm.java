@@ -18,6 +18,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
     public JframeEmployeeForm() {
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
+        showErrorLabels(false);
     }
 
     /**
@@ -83,6 +84,8 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         jLabelRiceSubisdyError = new javax.swing.JLabel();
         jLabelPhoneAllowanceError = new javax.swing.JLabel();
         jLabelClothingAllowanceError = new javax.swing.JLabel();
+        jButtonDiscard = new javax.swing.JButton();
+        jButtonSave = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
         jTextField1SssNumber = new javax.swing.JTextField();
@@ -93,8 +96,6 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         jLabel19 = new javax.swing.JLabel();
         jTextFieldPagibigNumber = new javax.swing.JTextField();
         jPanel9 = new javax.swing.JPanel();
-        jButtonSave = new javax.swing.JButton();
-        jButtonDiscard = new javax.swing.JButton();
         jLabelSssNumberError = new javax.swing.JLabel();
         jLabelPhilhealthNumberError = new javax.swing.JLabel();
         jLabelPagibigNumberError = new javax.swing.JLabel();
@@ -122,7 +123,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(86, 98, 106));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setBackground(new java.awt.Color(86, 98, 106));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         jPanel4.setBackground(new java.awt.Color(86, 98, 106));
@@ -150,7 +151,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(9, 12, 2, 12);
         jPanel4.add(jLabel3, gridBagConstraints);
 
-        jTextFieldFirstName.setPreferredSize(new java.awt.Dimension(200, 40));
+        jTextFieldFirstName.setPreferredSize(new java.awt.Dimension(200, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -159,12 +160,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(8, 12, 2, 12);
         jPanel4.add(jTextFieldFirstName, gridBagConstraints);
 
-        jTextFieldLastName.setPreferredSize(new java.awt.Dimension(200, 40));
-        jTextFieldLastName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldLastNameActionPerformed(evt);
-            }
-        });
+        jTextFieldLastName.setPreferredSize(new java.awt.Dimension(200, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -195,7 +191,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(8, 12, 2, 12);
         jPanel4.add(jLabel5, gridBagConstraints);
 
-        jDateChooserBirthday.setPreferredSize(new java.awt.Dimension(200, 40));
+        jDateChooserBirthday.setPreferredSize(new java.awt.Dimension(200, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -204,7 +200,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(8, 12, 2, 12);
         jPanel4.add(jDateChooserBirthday, gridBagConstraints);
 
-        jTextFieldPhoneNumber.setPreferredSize(new java.awt.Dimension(200, 40));
+        jTextFieldPhoneNumber.setPreferredSize(new java.awt.Dimension(200, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -224,7 +220,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(8, 12, 2, 12);
         jPanel4.add(jLabel6, gridBagConstraints);
 
-        jTextFieldAddress.setPreferredSize(new java.awt.Dimension(200, 40));
+        jTextFieldAddress.setPreferredSize(new java.awt.Dimension(200, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
@@ -244,7 +240,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(8, 12, 2, 12);
         jPanel4.add(jLabel7, gridBagConstraints);
 
-        jTextFieldStatus.setPreferredSize(new java.awt.Dimension(200, 40));
+        jTextFieldStatus.setPreferredSize(new java.awt.Dimension(200, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
@@ -262,7 +258,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(8, 12, 2, 12);
         jPanel4.add(jLabel8, gridBagConstraints);
 
-        jTextFieldPosition.setPreferredSize(new java.awt.Dimension(200, 40));
+        jTextFieldPosition.setPreferredSize(new java.awt.Dimension(200, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 10;
@@ -280,7 +276,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(8, 12, 2, 12);
         jPanel4.add(jLabel9, gridBagConstraints);
 
-        jTextFieldRole.setPreferredSize(new java.awt.Dimension(200, 40));
+        jTextFieldRole.setPreferredSize(new java.awt.Dimension(200, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 13;
@@ -298,12 +294,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(8, 12, 2, 12);
         jPanel4.add(jLabel10, gridBagConstraints);
 
-        jTextFieldSupervisor.setPreferredSize(new java.awt.Dimension(200, 40));
-        jTextFieldSupervisor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldSupervisorActionPerformed(evt);
-            }
-        });
+        jTextFieldSupervisor.setPreferredSize(new java.awt.Dimension(200, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 13;
@@ -414,7 +405,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(8, 12, 2, 12);
         jPanel5.add(jLabel11, gridBagConstraints);
 
-        jTextFieldBasicSalary.setPreferredSize(new java.awt.Dimension(200, 40));
+        jTextFieldBasicSalary.setPreferredSize(new java.awt.Dimension(200, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -436,12 +427,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(8, 12, 2, 12);
         jPanel5.add(jLabel12, gridBagConstraints);
 
-        jTextFieldGrossSemiMonthly.setPreferredSize(new java.awt.Dimension(200, 40));
-        jTextFieldGrossSemiMonthly.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldGrossSemiMonthlyActionPerformed(evt);
-            }
-        });
+        jTextFieldGrossSemiMonthly.setPreferredSize(new java.awt.Dimension(200, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -463,7 +449,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(8, 12, 2, 12);
         jPanel5.add(jLabel13, gridBagConstraints);
 
-        jTextFieldRiceSubsidy.setPreferredSize(new java.awt.Dimension(200, 40));
+        jTextFieldRiceSubsidy.setPreferredSize(new java.awt.Dimension(200, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
@@ -485,7 +471,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(8, 12, 2, 12);
         jPanel5.add(jLabel14, gridBagConstraints);
 
-        jTextFieldPhoneAllowance.setPreferredSize(new java.awt.Dimension(200, 40));
+        jTextFieldPhoneAllowance.setPreferredSize(new java.awt.Dimension(200, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
@@ -507,7 +493,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(8, 12, 2, 12);
         jPanel5.add(jLabel15, gridBagConstraints);
 
-        jTextFieldHourlyRate.setPreferredSize(new java.awt.Dimension(200, 40));
+        jTextFieldHourlyRate.setPreferredSize(new java.awt.Dimension(200, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -525,7 +511,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(8, 12, 2, 12);
         jPanel5.add(jLabel21, gridBagConstraints);
 
-        jTextFieldClothingAllowance.setPreferredSize(new java.awt.Dimension(200, 40));
+        jTextFieldClothingAllowance.setPreferredSize(new java.awt.Dimension(200, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 8;
@@ -594,6 +580,46 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.gridy = 9;
         jPanel5.add(jLabelClothingAllowanceError, gridBagConstraints);
 
+        jButtonDiscard.setBackground(new java.awt.Color(153, 0, 0));
+        jButtonDiscard.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButtonDiscard.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonDiscard.setText("DISCARD");
+        jButtonDiscard.setPreferredSize(new java.awt.Dimension(200, 40));
+        jButtonDiscard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDiscardActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 7, 0, 7);
+        jPanel5.add(jButtonDiscard, gridBagConstraints);
+
+        jButtonSave.setBackground(new java.awt.Color(0, 183, 229));
+        jButtonSave.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButtonSave.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonSave.setText("SAVE");
+        jButtonSave.setPreferredSize(new java.awt.Dimension(200, 40));
+        jButtonSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSaveActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 7, 0, 7);
+        jPanel5.add(jButtonSave, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -615,7 +641,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(13, 10, 0, 10);
         jPanel6.add(jLabel16, gridBagConstraints);
 
-        jTextField1SssNumber.setPreferredSize(new java.awt.Dimension(200, 40));
+        jTextField1SssNumber.setPreferredSize(new java.awt.Dimension(200, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -637,12 +663,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(13, 10, 0, 10);
         jPanel6.add(jLabel17, gridBagConstraints);
 
-        jTextFieldPhilhealthNumber.setPreferredSize(new java.awt.Dimension(200, 40));
-        jTextFieldPhilhealthNumber.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldPhilhealthNumberActionPerformed(evt);
-            }
-        });
+        jTextFieldPhilhealthNumber.setPreferredSize(new java.awt.Dimension(200, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -664,7 +685,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(15, 10, 0, 10);
         jPanel6.add(jLabel18, gridBagConstraints);
 
-        jTextFieldTinNumber.setPreferredSize(new java.awt.Dimension(200, 40));
+        jTextFieldTinNumber.setPreferredSize(new java.awt.Dimension(200, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -686,7 +707,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(15, 10, 0, 10);
         jPanel6.add(jLabel19, gridBagConstraints);
 
-        jTextFieldPagibigNumber.setPreferredSize(new java.awt.Dimension(200, 40));
+        jTextFieldPagibigNumber.setPreferredSize(new java.awt.Dimension(200, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -712,41 +733,6 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(3, 0, 0, 0);
         jPanel6.add(jPanel9, gridBagConstraints);
-
-        jButtonSave.setBackground(new java.awt.Color(0, 183, 229));
-        jButtonSave.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButtonSave.setForeground(new java.awt.Color(255, 255, 255));
-        jButtonSave.setText("SAVE");
-        jButtonSave.setPreferredSize(new java.awt.Dimension(200, 40));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 7, 0, 7);
-        jPanel6.add(jButtonSave, gridBagConstraints);
-
-        jButtonDiscard.setBackground(new java.awt.Color(153, 0, 0));
-        jButtonDiscard.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButtonDiscard.setForeground(new java.awt.Color(255, 255, 255));
-        jButtonDiscard.setText("DISCARD");
-        jButtonDiscard.setPreferredSize(new java.awt.Dimension(200, 40));
-        jButtonDiscard.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonDiscardActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 7, 0, 7);
-        jPanel6.add(jButtonDiscard, gridBagConstraints);
 
         jLabelSssNumberError.setForeground(new java.awt.Color(255, 102, 102));
         jLabelSssNumberError.setText("This is required");
@@ -794,27 +780,36 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextFieldLastNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldLastNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldLastNameActionPerformed
-
-    private void jTextFieldGrossSemiMonthlyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldGrossSemiMonthlyActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldGrossSemiMonthlyActionPerformed
-
-    private void jTextFieldPhilhealthNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldPhilhealthNumberActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldPhilhealthNumberActionPerformed
-
-    private void jTextFieldSupervisorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldSupervisorActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldSupervisorActionPerformed
-
     private void jButtonDiscardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDiscardActionPerformed
         this.dispose();
         new JframeEmpManagement().setVisible(true);
     }//GEN-LAST:event_jButtonDiscardActionPerformed
 
+    private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
+        showErrorLabels(true);
+    }//GEN-LAST:event_jButtonSaveActionPerformed
+    
+    private void showErrorLabels (boolean visible) {
+        jLabelFirstNameError.setVisible(visible);
+        jLabelLastNameError.setVisible(visible);
+        jLabelBirthdayError.setVisible(visible);
+        jLabelPhoneNumberError.setVisible(visible);
+        jLabelAddressError.setVisible(visible);
+        jLabelStatusError.setVisible(visible);
+        jLabelPositionError.setVisible(visible);
+        jLabelRoleError.setVisible(visible);
+        jLabelSupervisorError.setVisible(visible);
+        jLabelBasicSalaryError.setVisible(visible);
+        jLabelHourlyRateError.setVisible(visible);
+        jLabelPhoneAllowanceError.setVisible(visible);
+        jLabelGrossSemiMonthlyError.setVisible(visible);
+        jLabelRiceSubisdyError.setVisible(visible);
+        jLabelClothingAllowanceError.setVisible(visible);
+        jLabelSssNumberError.setVisible(visible);
+        jLabelPagibigNumberError.setVisible(visible);
+        jLabelPhilhealthNumberError.setVisible(visible);
+        jLabelTinNumberError.setVisible(visible); 
+    }
     /**
      * @param args the command line arguments
      */
