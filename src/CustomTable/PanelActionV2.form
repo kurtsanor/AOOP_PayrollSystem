@@ -19,7 +19,7 @@
     <Component class="CustomTable.ActionButton" name="actionButtonApprove">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/Images/pen (2).png"/>
+          <Image iconType="3" name="/Images/check.png"/>
         </Property>
       </Properties>
       <Constraints>
@@ -31,7 +31,7 @@
     <Component class="CustomTable.ActionButton" name="actionButtonDeny">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/Images/remove.png"/>
+          <Image iconType="3" name="/Images/x.png"/>
         </Property>
       </Properties>
       <Constraints>

@@ -50,7 +50,7 @@ public class PanelActionV2 extends javax.swing.JPanel {
 
         setLayout(new java.awt.GridBagLayout());
 
-        actionButtonApprove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/pen (2).png"))); // NOI18N
+        actionButtonApprove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/check.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -60,7 +60,7 @@ public class PanelActionV2 extends javax.swing.JPanel {
         gridBagConstraints.weighty = 1.0;
         add(actionButtonApprove, gridBagConstraints);
 
-        actionButtonDeny.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/remove.png"))); // NOI18N
+        actionButtonDeny.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/x.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;

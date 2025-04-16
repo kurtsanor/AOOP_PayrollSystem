@@ -5,10 +5,7 @@
 package Jframes;
 
 import java.awt.Image;
-import java.time.LocalDate;
-import java.time.Month;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import oopClasses.Employee;
 import oopClasses.EmployeeDatabase;
 import java.sql.Connection;
@@ -144,17 +141,18 @@ public class JframeDashboard extends javax.swing.JFrame {
         jPanel6 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        jButtonClockIn = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        jButtonClockOut = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        jButtonLogout = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jPanelTop = new javax.swing.JPanel();
+        jLabel15 = new javax.swing.JLabel();
         jPanelMid = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
@@ -370,7 +368,7 @@ public class JframeDashboard extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 183, 229));
-        jLabel2.setText(" GRAPH");
+        jLabel2.setText(" TIMELINE | EVENTS");
         jLabel2.setPreferredSize(new java.awt.Dimension(89, 35));
         jPanel4.add(jLabel2, java.awt.BorderLayout.CENTER);
 
@@ -399,7 +397,7 @@ public class JframeDashboard extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 1, 2);
         jPanelLeft.add(jPanel5, gridBagConstraints);
 
         getContentPane().add(jPanelLeft, java.awt.BorderLayout.LINE_START);
@@ -450,7 +448,7 @@ public class JframeDashboard extends javax.swing.JFrame {
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 183, 229));
-        jLabel6.setText(" TIME LOGGING");
+        jLabel6.setText(" ACTION PANEL");
         jPanel6.add(jLabel6, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -464,29 +462,29 @@ public class JframeDashboard extends javax.swing.JFrame {
         jPanel7.setBackground(new java.awt.Color(21, 36, 46));
         jPanel7.setLayout(new java.awt.GridLayout(3, 2));
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/pen (2).png"))); // NOI18N
-        jPanel7.add(jButton1);
+        jButtonClockIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/time (1).png"))); // NOI18N
+        jPanel7.add(jButtonClockIn);
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 183, 229));
         jLabel9.setText(" Clock In");
         jPanel7.add(jLabel9);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/eye.png"))); // NOI18N
-        jPanel7.add(jButton2);
+        jButtonClockOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/clock (2).png"))); // NOI18N
+        jPanel7.add(jButtonClockOut);
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 183, 229));
         jLabel10.setText(" Clock Out");
         jPanel7.add(jLabel10);
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/remove.png"))); // NOI18N
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        jButtonLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/logout (3).png"))); // NOI18N
+        jButtonLogout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                jButtonLogoutActionPerformed(evt);
             }
         });
-        jPanel7.add(jButton3);
+        jPanel7.add(jButtonLogout);
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(0, 183, 229));
@@ -539,17 +537,10 @@ public class JframeDashboard extends javax.swing.JFrame {
 
         jPanelTop.setBackground(new java.awt.Color(204, 204, 204));
         jPanelTop.setPreferredSize(new java.awt.Dimension(653, 20));
+        jPanelTop.setLayout(new java.awt.BorderLayout());
 
-        javax.swing.GroupLayout jPanelTopLayout = new javax.swing.GroupLayout(jPanelTop);
-        jPanelTop.setLayout(jPanelTopLayout);
-        jPanelTopLayout.setHorizontalGroup(
-            jPanelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 869, Short.MAX_VALUE)
-        );
-        jPanelTopLayout.setVerticalGroup(
-            jPanelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
-        );
+        jLabel15.setText(" @MotorPH");
+        jPanelTop.add(jLabel15, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(jPanelTop, java.awt.BorderLayout.PAGE_START);
 
@@ -744,12 +735,12 @@ public class JframeDashboard extends javax.swing.JFrame {
 
     private void jButtonLeaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLeaveActionPerformed
         this.dispose();
-        new JframeLeave().setVisible(true);
+        new JframeLeave(loggedEmployee).setVisible(true);
     }//GEN-LAST:event_jButtonLeaveActionPerformed
 
     private void jButtonLeaveManagementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLeaveManagementActionPerformed
         this.dispose();
-        new JframeLeaveManagement().setVisible(true);
+        new JframeLeaveManagement(loggedEmployee).setVisible(true);
     }//GEN-LAST:event_jButtonLeaveManagementActionPerformed
 
     private void jButtonPayrollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPayrollActionPerformed
@@ -757,10 +748,10 @@ public class JframeDashboard extends javax.swing.JFrame {
         new JframePayslip().setVisible(true);
     }//GEN-LAST:event_jButtonPayrollActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButtonLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLogoutActionPerformed
         this.dispose();
         new JframeLogin().setVisible(true);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_jButtonLogoutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -768,7 +759,6 @@ public class JframeDashboard extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton14;
@@ -777,13 +767,14 @@ public class JframeDashboard extends javax.swing.JFrame {
     private javax.swing.JButton jButton17;
     private javax.swing.JButton jButton18;
     private javax.swing.JButton jButton19;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButtonAttendance;
     private javax.swing.JButton jButtonAttendanceManagement;
+    private javax.swing.JButton jButtonClockIn;
+    private javax.swing.JButton jButtonClockOut;
     private javax.swing.JButton jButtonEmployeeManagement;
     private javax.swing.JButton jButtonLeave;
     private javax.swing.JButton jButtonLeaveManagement;
+    private javax.swing.JButton jButtonLogout;
     private javax.swing.JButton jButtonPayroll;
     private com.toedter.calendar.JCalendar jCalendar1;
     private javax.swing.JLabel jLabel1;
@@ -792,6 +783,7 @@ public class JframeDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;

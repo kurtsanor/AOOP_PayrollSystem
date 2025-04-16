@@ -4,6 +4,21 @@
  */
 package Jframes;
 
+import Domains.LeaveBalance;
+import Domains.LeaveRequest;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import oopClasses.DatabaseConnection;
+import oopClasses.Employee;
+import oopClasses.LeaveCreditsDatabase;
+import oopClasses.LeaveRequestValidator;
+
 /**
  *
  * @author keith
@@ -13,12 +28,161 @@ public class JframeLeave extends javax.swing.JFrame {
     /**
      * Creates new form JframeLeave
      */
-    public JframeLeave() {
+    private Employee loggedEmployee;
+    private DefaultTableModel leaveTbl;
+    private LeaveCreditsDatabase leaveCreditsDB;
+    private LeaveBalance personalLeaveCredits;
+    private SimpleDateFormat dateFormat;
+    public JframeLeave(Employee loggedEmployee) {
+        this.leaveCreditsDB = new LeaveCreditsDatabase(DatabaseConnection.Connect());
+        this.loggedEmployee = loggedEmployee;
+        this.dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         initComponents();
+        this.leaveTbl = (DefaultTableModel) jTableLeaveHistory.getModel();
         jPanel3.setVisible(false);
         setExtendedState(MAXIMIZED_BOTH);
+        loadPersonalLeaves();
+        loadPersonalLeaveCredits();
+        syncLeaveCreditsToLabels();
+        hideErrorLables();
+        configureDateChoosers();
     }
-
+    
+    
+    private void configureDateChoosers () {
+        ((JTextField) jDateChooserStartDate.getDateEditor().getUiComponent()).setEditable(false);
+        ((JTextField) jDateChooserEndDate.getDateEditor().getUiComponent()).setEditable(false);
+    }
+    
+    private void syncLeaveCreditsToLabels () {
+        jLabelVacationLeaveBalance.setText(String.valueOf(personalLeaveCredits.getVacationLeaveCredits()));
+        jLabelMedicalLeaveBalance.setText(String.valueOf(personalLeaveCredits.getMedicalLeaveCredits()));
+        jLabelPersonalLeaveBalance.setText(String.valueOf(personalLeaveCredits.getPersonalLeaveCredits()));     
+    }
+    
+    private void loadPersonalLeaveCredits () {
+        this.personalLeaveCredits = leaveCreditsDB.getLeaveCreditsByEmpID(loggedEmployee.getID());
+    }
+    
+    private void loadPersonalLeaves () {
+        List <LeaveRequest> leaveRecords = loggedEmployee.viewPersonalLeaves(loggedEmployee.getID());
+        
+        for (LeaveRequest request: leaveRecords) {
+            leaveTbl.addRow(new Object [] {
+                request.getLeaveID(),
+                request.getLeaveType(),
+                request.getStartDate(),
+                request.getEndDate(),
+                request.getStatus(),
+                request.getSubmittedDate(),
+                request.getProcessedDate(),
+                request.getRemarks()});
+        }       
+    }
+    
+    private void clearTable () {
+        leaveTbl.setRowCount(0);
+    }
+    
+    private void hideErrorLables () {
+        jLabelLeaveTypeError.setVisible(false);
+        jLabelStartDateError.setVisible(false);
+        jLabelEndDateError.setVisible(false);
+        jLabelRemarksError.setVisible(false);
+    }
+    
+    private void clearInputFields () {
+        jDateChooserStartDate.setDate(null);
+        jDateChooserEndDate.setDate(null);
+        jTextFieldRemarks.setText(null);
+    }
+    
+    private void submitLeave () {
+        LocalDateTime dateTimeNow = LocalDateTime.now();
+        Date start = jDateChooserStartDate.getDate();       
+        LocalDate startDate = start != null ? LocalDate.parse(dateFormat.format(start)) : null;
+        Date end = jDateChooserEndDate.getDate();
+        LocalDate endDate = end != null ? LocalDate.parse(dateFormat.format(end)) : null;
+        
+        LeaveRequest request = new LeaveRequest(
+            loggedEmployee.getID(),
+            jComboBoxLeaveType.getSelectedItem().toString().trim(),
+            startDate,
+            endDate,
+            "Pending",
+            dateTimeNow,
+            jTextFieldRemarks.getText());
+        
+        boolean requestSuccessful = loggedEmployee.requestForLeave(request);
+        
+        if (requestSuccessful) {
+            JOptionPane.showMessageDialog(this, "Leave Request has been Submitted", "Submitted", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "An error occured while submitting your request", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void validateThenSubmitLeave () {        
+        boolean validRequest = true;
+        String errorMessage;
+        
+        Date unparsedStartDate = jDateChooserStartDate.getDate();       
+        LocalDate startDate = unparsedStartDate != null ? LocalDate.parse(dateFormat.format(unparsedStartDate)) : null;
+        Date unparsedEndDate = jDateChooserEndDate.getDate();
+        LocalDate endDate = unparsedEndDate != null ? LocalDate.parse(dateFormat.format(unparsedEndDate)) : null;
+        String leaveType = jComboBoxLeaveType.getSelectedItem().toString();
+        
+        errorMessage = LeaveRequestValidator.validateStartDateWithMessage(startDate, endDate);
+        setStartDateErorrMessage(errorMessage);
+        if (!errorMessage.isBlank()) validRequest = false;
+        
+        errorMessage = LeaveRequestValidator.validateEndDateWithMessage(startDate, endDate);
+        setEndDateErorrMessage(errorMessage);
+        if (!errorMessage.isBlank()) validRequest = false;
+        
+        errorMessage = LeaveRequestValidator.validateRemarksWithMessage(jTextFieldRemarks.getText());
+        setRemarksErorrMessage(errorMessage);
+        if (!errorMessage.isBlank()) validRequest = false;
+        
+        errorMessage = LeaveRequestValidator.validateLeaveTypeWithMessage(personalLeaveCredits, leaveType, startDate, endDate);
+        setLeaveTypeErorrMessage(errorMessage);
+        if (!errorMessage.isBlank()) validRequest = false;
+        
+        if (validRequest) {
+            submitLeave();
+            clearInputFields();
+            hideErrorLables();
+            jPanel3.setVisible(false);
+            clearTable();
+            loadPersonalLeaves();
+        }
+        
+    }
+    
+    private void setStartDateErorrMessage (String message) {
+        jLabelStartDateError.setText(message);
+        jLabelStartDateError.setVisible(true);
+    }
+    
+    private void setEndDateErorrMessage (String message) {
+        jLabelEndDateError.setText(message);
+        jLabelEndDateError.setVisible(true);
+    }
+    
+    private void setRemarksErorrMessage (String message) {
+        jLabelRemarksError.setText(message);
+        jLabelRemarksError.setVisible(true);
+    }
+    
+    private void setLeaveTypeErorrMessage (String message) {
+        jLabelLeaveTypeError.setText(message);
+        jLabelLeaveTypeError.setVisible(true);
+    }
+    
+    
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -32,15 +196,15 @@ public class JframeLeave extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        jLabelVacationLeaveBalance = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
+        jLabelMedicalLeaveBalance = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
+        jLabelPersonalLeaveBalance = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -54,17 +218,17 @@ public class JframeLeave extends javax.swing.JFrame {
         jButtonSubmit = new javax.swing.JButton();
         jDateChooserStartDate = new com.toedter.calendar.JDateChooser();
         jDateChooserEndDate = new com.toedter.calendar.JDateChooser();
-        jLabel15 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
+        jLabelLeaveTypeError = new javax.swing.JLabel();
+        jLabelStartDateError = new javax.swing.JLabel();
+        jLabelEndDateError = new javax.swing.JLabel();
+        jLabelRemarksError = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableLeaveHistory = new javax.swing.JTable();
         jLabel14 = new javax.swing.JLabel();
         jButtonAddLeave = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        jButtonBackToDashboard = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -78,15 +242,15 @@ public class JframeLeave extends javax.swing.JFrame {
         jPanel6.setBackground(new java.awt.Color(86, 98, 106));
         jPanel6.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("21");
+        jLabelVacationLeaveBalance.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabelVacationLeaveBalance.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelVacationLeaveBalance.setText("21");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
-        jPanel6.add(jLabel1, gridBagConstraints);
+        jPanel6.add(jLabelVacationLeaveBalance, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -122,14 +286,14 @@ public class JframeLeave extends javax.swing.JFrame {
         jPanel7.setBackground(new java.awt.Color(86, 98, 106));
         jPanel7.setLayout(new java.awt.GridBagLayout());
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("0");
+        jLabelMedicalLeaveBalance.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabelMedicalLeaveBalance.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelMedicalLeaveBalance.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
-        jPanel7.add(jLabel4, gridBagConstraints);
+        jPanel7.add(jLabelMedicalLeaveBalance, gridBagConstraints);
 
         jLabel5.setBackground(new java.awt.Color(204, 0, 102));
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -163,14 +327,14 @@ public class JframeLeave extends javax.swing.JFrame {
         jPanel8.setBackground(new java.awt.Color(86, 98, 106));
         jPanel8.setLayout(new java.awt.GridBagLayout());
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("11");
+        jLabelPersonalLeaveBalance.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabelPersonalLeaveBalance.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelPersonalLeaveBalance.setText("11");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
-        jPanel8.add(jLabel7, gridBagConstraints);
+        jPanel8.add(jLabelPersonalLeaveBalance, gridBagConstraints);
 
         jLabel8.setBackground(new java.awt.Color(204, 153, 0));
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -212,7 +376,7 @@ public class JframeLeave extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(86, 98, 106));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
-        jComboBoxLeaveType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "VL - Vacation", "SL - Sick", "PL - Personal" }));
+        jComboBoxLeaveType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Vacation", "Medical", "Personal" }));
         jComboBoxLeaveType.setPreferredSize(new java.awt.Dimension(100, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -294,6 +458,11 @@ public class JframeLeave extends javax.swing.JFrame {
         jButtonSubmit.setForeground(new java.awt.Color(255, 255, 255));
         jButtonSubmit.setText("Submit");
         jButtonSubmit.setPreferredSize(new java.awt.Dimension(90, 35));
+        jButtonSubmit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSubmitActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 9;
@@ -301,6 +470,7 @@ public class JframeLeave extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(9, 12, 9, 12);
         jPanel3.add(jButtonSubmit, gridBagConstraints);
 
+        jDateChooserStartDate.setDateFormatString("yyyy-MM-dd");
         jDateChooserStartDate.setPreferredSize(new java.awt.Dimension(88, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -310,6 +480,7 @@ public class JframeLeave extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(3, 12, 3, 12);
         jPanel3.add(jDateChooserStartDate, gridBagConstraints);
 
+        jDateChooserEndDate.setDateFormatString("yyyy-MM-dd");
         jDateChooserEndDate.setPreferredSize(new java.awt.Dimension(88, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -319,34 +490,34 @@ public class JframeLeave extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(3, 12, 3, 12);
         jPanel3.add(jDateChooserEndDate, gridBagConstraints);
 
-        jLabel15.setForeground(new java.awt.Color(255, 102, 102));
-        jLabel15.setText("This is required");
+        jLabelLeaveTypeError.setForeground(new java.awt.Color(255, 102, 102));
+        jLabelLeaveTypeError.setText("This is required");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        jPanel3.add(jLabel15, gridBagConstraints);
+        jPanel3.add(jLabelLeaveTypeError, gridBagConstraints);
 
-        jLabel16.setForeground(new java.awt.Color(255, 102, 102));
-        jLabel16.setText("This is required");
+        jLabelStartDateError.setForeground(new java.awt.Color(255, 102, 102));
+        jLabelStartDateError.setText("This is required");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
-        jPanel3.add(jLabel16, gridBagConstraints);
+        jPanel3.add(jLabelStartDateError, gridBagConstraints);
 
-        jLabel17.setForeground(new java.awt.Color(255, 102, 102));
-        jLabel17.setText("This is required");
+        jLabelEndDateError.setForeground(new java.awt.Color(255, 102, 102));
+        jLabelEndDateError.setText("This is required");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
-        jPanel3.add(jLabel17, gridBagConstraints);
+        jPanel3.add(jLabelEndDateError, gridBagConstraints);
 
-        jLabel18.setForeground(new java.awt.Color(255, 102, 102));
-        jLabel18.setText("This is required");
+        jLabelRemarksError.setForeground(new java.awt.Color(255, 102, 102));
+        jLabelRemarksError.setText("This is required");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 2;
-        jPanel3.add(jLabel18, gridBagConstraints);
+        jPanel3.add(jLabelRemarksError, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -366,10 +537,7 @@ public class JframeLeave extends javax.swing.JFrame {
 
         jTableLeaveHistory.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "Leave ID", "Leave Type", "Start Date", "End Date", "Status", "Submitted Date", "Processed Date", "Remarks"
@@ -433,14 +601,14 @@ public class JframeLeave extends javax.swing.JFrame {
         gridBagConstraints.weighty = 1.0;
         jPanel1.add(jPanel4, gridBagConstraints);
 
-        jButton1.setBackground(new java.awt.Color(0, 183, 229));
-        jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Back To Dashboard");
-        jButton1.setPreferredSize(new java.awt.Dimension(131, 35));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonBackToDashboard.setBackground(new java.awt.Color(0, 183, 229));
+        jButtonBackToDashboard.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButtonBackToDashboard.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonBackToDashboard.setText("Back To Dashboard");
+        jButtonBackToDashboard.setPreferredSize(new java.awt.Dimension(131, 35));
+        jButtonBackToDashboard.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonBackToDashboardActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -449,87 +617,64 @@ public class JframeLeave extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
-        jPanel1.add(jButton1, gridBagConstraints);
+        jPanel1.add(jButtonBackToDashboard, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButtonBackToDashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBackToDashboardActionPerformed
         this.dispose();
-        new JframeDashboard().setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+        new JframeDashboard(loggedEmployee.getID()).setVisible(true);
+    }//GEN-LAST:event_jButtonBackToDashboardActionPerformed
 
     private void jButtonDiscardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDiscardActionPerformed
         jPanel3.setVisible(false);
+        clearInputFields();
+        hideErrorLables();
     }//GEN-LAST:event_jButtonDiscardActionPerformed
 
     private void jButtonAddLeaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddLeaveActionPerformed
         jPanel3.setVisible(true);
     }//GEN-LAST:event_jButtonAddLeaveActionPerformed
 
+    private void jButtonSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSubmitActionPerformed
+         hideErrorLables();
+         validateThenSubmitLeave();
+    }//GEN-LAST:event_jButtonSubmitActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JframeLeave.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JframeLeave.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JframeLeave.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JframeLeave.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new JframeLeave().setVisible(true);
-            }
-        });
-    }
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonAddLeave;
+    private javax.swing.JButton jButtonBackToDashboard;
     private javax.swing.JButton jButtonDiscard;
     private javax.swing.JButton jButtonSubmit;
     private javax.swing.JComboBox<String> jComboBoxLeaveType;
     private com.toedter.calendar.JDateChooser jDateChooserEndDate;
     private com.toedter.calendar.JDateChooser jDateChooserStartDate;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelEndDateError;
+    private javax.swing.JLabel jLabelLeaveTypeError;
+    private javax.swing.JLabel jLabelMedicalLeaveBalance;
+    private javax.swing.JLabel jLabelPersonalLeaveBalance;
+    private javax.swing.JLabel jLabelRemarksError;
+    private javax.swing.JLabel jLabelStartDateError;
+    private javax.swing.JLabel jLabelVacationLeaveBalance;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

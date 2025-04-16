@@ -110,8 +110,7 @@ public abstract class Employee implements EmployeeEssentials {
             return leaveDB.getLeavesByEmployeeID(employeeID);
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
-        
+        }        
     }
     
     public Payslip viewPersonalSalary (YearPeriod period) {
