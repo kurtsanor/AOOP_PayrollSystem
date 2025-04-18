@@ -8,8 +8,10 @@ import javax.swing.table.DefaultTableModel;
 import CustomTable.TableActionCellEditor;
 import CustomTable.TableActionCellRenderer;
 import CustomTable.TableActionEvent;
+import java.awt.Color;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JWindow;
 import oopClasses.Employee;
 import oopClasses.HR;
 
@@ -25,14 +27,23 @@ public class JframeEmpManagement extends javax.swing.JFrame {
     private DefaultTableModel employeeTbl;
     private Employee loggedEmployee;
     private HR hrEmployee;
+    public static JWindow window;
     public JframeEmpManagement(Employee loggedEmployee) {
+        window = new JWindow();
         this.loggedEmployee = loggedEmployee;
         initComponents();
         employeeTbl = (DefaultTableModel) jTableEmployeeList.getModel();
         setExtendedState(MAXIMIZED_BOTH);
         initHrUser(loggedEmployee);
         initTable();
-        loadEmployeeTable();
+        loadEmployeeTable();            
+    }
+    
+    private void showOverlay () {
+        window.setSize(this.getSize());
+        window.setVisible(true);
+        window.setLocationRelativeTo(this);
+        window.setBackground(new Color(0, 0, 0, 200));
     }
     
     private void loadEmployeeTable () {
@@ -89,7 +100,9 @@ public class JframeEmpManagement extends javax.swing.JFrame {
             }
             @Override
             public void onView(int row) {
-                System.out.println("view row: " + row);
+                chosenEmployeeID = Integer.parseInt(jTableEmployeeList.getValueAt(row, 0).toString());
+                showOverlay();
+                new JframeProfile(loggedEmployee, chosenEmployeeID).setVisible(true);
             }
         };
          jTableEmployeeList.getColumnModel().getColumn(3).setCellRenderer(new TableActionCellRenderer());
@@ -261,7 +274,7 @@ public class JframeEmpManagement extends javax.swing.JFrame {
 
     private void jButtonAddNewEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddNewEmployeeActionPerformed
         dispose();
-        new JframeEmployeeForm(loggedEmployee).setVisible(true);
+        new JframeEmployeeForm(loggedEmployee).setVisible(true);         
     }//GEN-LAST:event_jButtonAddNewEmployeeActionPerformed
 
     /**

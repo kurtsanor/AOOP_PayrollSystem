@@ -51,7 +51,8 @@ public class LeaveRequestValidator {
     }
     
     public static String validateLeaveTypeWithMessage (LeaveBalance balance, String leaveType, LocalDate startDate, LocalDate endDate) {
-        if (startDate == null || endDate == null) {
+        LocalDate dateNow = LocalDate.now();
+        if (startDate == null || endDate == null || startDate.isBefore(dateNow) || endDate.isBefore(dateNow)) {
             return "";
         }
         

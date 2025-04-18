@@ -41,12 +41,6 @@ public class MotorPhPayrollv2 {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new JframeLogin().setVisible(true);
-//                new JframeDashboard().setVisible(true);
-//                 new JframeEmpManagement().setVisible(true);
-//                  new JframeEmployeeForm().setVisible(true);
-//                    new JframeLeave().setVisible(true);
-//                    new JframeLeaveManagement().setVisible(true);
-//                new JframePayslip().setVisible(true);
             }
         });
     }

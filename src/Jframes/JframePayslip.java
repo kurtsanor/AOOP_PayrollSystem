@@ -4,6 +4,10 @@
  */
 package Jframes;
 
+import Domains.Payslip;
+import Domains.YearPeriod;
+import oopClasses.Employee;
+
 /**
  *
  * @author keith
@@ -13,10 +17,63 @@ public class JframePayslip extends javax.swing.JFrame {
     /**
      * Creates new form JframePayslip
      */
-    public JframePayslip() {
+    private Employee loggedEmployee;
+    public JframePayslip(Employee loggedEmployee) {
+        this.loggedEmployee = loggedEmployee;
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
         jPanel3.setVisible(false);
+        jLabelVerifyError.setVisible(false);
+    }
+    
+
+    private YearPeriod getChosenPeriod () {
+        int year = jYearChooser.getYear();
+        int month = jMonthChooser.getMonth() + 1;
+        return new YearPeriod(year, month);
+    }
+    
+    private Payslip getPayslipDetails (YearPeriod period) {
+        return loggedEmployee.viewPersonalSalary(period);
+    }
+    
+    private void displayPayslipDetails () {
+        jLabelVerifyError.setVisible(false);
+        YearPeriod period = getChosenPeriod();
+        Payslip payslip = getPayslipDetails(period);
+        
+        if (payslip.getWorkHours() == 0) {
+            jLabelVerifyError.setVisible(true);
+            return;
+        }
+        
+        jPanel3.setVisible(true);
+        jLabelHourlyRateAmount.setText(amountToString(loggedEmployee.getHourlyRate()));
+        jLabelHoursWorked.setText(amountToString(payslip.getWorkHours()));
+        jLabelBasicSalaryAmount.setText(amountToString(payslip.getBasicSalary()));
+        jLabelRiceSubsidyAmount.setText(amountToString(payslip.getRiceSubsidy()));
+        jLabelPhoneAllowanceAmount.setText(amountToString(payslip.getPhoneAllowance()));
+        jLabelClothingAllowanceAmount.setText(amountToString(payslip.getClothingAllowance()));
+        jLabelGrossPayAmount.setText(amountToString(payslip.getGrossPay()));
+        jLabelSssAmount.setText(amountToString(payslip.getSssDeduction()));
+        jLabelPhilhealthAmount.setText(amountToString(payslip.getPhilhealthDeduction()));
+        jLabelPagibigAmount.setText(amountToString(payslip.getPagibigDeduction()));
+        jLabelWithholdingTaxAmount.setText(amountToString(payslip.getTaxDeduction()));
+        jLabelTotalDeductionsAmount.setText(amountToString(payslip.getTotalDeductions()));
+        jLabelTakeHomePayAmount.setText(amountToString(payslip.getNetPay()));      
+        
+        enableControls(false);
+    }
+    
+    private void enableControls (boolean status) {
+        jMonthChooser.setEnabled(status);
+        jYearChooser.setEnabled(status);
+        jButtonVerify.setEnabled(status);
+    }
+        
+    
+    private String amountToString (double amount) {
+        return String.format("%.2f", amount);
     }
 
     /**
@@ -33,9 +90,9 @@ public class JframePayslip extends javax.swing.JFrame {
         jButtonBackToDashboard = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabelSelectMonth = new javax.swing.JLabel();
-        jMonthChooserSelectMonth = new com.toedter.calendar.JMonthChooser();
+        jMonthChooser = new com.toedter.calendar.JMonthChooser();
         jLabelSelectYear = new javax.swing.JLabel();
-        jYearChooserSelectYear = new com.toedter.calendar.JYearChooser();
+        jYearChooser = new com.toedter.calendar.JYearChooser();
         jButtonVerify = new javax.swing.JButton();
         jLabelVerifyError = new javax.swing.JLabel();
         jLabelHeader = new javax.swing.JLabel();
@@ -48,14 +105,14 @@ public class JframePayslip extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
+        jLabelHourlyRateAmount = new javax.swing.JLabel();
+        jLabelHoursWorked = new javax.swing.JLabel();
+        jLabelBasicSalaryAmount = new javax.swing.JLabel();
+        jLabelRiceSubsidyAmount = new javax.swing.JLabel();
+        jLabelPhoneAllowanceAmount = new javax.swing.JLabel();
+        jLabelClothingAllowanceAmount = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
+        jLabelGrossPayAmount = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel30 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
@@ -64,12 +121,14 @@ public class JframePayslip extends javax.swing.JFrame {
         jLabel22 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jLabel31 = new javax.swing.JLabel();
+        jLabelTakeHomePayAmount = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
-        jLabel24 = new javax.swing.JLabel();
-        jLabel25 = new javax.swing.JLabel();
-        jLabel26 = new javax.swing.JLabel();
-        jLabel27 = new javax.swing.JLabel();
-        jLabel28 = new javax.swing.JLabel();
+        jLabelSssAmount = new javax.swing.JLabel();
+        jLabelPhilhealthAmount = new javax.swing.JLabel();
+        jLabelPagibigAmount = new javax.swing.JLabel();
+        jLabelWithholdingTaxAmount = new javax.swing.JLabel();
+        jLabelTotalDeductionsAmount = new javax.swing.JLabel();
+        jButtonClose = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -104,13 +163,13 @@ public class JframePayslip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(3, 0, 0, 0);
         jPanel2.add(jLabelSelectMonth, gridBagConstraints);
 
-        jMonthChooserSelectMonth.setPreferredSize(new java.awt.Dimension(125, 35));
+        jMonthChooser.setPreferredSize(new java.awt.Dimension(125, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 0, 11, 0);
-        jPanel2.add(jMonthChooserSelectMonth, gridBagConstraints);
+        jPanel2.add(jMonthChooser, gridBagConstraints);
 
         jLabelSelectYear.setForeground(new java.awt.Color(255, 255, 255));
         jLabelSelectYear.setText("Select Year");
@@ -121,13 +180,13 @@ public class JframePayslip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(3, 0, 0, 0);
         jPanel2.add(jLabelSelectYear, gridBagConstraints);
 
-        jYearChooserSelectYear.setPreferredSize(new java.awt.Dimension(64, 35));
+        jYearChooser.setPreferredSize(new java.awt.Dimension(64, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 0, 3, 0);
-        jPanel2.add(jYearChooserSelectYear, gridBagConstraints);
+        jPanel2.add(jYearChooser, gridBagConstraints);
 
         jButtonVerify.setBackground(new java.awt.Color(0, 183, 229));
         jButtonVerify.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -248,59 +307,59 @@ public class JframePayslip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(2, 40, 2, 40);
         jPanel3.add(jLabel10, gridBagConstraints);
 
-        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel11.setText("jLabel11");
+        jLabelHourlyRateAmount.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelHourlyRateAmount.setText("jLabel11");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(2, 40, 2, 40);
-        jPanel3.add(jLabel11, gridBagConstraints);
+        jPanel3.add(jLabelHourlyRateAmount, gridBagConstraints);
 
-        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel12.setText("jLabel12");
+        jLabelHoursWorked.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelHoursWorked.setText("jLabel12");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(2, 40, 2, 40);
-        jPanel3.add(jLabel12, gridBagConstraints);
+        jPanel3.add(jLabelHoursWorked, gridBagConstraints);
 
-        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel13.setText("jLabel13");
+        jLabelBasicSalaryAmount.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelBasicSalaryAmount.setText("jLabel13");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(2, 40, 2, 40);
-        jPanel3.add(jLabel13, gridBagConstraints);
+        jPanel3.add(jLabelBasicSalaryAmount, gridBagConstraints);
 
-        jLabel14.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel14.setText("jLabel14");
+        jLabelRiceSubsidyAmount.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelRiceSubsidyAmount.setText("jLabel14");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(2, 40, 2, 40);
-        jPanel3.add(jLabel14, gridBagConstraints);
+        jPanel3.add(jLabelRiceSubsidyAmount, gridBagConstraints);
 
-        jLabel15.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel15.setText("jLabel15");
+        jLabelPhoneAllowanceAmount.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelPhoneAllowanceAmount.setText("jLabel15");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(2, 40, 2, 40);
-        jPanel3.add(jLabel15, gridBagConstraints);
+        jPanel3.add(jLabelPhoneAllowanceAmount, gridBagConstraints);
 
-        jLabel16.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel16.setText("jLabel16");
+        jLabelClothingAllowanceAmount.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelClothingAllowanceAmount.setText("jLabel16");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(2, 40, 2, 40);
-        jPanel3.add(jLabel16, gridBagConstraints);
+        jPanel3.add(jLabelClothingAllowanceAmount, gridBagConstraints);
 
         jLabel17.setForeground(new java.awt.Color(255, 255, 255));
         jLabel17.setText("Gross Pay");
@@ -311,14 +370,14 @@ public class JframePayslip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(2, 40, 2, 40);
         jPanel3.add(jLabel17, gridBagConstraints);
 
-        jLabel18.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel18.setText("jLabel18");
+        jLabelGrossPayAmount.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelGrossPayAmount.setText("jLabel18");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(2, 40, 2, 40);
-        jPanel3.add(jLabel18, gridBagConstraints);
+        jPanel3.add(jLabelGrossPayAmount, gridBagConstraints);
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
         jPanel5.setPreferredSize(new java.awt.Dimension(100, 25));
@@ -375,11 +434,23 @@ public class JframePayslip extends javax.swing.JFrame {
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
         jPanel6.setPreferredSize(new java.awt.Dimension(100, 25));
-        jPanel6.setLayout(new java.awt.BorderLayout());
+        jPanel6.setLayout(new java.awt.GridBagLayout());
 
         jLabel31.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel31.setText(" TAKE HOME PAY:");
-        jPanel6.add(jLabel31, java.awt.BorderLayout.CENTER);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 0.1;
+        jPanel6.add(jLabel31, gridBagConstraints);
+
+        jLabelTakeHomePayAmount.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabelTakeHomePayAmount.setText("jLabel1");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.weightx = 0.1;
+        jPanel6.add(jLabelTakeHomePayAmount, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -399,50 +470,65 @@ public class JframePayslip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(2, 40, 2, 40);
         jPanel3.add(jLabel23, gridBagConstraints);
 
-        jLabel24.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel24.setText("jLabel24");
+        jLabelSssAmount.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelSssAmount.setText("jLabel24");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(2, 40, 2, 40);
-        jPanel3.add(jLabel24, gridBagConstraints);
+        jPanel3.add(jLabelSssAmount, gridBagConstraints);
 
-        jLabel25.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel25.setText("jLabel25");
+        jLabelPhilhealthAmount.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelPhilhealthAmount.setText("jLabel25");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(2, 40, 2, 40);
-        jPanel3.add(jLabel25, gridBagConstraints);
+        jPanel3.add(jLabelPhilhealthAmount, gridBagConstraints);
 
-        jLabel26.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel26.setText("jLabel26");
+        jLabelPagibigAmount.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelPagibigAmount.setText("jLabel26");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 11;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(2, 40, 2, 40);
-        jPanel3.add(jLabel26, gridBagConstraints);
+        jPanel3.add(jLabelPagibigAmount, gridBagConstraints);
 
-        jLabel27.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel27.setText("jLabel27");
+        jLabelWithholdingTaxAmount.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelWithholdingTaxAmount.setText("jLabel27");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(2, 40, 2, 40);
-        jPanel3.add(jLabel27, gridBagConstraints);
+        jPanel3.add(jLabelWithholdingTaxAmount, gridBagConstraints);
 
-        jLabel28.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel28.setText("jLabel28");
+        jLabelTotalDeductionsAmount.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelTotalDeductionsAmount.setText("jLabel28");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 13;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(2, 40, 2, 40);
-        jPanel3.add(jLabel28, gridBagConstraints);
+        jPanel3.add(jLabelTotalDeductionsAmount, gridBagConstraints);
+
+        jButtonClose.setBackground(new java.awt.Color(153, 0, 0));
+        jButtonClose.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonClose.setText("Close");
+        jButtonClose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCloseActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        jPanel3.add(jButtonClose, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -458,71 +544,35 @@ public class JframePayslip extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonVerifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVerifyActionPerformed
-        jPanel3.setVisible(true);
+        displayPayslipDetails();
     }//GEN-LAST:event_jButtonVerifyActionPerformed
 
     private void jButtonBackToDashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBackToDashboardActionPerformed
         this.dispose();
-        new JframeDashboard().setVisible(true);
+        new JframeDashboard(loggedEmployee.getID()).setVisible(true);
     }//GEN-LAST:event_jButtonBackToDashboardActionPerformed
+
+    private void jButtonCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCloseActionPerformed
+        jPanel3.setVisible(false);
+        enableControls(true);
+    }//GEN-LAST:event_jButtonCloseActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JframePayslip.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JframePayslip.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JframePayslip.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JframePayslip.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new JframePayslip().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBackToDashboard;
+    private javax.swing.JButton jButtonClose;
     private javax.swing.JButton jButtonVerify;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel26;
-    private javax.swing.JLabel jLabel27;
-    private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
@@ -531,17 +581,30 @@ public class JframePayslip extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelBasicSalaryAmount;
+    private javax.swing.JLabel jLabelClothingAllowanceAmount;
+    private javax.swing.JLabel jLabelGrossPayAmount;
     private javax.swing.JLabel jLabelHeader;
+    private javax.swing.JLabel jLabelHourlyRateAmount;
+    private javax.swing.JLabel jLabelHoursWorked;
+    private javax.swing.JLabel jLabelPagibigAmount;
+    private javax.swing.JLabel jLabelPhilhealthAmount;
+    private javax.swing.JLabel jLabelPhoneAllowanceAmount;
+    private javax.swing.JLabel jLabelRiceSubsidyAmount;
     private javax.swing.JLabel jLabelSelectMonth;
     private javax.swing.JLabel jLabelSelectYear;
+    private javax.swing.JLabel jLabelSssAmount;
+    private javax.swing.JLabel jLabelTakeHomePayAmount;
+    private javax.swing.JLabel jLabelTotalDeductionsAmount;
     private javax.swing.JLabel jLabelVerifyError;
-    private com.toedter.calendar.JMonthChooser jMonthChooserSelectMonth;
+    private javax.swing.JLabel jLabelWithholdingTaxAmount;
+    private com.toedter.calendar.JMonthChooser jMonthChooser;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private com.toedter.calendar.JYearChooser jYearChooserSelectYear;
+    private com.toedter.calendar.JYearChooser jYearChooser;
     // End of variables declaration//GEN-END:variables
 }

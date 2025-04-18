@@ -283,6 +283,11 @@ public class JframeDashboard extends javax.swing.JFrame {
         jPanelLeft.add(jPanel3, gridBagConstraints);
 
         jButtonAttendance.setText("Attendance");
+        jButtonAttendance.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAttendanceActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -745,13 +750,18 @@ public class JframeDashboard extends javax.swing.JFrame {
 
     private void jButtonPayrollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPayrollActionPerformed
         this.dispose();
-        new JframePayslip().setVisible(true);
+        new JframePayslip(loggedEmployee).setVisible(true);
     }//GEN-LAST:event_jButtonPayrollActionPerformed
 
     private void jButtonLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLogoutActionPerformed
         this.dispose();
         new JframeLogin().setVisible(true);
     }//GEN-LAST:event_jButtonLogoutActionPerformed
+
+    private void jButtonAttendanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAttendanceActionPerformed
+        this.dispose();
+        new JframeAttendance(loggedEmployee).setVisible(true);
+    }//GEN-LAST:event_jButtonAttendanceActionPerformed
 
     /**
      * @param args the command line arguments

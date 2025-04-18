@@ -15,7 +15,7 @@ import java.sql.SQLException;
  * @author keith
  */
 public interface EmployeeEssentials {
-    boolean requestForLeave (LeaveRequest request) throws SQLException, ClassNotFoundException;
-    List<AttendanceRecord> viewPersonalAttendance(int employeeID, YearPeriod period) throws SQLException, ClassNotFoundException;
-    List<LeaveRequest> viewPersonalLeaves(int employeeID) throws SQLException, ClassNotFoundException;
+    boolean requestForLeave (LeaveRequest request);
+    List<AttendanceRecord> viewPersonalAttendance(int employeeID, YearPeriod period);
+    List<LeaveRequest> viewPersonalLeaves(int employeeID);
 }

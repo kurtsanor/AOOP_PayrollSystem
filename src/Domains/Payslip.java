@@ -17,12 +17,14 @@ public class Payslip {
     private double philhealthDeduction;
     private double taxDeduction;
     private double pagibigDeduction;
+    private double grossPay;
     private double netPay;
     private double riceSubsidy;
     private double phoneAllowance;
     private double clothingAllowance;
     
-    public Payslip (int employeeID, YearPeriod period, double workHours, double basicSalary, double sssDeduction, double philhealthDeduction, double taxDeduction, double pagibigDeduction, double netPay) {
+    public Payslip (int employeeID, YearPeriod period, double workHours, double basicSalary, double sssDeduction, double philhealthDeduction, 
+            double taxDeduction, double pagibigDeduction, double grossPay, double netPay, double riceSubsidy, double phoneAllowance, double clothingAllowance) {
         this.employeeID = employeeID;
         this.period = period;
         this.workHours = workHours;
@@ -31,7 +33,11 @@ public class Payslip {
         this.philhealthDeduction = philhealthDeduction;
         this.taxDeduction = taxDeduction;
         this.pagibigDeduction = pagibigDeduction;
+        this.grossPay = grossPay;
         this.netPay = netPay;
+        this.riceSubsidy = riceSubsidy;
+        this.phoneAllowance = phoneAllowance;
+        this.clothingAllowance = clothingAllowance;
     }
     
     public double getTotalAllowance () {
@@ -88,6 +94,10 @@ public class Payslip {
 
     public double getClothingAllowance() {
         return clothingAllowance;
+    }
+    
+    public double getGrossPay () {
+        return grossPay;
     }
     
     

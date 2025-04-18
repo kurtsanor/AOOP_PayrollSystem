@@ -116,25 +116,31 @@ public abstract class Employee implements EmployeeEssentials {
     public Payslip viewPersonalSalary (YearPeriod period) {
         try (Connection connection = DatabaseConnection.Connect()) {
             AttendanceDatabase attendanceDB = new AttendanceDatabase(connection);
-            double workHours = HoursCalculator.calculateTotalHoursByPeriod(this.employeeID, period, attendanceDB);
-            double basicSalary = this.hourlyRate * workHours;
-            double taxableIncome = PayrollCalculator.getTaxableIncome(basicSalary);
-            double sssDeduction = TaxAndDeductionsModule.getSSSDeduction(basicSalary);
-            double philhealthDeduction = TaxAndDeductionsModule.getPhilHealthDeduction(basicSalary);
+            double empWorkHours = HoursCalculator.calculateTotalHoursByPeriod(getID(), period, attendanceDB);
+            double empBasicSalary = getHourlyRate() * empWorkHours;
+            double totalAllowance = getRiceSubsidy() + getPhoneAllowance() + getClothingAllowance();
+            double grossPay = PayrollCalculator.getGrossSalary(empBasicSalary, totalAllowance);
+            double taxableIncome = PayrollCalculator.getTaxableIncome(grossPay);
+            double sssDeduction = TaxAndDeductionsModule.getSSSDeduction(grossPay);
+            double philhealthDeduction = TaxAndDeductionsModule.getPhilHealthDeduction(grossPay);
             double taxDeduction = TaxAndDeductionsModule.getWithholdingTax(taxableIncome);
-            double pagibigDeduction = TaxAndDeductionsModule.getPagIbigDeduction(basicSalary);
-            double netPay = PayrollCalculator.getNetSalary(basicSalary);
+            double pagibigDeduction = TaxAndDeductionsModule.getPagIbigDeduction(grossPay);
+            double netPay = PayrollCalculator.getNetSalary(grossPay);
            
             Payslip payslip = new Payslip(
-                employeeID, 
+                getID(), 
                 period,
-                workHours,
-                basicSalary, 
+                empWorkHours,
+                empBasicSalary, 
                 sssDeduction, 
                 philhealthDeduction, 
                 taxDeduction, 
                 pagibigDeduction,
-                netPay);
+                grossPay,    
+                netPay,
+                getRiceSubsidy(),
+                getPhoneAllowance(),
+                getClothingAllowance());
             
             return payslip;
             
