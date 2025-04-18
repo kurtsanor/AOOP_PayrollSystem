@@ -39,6 +39,7 @@ public class JframeEmpManagement extends javax.swing.JFrame {
         loadEmployeeTable();            
     }
     
+    // displays a dim overlay to darken the background
     private void showOverlay () {
         window.setSize(this.getSize());
         window.setVisible(true);
@@ -58,10 +59,18 @@ public class JframeEmpManagement extends javax.swing.JFrame {
         }
     }
     
-    // removes all contents of jtable
     private void clearTable () {
         employeeTbl.setRowCount(0);
     }
+    
+    private void clearTableSelection () {
+        jTableEmployeeList.clearSelection();
+        if (jTableEmployeeList.getCellEditor() != null) {
+            jTableEmployeeList.getCellEditor().stopCellEditing();
+        }
+    }
+    
+    
     
     // creates an HR object if employee is instance of HR class
     private void initHrUser (Employee loggedEmployee) {
@@ -94,8 +103,10 @@ public class JframeEmpManagement extends javax.swing.JFrame {
                     } else {
                         JOptionPane.showMessageDialog(JframeEmpManagement.this, "Failed to delete record ", "Error", JOptionPane.ERROR_MESSAGE);
                     }
+                    clearTableSelection();
                     clearTable();
                     loadEmployeeTable();
+                    
                 }               
             }
             @Override
