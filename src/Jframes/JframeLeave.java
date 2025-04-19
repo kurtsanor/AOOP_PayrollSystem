@@ -47,8 +47,7 @@ public class JframeLeave extends javax.swing.JFrame {
         hideErrorLables();
         configureDateChoosers();
     }
-    
-    
+       
     private void configureDateChoosers () {
         ((JTextField) jDateChooserStartDate.getDateEditor().getUiComponent()).setEditable(false);
         ((JTextField) jDateChooserEndDate.getDateEditor().getUiComponent()).setEditable(false);
@@ -64,19 +63,32 @@ public class JframeLeave extends javax.swing.JFrame {
         this.personalLeaveCredits = leaveCreditsDB.getLeaveCreditsByEmpID(loggedEmployee.getID());
     }
     
+    private List<LeaveRequest> fetchPersonalLeaves () {
+        return loggedEmployee.viewPersonalLeaves(loggedEmployee.getID());
+    }
+    
     private void loadPersonalLeaves () {
-        List <LeaveRequest> leaveRecords = loggedEmployee.viewPersonalLeaves(loggedEmployee.getID());
-        
-        for (LeaveRequest request: leaveRecords) {
-            leaveTbl.addRow(new Object [] {
-                request.getLeaveID(),
-                request.getLeaveType(),
-                request.getStartDate(),
-                request.getEndDate(),
-                request.getStatus(),
-                request.getSubmittedDate(),
-                request.getProcessedDate(),
-                request.getRemarks()});
+        List <LeaveRequest> leaveRecords = fetchPersonalLeaves();
+        populateLeaveTable(leaveRecords);        
+    }
+    
+    private Object [] createLeaveRowData (LeaveRequest request) {
+        return new Object [] {
+            request.getLeaveID(),
+            request.getLeaveType(),
+            request.getStartDate(),
+            request.getEndDate(),
+            request.getStatus(),
+            request.getSubmittedDate(),
+            request.getProcessedDate(),
+            request.getRemarks()
+        };
+    }
+    
+    private void populateLeaveTable (List<LeaveRequest> requests) {
+        clearTable();
+        for (LeaveRequest request: requests) {
+            leaveTbl.addRow(createLeaveRowData(request));
         }       
     }
     
@@ -97,14 +109,14 @@ public class JframeLeave extends javax.swing.JFrame {
         jTextFieldRemarks.setText(null);
     }
     
-    private void submitLeave () {
+    private LeaveRequest setupLeaveRequest () {
         LocalDateTime dateTimeNow = LocalDateTime.now();
         Date start = jDateChooserStartDate.getDate();       
         LocalDate startDate = start != null ? LocalDate.parse(dateFormat.format(start)) : null;
         Date end = jDateChooserEndDate.getDate();
         LocalDate endDate = end != null ? LocalDate.parse(dateFormat.format(end)) : null;
         
-        LeaveRequest request = new LeaveRequest(
+        return new LeaveRequest(
             loggedEmployee.getID(),
             jComboBoxLeaveType.getSelectedItem().toString().trim(),
             startDate,
@@ -112,17 +124,32 @@ public class JframeLeave extends javax.swing.JFrame {
             "Pending",
             dateTimeNow,
             jTextFieldRemarks.getText());
-        
-        boolean requestSuccessful = loggedEmployee.requestForLeave(request);
-        
-        if (requestSuccessful) {
-            JOptionPane.showMessageDialog(this, "Leave Request has been Submitted", "Submitted", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this, "An error occured while submitting your request", "Error", JOptionPane.ERROR_MESSAGE);
-        }
     }
     
-    private void validateThenSubmitLeave () {        
+    private void submitLeave () {
+        if (validLeaveRequest()) {
+            LeaveRequest leaveRequest = setupLeaveRequest();       
+            boolean requestSuccessful = loggedEmployee.requestForLeave(leaveRequest);
+            showLeaveSubmissionResult(requestSuccessful);
+            refreshLeaveTable();
+            clearInputFields();
+            jPanel3.setVisible(false);
+        }           
+    }
+    
+    private void refreshLeaveTable () {
+        clearTable();
+        loadPersonalLeaves();
+    }
+    
+    private void showLeaveSubmissionResult (boolean submitted) {
+        String message = submitted ? "Leave request has been submitted" : "Failed to submit leave request";
+        int messageType = submitted ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.ERROR_MESSAGE;
+        JOptionPane.showMessageDialog(this, message, submitted? "Success": "Failed", messageType);
+    }
+    
+    private boolean validLeaveRequest () {
+        hideErrorLables();
         boolean validRequest = true;
         String errorMessage;
         
@@ -148,15 +175,7 @@ public class JframeLeave extends javax.swing.JFrame {
         setLeaveTypeErorrMessage(errorMessage);
         if (!errorMessage.isBlank()) validRequest = false;
         
-        if (validRequest) {
-            submitLeave();
-            clearInputFields();
-            hideErrorLables();
-            jPanel3.setVisible(false);
-            clearTable();
-            loadPersonalLeaves();
-        }
-        
+        return validRequest;
     }
     
     private void setStartDateErorrMessage (String message) {
@@ -178,11 +197,7 @@ public class JframeLeave extends javax.swing.JFrame {
         jLabelLeaveTypeError.setText(message);
         jLabelLeaveTypeError.setVisible(true);
     }
-    
-    
-    
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -544,7 +559,7 @@ public class JframeLeave extends javax.swing.JFrame {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                true, true, true, true, true, true, true, false
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -640,8 +655,7 @@ public class JframeLeave extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonAddLeaveActionPerformed
 
     private void jButtonSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSubmitActionPerformed
-         hideErrorLables();
-         validateThenSubmitLeave();
+         submitLeave();
     }//GEN-LAST:event_jButtonSubmitActionPerformed
 
     /**

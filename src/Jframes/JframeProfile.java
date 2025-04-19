@@ -621,8 +621,6 @@ public class JframeProfile extends javax.swing.JFrame {
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
-        jMenuBar1.setBackground(new java.awt.Color(0, 0, 0));
-        jMenuBar1.setForeground(new java.awt.Color(255, 255, 255));
         jMenuBar1.setOpaque(true);
 
         jMenuClose.setBackground(new java.awt.Color(51, 51, 51));
@@ -641,7 +639,7 @@ public class JframeProfile extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuCloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuCloseMouseClicked
-        JframeEmpManagement.window.setVisible(false);
+        JframeEmpManagement.overlay.setVisible(false);
         dispose();
     }//GEN-LAST:event_jMenuCloseMouseClicked
 

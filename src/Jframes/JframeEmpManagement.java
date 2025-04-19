@@ -9,6 +9,7 @@ import CustomTable.TableActionCellEditor;
 import CustomTable.TableActionCellRenderer;
 import CustomTable.TableActionEvent;
 import java.awt.Color;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JWindow;
@@ -27,35 +28,47 @@ public class JframeEmpManagement extends javax.swing.JFrame {
     private DefaultTableModel employeeTbl;
     private Employee loggedEmployee;
     private HR hrEmployee;
-    public static JWindow window;
+    public static JWindow overlay;
     public JframeEmpManagement(Employee loggedEmployee) {
-        window = new JWindow();
+        overlay = new JWindow();
         this.loggedEmployee = loggedEmployee;
         initComponents();
         employeeTbl = (DefaultTableModel) jTableEmployeeList.getModel();
         setExtendedState(MAXIMIZED_BOTH);
         initHrUser(loggedEmployee);
-        initTable();
+        initTableEvents();
         loadEmployeeTable();            
     }
     
     // displays a dim overlay to darken the background
     private void showOverlay () {
-        window.setSize(this.getSize());
-        window.setVisible(true);
-        window.setLocationRelativeTo(this);
-        window.setBackground(new Color(0, 0, 0, 200));
+        overlay.setSize(this.getSize());        
+        overlay.setLocationRelativeTo(this);
+        overlay.setBackground(new Color(0, 0, 0, 200));
+        overlay.setVisible(true);
+    }
+    
+    private List<Employee> fetchEmployees () {
+        return hrEmployee != null ? hrEmployee.loadEmployees() : Collections.emptyList();
+    }
+    
+    private Object [] createEmployeeData (Employee employee) {
+        return new Object [] {
+                   employee.getID(),   
+                   employee.getFirstName(),
+                   employee.getLastName() 
+        };
     }
     
     private void loadEmployeeTable () {
-        if (hrEmployee != null) {
-            List <Employee> employees = hrEmployee.loadEmployees();
-            for (Employee employee: employees) {
-                employeeTbl.addRow(new Object[] {
-                    employee.getID(),
-                    employee.getFirstName(),
-                    employee.getLastName()});
-            }
+        List <Employee> employees = fetchEmployees();
+        populateTableWithEmployees(employees);
+    }
+    
+    private void populateTableWithEmployees (List <Employee> employees) {
+        clearTable();
+        for (Employee employee: employees) {
+            employeeTbl.addRow(createEmployeeData(employee));
         }
     }
     
@@ -69,9 +82,7 @@ public class JframeEmpManagement extends javax.swing.JFrame {
             jTableEmployeeList.getCellEditor().stopCellEditing();
         }
     }
-    
-    
-    
+      
     // creates an HR object if employee is instance of HR class
     private void initHrUser (Employee loggedEmployee) {
         if (loggedEmployee instanceof HR) {
@@ -80,45 +91,84 @@ public class JframeEmpManagement extends javax.swing.JFrame {
         }
     }
     
-    // initializes jtable action events
-    private void initTable () {
-        TableActionEvent event = new TableActionEvent() {
-            int chosenEmployeeID;
+    private void initTableEvents () {
+        TableActionEvent events = createTableActionEvents();
+        setupActionColumn(events);
+    }
+    
+    private TableActionEvent createTableActionEvents () {
+        return new TableActionEvent() {
             @Override
             public void onEdit(int row) {
-                chosenEmployeeID = Integer.parseInt(jTableEmployeeList.getValueAt(row, 0).toString());
-                dispose();
-                new JframeEmployeeForm(loggedEmployee, chosenEmployeeID).setVisible(true);
+                int employeeID = getEmployeeIdFromRow(row);
+                openEmployeeForm(employeeID);
             }
+
             @Override
             public void onDelete(int row) {
-                chosenEmployeeID = Integer.parseInt(jTableEmployeeList.getValueAt(row, 0).toString());
-                String firstName = jTableEmployeeList.getValueAt(row, 1).toString();
-                String lastName = jTableEmployeeList.getValueAt(row, 2).toString();
-                int choice = JOptionPane.showConfirmDialog(JframeEmpManagement.this, "This operation will permanently delete " + firstName + " " + lastName + "\n Do you wish to proceed?", "Confirm deletion", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-                if (choice == JOptionPane.YES_OPTION) {
-                    boolean deleted = hrEmployee.deleteEmployeeByID(chosenEmployeeID);
-                    if (deleted) {
-                        JOptionPane.showMessageDialog(JframeEmpManagement.this, "Employee record has been deleted", "Deleted", JOptionPane.INFORMATION_MESSAGE);
-                    } else {
-                        JOptionPane.showMessageDialog(JframeEmpManagement.this, "Failed to delete record ", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                    clearTableSelection();
-                    clearTable();
-                    loadEmployeeTable();
-                    
-                }               
+               String fullName = getFullNameFromRow(row);
+               int employeeID = getEmployeeIdFromRow(row);
+                handleEmployeeDeletion(employeeID, fullName);
             }
+                
             @Override
             public void onView(int row) {
-                chosenEmployeeID = Integer.parseInt(jTableEmployeeList.getValueAt(row, 0).toString());
-                showOverlay();
-                new JframeProfile(loggedEmployee, chosenEmployeeID).setVisible(true);
+                int employeeID = getEmployeeIdFromRow(row);              
+                openProfileView(employeeID);
             }
         };
+    }
+    
+    private void openProfileView (int employeeID) {
+        showOverlay();
+        new JframeProfile(loggedEmployee, employeeID).setVisible(true);
+    }
+    
+    private void setupActionColumn (TableActionEvent event) {
          jTableEmployeeList.getColumnModel().getColumn(3).setCellRenderer(new TableActionCellRenderer());
          jTableEmployeeList.getColumnModel().getColumn(3).setCellEditor(new TableActionCellEditor(event));
     }
+    
+    private int getEmployeeIdFromRow (int row) {
+        return (int)jTableEmployeeList.getValueAt(row, 0);
+    }
+    
+    private String getFullNameFromRow (int row) {
+        String firstName = jTableEmployeeList.getValueAt(row, 1).toString();
+        String lastName = jTableEmployeeList.getValueAt(row, 2).toString();
+        return firstName + " " + lastName;
+    }
+    
+    private void openEmployeeForm (int employeeID) {
+        this.dispose();
+        new JframeEmployeeForm(loggedEmployee, employeeID).setVisible(true);
+    }
+    
+    private boolean confirmDeletion (String fullName) {
+        String message = "This operation will permanently delete " + fullName + "\n Do you wish to procceed?";
+        return JOptionPane.showConfirmDialog(this, message, "Confirm Deletion", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION;
+    }
+    
+    private void handleEmployeeDeletion (int employeeID, String fullName) {
+        if (confirmDeletion(fullName)) {
+            boolean deleted = hrEmployee.deleteEmployeeByID(employeeID);
+            showDeletionResult(deleted);
+            refreshTable();
+        }            
+    }
+    
+    private void showDeletionResult (boolean deleted) {
+        String message = deleted ? "Employee record has been deleted" : "Failed to delete record";
+        int messageType = deleted ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.ERROR_MESSAGE;
+        JOptionPane.showMessageDialog(this, message, deleted ? "Success" : "Error", messageType);
+    }
+    
+    private void refreshTable () {
+        clearTableSelection();
+        clearTable();
+        loadEmployeeTable();
+    }
+      
   
     /**
      * This method is called from within the constructor to initialize the form.

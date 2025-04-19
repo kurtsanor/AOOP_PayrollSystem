@@ -4,7 +4,6 @@
  */
 package Jframes;
 
-import javax.swing.table.TableCellEditor;
 import CustomTable.TableActionCellEditorV2;
 import CustomTable.TableActionCellRendererV2;
 import CustomTable.TableActionEventV2;
@@ -12,9 +11,9 @@ import Domains.LeaveBalance;
 import Domains.LeaveRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import javax.swing.JOptionPane;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import oopClasses.DatabaseConnection;
 import oopClasses.Employee;
@@ -40,7 +39,7 @@ public class JframeLeaveManagement extends javax.swing.JFrame {
         initComponents();
         this.leaveTbl = (DefaultTableModel) jTableLeaveTable.getModel();
         setExtendedState(MAXIMIZED_BOTH);
-        initTable();
+        initTableEvents();
         initHrUser(loggedEmployee);
         loadLeaveTable();
     }
@@ -51,35 +50,46 @@ public class JframeLeaveManagement extends javax.swing.JFrame {
         }
     }
     
-    private void deductDurationToCredits (int employeeID, int leaveDuration, String leaveType) {
-        LeaveBalance leaveBalance = leaveCreditsDB.getLeaveCreditsByEmpID(employeeID);
-        switch (leaveType) {
-            case "Vacation":
-                leaveBalance = leaveBalance.deductVacationCredits(leaveDuration);
-                break;
-            case "Medical":
-                leaveBalance = leaveBalance.deductMedicalCredits(leaveDuration);
-                break;
-            case "Personal":
-                leaveBalance = leaveBalance.deductPersonalCredits(leaveDuration);
-                break;
-        }
+    private LeaveBalance fetchLeaveCreditsByEmployeeID (int employeeID) {
+        return leaveCreditsDB.getLeaveCreditsByEmpID(employeeID);
+    }
+    
+    private void updateLeaveCredits (int employeeID, String leaveType, int leaveDuration) {
+        LeaveBalance leaveBalance = fetchLeaveCreditsByEmployeeID(employeeID);
+        leaveBalance = deductBalanceByLeaveType(leaveType, leaveBalance, leaveDuration);
+        
         boolean updated = leaveCreditsDB.updateLeaveCreditsByEmpID(employeeID, leaveBalance);
-        System.out.println("updated = " + updated);
+        System.out.println("updated balance = " + updated);
     }
     
-    private void updateLeaveRequest (int leaveID, String status) {
-        LocalDateTime dateTimeNow = LocalDateTime.now();
-        boolean updated = hrEmployee.updateLeaveStatus(leaveID, status, dateTimeNow);
-        if (updated) {
-            JOptionPane.showMessageDialog(this, "Leave status successfully updated to " + status, "Success", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this, "There was a problem updating the request", "Error", JOptionPane.ERROR_MESSAGE);
+    private LeaveBalance deductBalanceByLeaveType (String leaveType, LeaveBalance leaveBalance, int leaveDuration) {
+        switch (leaveType) {
+            case "Vacation" -> leaveBalance = leaveBalance.deductVacationCredits(leaveDuration);
+            case "Medical" -> leaveBalance = leaveBalance.deductMedicalCredits(leaveDuration);
+            case "Personal" -> leaveBalance = leaveBalance.deductPersonalCredits(leaveDuration);
         }
+        return leaveBalance;
     }
     
+    private void updateLeaveStatus (int leaveID, String status) {
+            LocalDateTime dateTimeNow = LocalDateTime.now();
+            boolean updated = hrEmployee.updateLeaveStatus(leaveID, status, dateTimeNow);
+            showUpdatedLeaveStatusResult(updated, status);                          
+    }
+    
+    private void showUpdatedLeaveStatusResult (boolean updated, String status) {
+        String message = updated ? "Leave status successfully updated to " + status : " Failed to update leave status";
+        int messageType = updated ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.ERROR_MESSAGE;
+        JOptionPane.showMessageDialog(this, message, updated ? "Success" : "Error", messageType);
+    }
+    
+    private boolean confirmAction (String action) {
+        String message = "Do you want to update the status to " + action +"?";
+        return JOptionPane.showConfirmDialog(this, message, "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION;
+    }
+       
     private boolean hasEnoughCredits (int employeeID, int leaveDuration, String leaveType) {
-        LeaveBalance leaveBalance = leaveCreditsDB.getLeaveCreditsByEmpID(employeeID);
+        LeaveBalance leaveBalance = fetchLeaveCreditsByEmployeeID(employeeID);
         
         switch (leaveType) {
             case "Vacation":
@@ -92,69 +102,117 @@ public class JframeLeaveManagement extends javax.swing.JFrame {
         return false; // should be unreachable
     }
     
+    private void showInsufficientLeaveCreditsWarning (String leaveType) {
+        JOptionPane.showMessageDialog(JframeLeaveManagement.this, "Employee has insufficient " + leaveType + " credits", "Error", JOptionPane.ERROR_MESSAGE);
+    }
     
-    private void initTable () {
-        TableActionEventV2 event = new TableActionEventV2() {
+    private TableActionEventV2 createTableActionEvents () {
+        return new TableActionEventV2() {
             @Override
             public void onApprove(int row) {
-                String status = jTableLeaveTable.getValueAt(row, 6).toString();
-                if (!"Pending".equals(status)) {
-                    JOptionPane.showMessageDialog(JframeLeaveManagement.this, "This request has already been processed", "Invalid", JOptionPane.WARNING_MESSAGE);
+                String status = getStatusFromRow(row);
+                if (alreadyProcessed(status)) return;
+                                                          
+                LocalDate startDate = getStartDateFromRow(row);
+                LocalDate endDate = getEndDateFromRow(row);
+                String leaveType = getLeaveTypeFromRow(row);
+                int leaveDuration = getLeaveDuration(startDate, endDate);
+                int leaveID = getLeaveIdFromRow(row);
+                int employeeID = getEmployeeIdFromRow(row);
+                
+                if (!hasEnoughCredits(employeeID, leaveDuration, leaveType)) {
+                    showInsufficientLeaveCreditsWarning(leaveType);
                     return;
                 }
                 
-                int choice = JOptionPane.showConfirmDialog(JframeLeaveManagement.this, "Do you want to approve this leave request?", "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                
-                if (choice == JOptionPane.YES_OPTION) {
-                    int leaveID = (int) jTableLeaveTable.getValueAt(row, 0);
-                    int employeeID = (int) jTableLeaveTable.getValueAt(row, 1);
-                    LocalDate startDate = (LocalDate) jTableLeaveTable.getValueAt(row, 3);
-                    LocalDate endDate = (LocalDate) jTableLeaveTable.getValueAt(row, 4);
-                    String leaveType = jTableLeaveTable.getValueAt(row, 2).toString();
-                    int leaveDuration = startDate.until(endDate).getDays();
-                                                     
-                    if (hasEnoughCredits(employeeID, leaveDuration, leaveType)) {
-                        updateLeaveRequest(leaveID, "Approved");
-                        deductDurationToCredits(employeeID, leaveDuration, leaveType);
-                        clearLeaveTable();
-                        loadLeaveTable();
-                        jTableLeaveTable.setRowSelectionInterval(row, row);
-
-                    } else {
-                        JOptionPane.showMessageDialog(JframeLeaveManagement.this, "Employee has insufficient leave credits", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                }   
+                String action = "Approved";
+                if (confirmAction(action)) {
+                    updateLeaveStatus(leaveID, action);
+                    updateLeaveCredits(employeeID, leaveType, leaveDuration);
+                    refreshLeaveTable();
+                    jTableLeaveTable.setRowSelectionInterval(row, row);
+                }              
             }
-                
 
             @Override
             public void onDeny(int row) {
-                String status = jTableLeaveTable.getValueAt(row, 6).toString();
-                if (!"Pending".equals(status)) {
-                    JOptionPane.showMessageDialog(JframeLeaveManagement.this, "This request has already been processed", "Invalid", JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
+                String status = getStatusFromRow(row);
+                if (alreadyProcessed(status)) return;
                 
-                 int choice = JOptionPane.showConfirmDialog(JframeLeaveManagement.this, "Do you want to deny this leave request?", "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                 if (choice == JOptionPane.YES_OPTION) {
-                     int leaveID = (int) jTableLeaveTable.getValueAt(row, 0);
-                    updateLeaveRequest(leaveID, "Denied");
-                    clearLeaveTable();
-                    loadLeaveTable();
+                int leaveID = getLeaveIdFromRow(row);
+                String action = "Denied";
+                if (confirmAction(action)) {
+                    updateLeaveStatus(leaveID, action);
+                    refreshLeaveTable();
                     jTableLeaveTable.setRowSelectionInterval(row, row);
-                 }             
+                }              
             }
         };
-            jTableLeaveTable.getColumnModel().getColumn(9).setCellRenderer(new TableActionCellRendererV2());
-            jTableLeaveTable.getColumnModel().getColumn(9).setCellEditor(new TableActionCellEditorV2(event));
     }
     
+    private void setUpActionColumn (TableActionEventV2 event) {
+        jTableLeaveTable.getColumnModel().getColumn(9).setCellRenderer(new TableActionCellRendererV2());
+        jTableLeaveTable.getColumnModel().getColumn(9).setCellEditor(new TableActionCellEditorV2(event));
+    }
     
+    private void initTableEvents () {
+        TableActionEventV2 events = createTableActionEvents();
+        setUpActionColumn(events);
+    }
+    
+    private void showAlreadyProcessedMessage() {
+        JOptionPane.showMessageDialog(JframeLeaveManagement.this, "This request has already been processed", "Invalid", JOptionPane.WARNING_MESSAGE);
+    }
+    
+    private boolean alreadyProcessed (String status) {
+        if (!"Pending".equals(status)) {
+            showAlreadyProcessedMessage();
+            return true;
+        }
+        return false;
+    }
+    
+    private int getEmployeeIdFromRow (int row) {
+        return (int) jTableLeaveTable.getValueAt(row, 1);
+    }
+    
+    private String getStatusFromRow (int row) {
+        return jTableLeaveTable.getValueAt(row, 6).toString();
+    }
+    
+    private int getLeaveIdFromRow (int row) {
+        return (int) jTableLeaveTable.getValueAt(row, 0);
+    }
+    
+    private LocalDate getStartDateFromRow (int row) {
+        return (LocalDate) jTableLeaveTable.getValueAt(row, 3);
+    }
+    
+    private LocalDate getEndDateFromRow (int row) {
+        return (LocalDate) jTableLeaveTable.getValueAt(row, 4);
+    }
+    
+    private int getLeaveDuration (LocalDate startDate, LocalDate endDate) {
+        return (int) ChronoUnit.DAYS.between(startDate, endDate) + 1;
+        
+    }
+    
+    private String getLeaveTypeFromRow (int row) {
+        return jTableLeaveTable.getValueAt(row, 2).toString();
+    }
+    
+    private void refreshLeaveTable () {
+        clearLeaveTable();
+        loadLeaveTable();
+    }
+     
     private void loadLeaveTable () {
         List <LeaveRequest> leaveRequests = hrEmployee.loadEmployeeLeaves();
-        
-        for (LeaveRequest request: leaveRequests) {
-            leaveTbl.addRow(new Object [] {
+        populateTableWithLeaveRequests(leaveRequests);
+    }
+    
+    private Object [] createLeaveRowData(LeaveRequest request) {
+        return new Object [] {
             request.getLeaveID(),
             request.getEmployeeID(),
             request.getLeaveType(),
@@ -163,19 +221,21 @@ public class JframeLeaveManagement extends javax.swing.JFrame {
             request.getRemarks(),
             request.getStatus(),
             request.getSubmittedDate(),
-            request.getProcessedDate()});
+            request.getProcessedDate()
+        };
+    }
+    
+    private void populateTableWithLeaveRequests(List<LeaveRequest> leaveRequests) {
+        clearLeaveTable();      
+        for (LeaveRequest request: leaveRequests) {
+            leaveTbl.addRow(createLeaveRowData(request));
         }
     }
     
     private void clearLeaveTable () {       
         leaveTbl.setRowCount(0);
     }
-    
-    
-    
-    
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

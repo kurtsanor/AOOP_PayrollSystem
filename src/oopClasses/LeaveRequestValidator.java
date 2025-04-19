@@ -6,6 +6,7 @@ package oopClasses;
 
 import Domains.LeaveBalance;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 /**
  *
@@ -56,7 +57,7 @@ public class LeaveRequestValidator {
             return "";
         }
         
-        int totalDays = startDate.until(endDate).getDays();
+        int totalDays = (int) ChronoUnit.DAYS.between(startDate, endDate) + 1;
         
         switch (leaveType) {
             case "Vacation":
