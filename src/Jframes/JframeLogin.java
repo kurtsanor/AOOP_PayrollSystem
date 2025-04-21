@@ -53,11 +53,16 @@ public class JframeLogin extends javax.swing.JFrame {
 
         jLabelSignIn.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabelSignIn.setForeground(new java.awt.Color(255, 255, 255));
-        jLabelSignIn.setText("Sign In");
+        jLabelSignIn.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabelSignIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/tagged (1).png"))); // NOI18N
+        jLabelSignIn.setText("MotorPH");
+        jLabelSignIn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jLabelSignIn.setIconTextGap(15);
+        jLabelSignIn.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(12, 0, 12, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 25, 0);
         jPanelBg.add(jLabelSignIn, gridBagConstraints);
 
         jTextFieldUsername.setPreferredSize(new java.awt.Dimension(300, 35));

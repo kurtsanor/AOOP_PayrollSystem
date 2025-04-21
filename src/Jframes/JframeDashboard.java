@@ -10,7 +10,9 @@ import oopClasses.Employee;
 import oopClasses.EmployeeDatabase;
 import java.sql.Connection;
 import oopClasses.DatabaseConnection;
+import oopClasses.Finance;
 import oopClasses.HR;
+import oopClasses.IT;
 import oopClasses.RegularEmployee;
 
 /**
@@ -49,6 +51,16 @@ public class JframeDashboard extends javax.swing.JFrame {
             jButtonLeaveManagement.setVisible(true);
         }
         else if (loggedEmployee instanceof RegularEmployee) {
+            jButtonAttendanceManagement.setVisible(false);
+            jButtonEmployeeManagement.setVisible(false);
+            jButtonLeaveManagement.setVisible(false);
+        }
+        else if (loggedEmployee instanceof Finance) {
+            jButtonAttendanceManagement.setVisible(false);
+            jButtonEmployeeManagement.setVisible(false);
+            jButtonLeaveManagement.setVisible(false);
+        }
+        else if (loggedEmployee instanceof IT) {
             jButtonAttendanceManagement.setVisible(false);
             jButtonEmployeeManagement.setVisible(false);
             jButtonLeaveManagement.setVisible(false);
@@ -297,7 +309,7 @@ public class JframeDashboard extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanelLeft.add(jButtonAttendance, gridBagConstraints);
 
-        jButtonPayroll.setText("Payroll");
+        jButtonPayroll.setText("Payslip");
         jButtonPayroll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonPayrollActionPerformed(evt);
@@ -343,6 +355,11 @@ public class JframeDashboard extends javax.swing.JFrame {
         jPanelLeft.add(jButtonEmployeeManagement, gridBagConstraints);
 
         jButtonAttendanceManagement.setText("Attendance Management");
+        jButtonAttendanceManagement.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAttendanceManagementActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -762,6 +779,11 @@ public class JframeDashboard extends javax.swing.JFrame {
         this.dispose();
         new JframeAttendance(loggedEmployee).setVisible(true);
     }//GEN-LAST:event_jButtonAttendanceActionPerformed
+
+    private void jButtonAttendanceManagementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAttendanceManagementActionPerformed
+        this.dispose();
+        new JframeAttendanceManagement(loggedEmployee).setVisible(true);
+    }//GEN-LAST:event_jButtonAttendanceManagementActionPerformed
 
     /**
      * @param args the command line arguments

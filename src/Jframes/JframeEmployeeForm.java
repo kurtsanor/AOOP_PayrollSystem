@@ -510,7 +510,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(8, 12, 2, 12);
         jPanel4.add(jLabel5, gridBagConstraints);
 
-        jDateChooserBirthday.setDateFormatString("yyyy-MM-dd");
+        jDateChooserBirthday.setDateFormatString("MMM dd, yyyy");
         jDateChooserBirthday.setPreferredSize(new java.awt.Dimension(200, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;

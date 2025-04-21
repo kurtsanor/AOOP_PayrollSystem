@@ -22,7 +22,7 @@ public class AttendanceDatabase {
     public AttendanceDatabase (Connection connection) {
         this.connection = connection;
     }
-    
+    // Fetch all attendance records that match the given month and year.
     public List <AttendanceRecord> getAttendanceByIdAndPeriod(int employeeID, YearPeriod period) {
         List <AttendanceRecord> records = new ArrayList<>();
         String query = "SELECT * FROM attendance WHERE employeeID = ? AND YEAR(date) = ? AND MONTH(date) = ?";
@@ -31,6 +31,30 @@ public class AttendanceDatabase {
             pst.setInt(1, employeeID);
             pst.setInt(2, period.getYear());
             pst.setInt(3, period.getMonth());
+            ResultSet rs = pst.executeQuery();
+            
+            while (rs.next()) {
+                LocalDate date = rs.getDate("date").toLocalDate();
+                LocalTime timeIn = rs.getTime("timeIn").toLocalTime();
+                LocalTime timeOut = (rs.getTime("timeOut") != null) ? rs.getTime("timeOut").toLocalTime() : null;              
+                records.add(new AttendanceRecord(employeeID, date, timeIn, timeOut));                            
+            }                               
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to fetch attendance records", e);
+        }
+        
+        return records;
+    }
+    
+    // Fetch attendance records between a custom date range specified by the user.
+    public List<AttendanceRecord> getAttendanceByIdAndPeriod (int employeeID, LocalDate startDate, LocalDate endDate) {
+        List <AttendanceRecord> records = new ArrayList<>();
+        String query = "SELECT * FROM attendance WHERE employeeID = ? AND date BETWEEN ? AND ?";
+        
+        try (PreparedStatement pst = connection.prepareStatement(query)) {                     
+            pst.setInt(1, employeeID);
+            pst.setDate(2, Date.valueOf(startDate));
+            pst.setDate(3, Date.valueOf(endDate));
             ResultSet rs = pst.executeQuery();
             
             while (rs.next()) {
