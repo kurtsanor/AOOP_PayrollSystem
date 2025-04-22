@@ -185,6 +185,7 @@ public class JframeAttendance extends javax.swing.JFrame {
                 "Date", "Time In", "Time Out", "Hours Worked"
             }
         ));
+        jTableAttendance.setSelectionBackground(new java.awt.Color(0, 183, 229));
         jScrollPane1.setViewportView(jTableAttendance);
 
         gridBagConstraints = new java.awt.GridBagConstraints();

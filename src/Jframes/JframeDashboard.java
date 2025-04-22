@@ -4,15 +4,19 @@
  */
 package Jframes;
 
+import Domains.YearPeriod;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import oopClasses.Employee;
 import oopClasses.EmployeeDatabase;
 import java.sql.Connection;
+import java.time.LocalDate;
+import oopClasses.AttendanceDatabase;
 import oopClasses.DatabaseConnection;
 import oopClasses.Finance;
 import oopClasses.HR;
-import oopClasses.IT;
+import oopClasses.HoursCalculator;
+import oopClasses.IT;   
 import oopClasses.RegularEmployee;
 
 /**
@@ -35,7 +39,8 @@ public class JframeDashboard extends javax.swing.JFrame {
         initImages();
         loadEmployeeInformation(employeeID);
         configureRoleBasedButtons(loggedEmployee);
-        populateLabelsWithInfo(loggedEmployee);                  
+        populateLabelsWithInfo(loggedEmployee);        
+        setWorkHoursValue();
     }
     
     // intialize employee variable
@@ -79,10 +84,10 @@ public class JframeDashboard extends javax.swing.JFrame {
         logoIcon = new ImageIcon(img);
         jLabel4.setIcon(logoIcon);             
         
-        ImageIcon logoIcon3 = new ImageIcon(getClass().getResource("/images/theone.jpg"));
-        Image img3 = logoIcon3.getImage().getScaledInstance(jLabel17.getWidth(), jLabel17.getHeight(), Image.SCALE_SMOOTH);
+        ImageIcon logoIcon3 = new ImageIcon(getClass().getResource("/images/linegraph.png"));
+        Image img3 = logoIcon3.getImage().getScaledInstance(jLabelWorkHours.getWidth()+680, jLabelWorkHours.getHeight(), Image.SCALE_SMOOTH);
         logoIcon3 = new ImageIcon(img3);
-        jLabel17.setIcon(logoIcon3); 
+        jLabelWorkHours.setIcon(logoIcon3); 
     }
     
     // set jLabels to employee information
@@ -107,6 +112,35 @@ public class JframeDashboard extends javax.swing.JFrame {
     
     private String formatAmount (double amount) {
         return String.format("%.2f", amount);
+    }
+    
+    private YearPeriod getMonthPeriod () {
+        int month = LocalDate.now().getMonthValue();
+        int year = LocalDate.now().getYear();
+        return new YearPeriod(year, month);
+    }
+    
+    private double getTotalMonthlyHours () {              
+        AttendanceDatabase attendanceDB = new AttendanceDatabase(DatabaseConnection.Connect());
+        YearPeriod period = getMonthPeriod();
+        
+        return HoursCalculator.calculateTotalHoursByPeriod(loggedEmployee.getID(), period, attendanceDB);      
+    }
+    
+    private void setWorkHoursValue () {
+        double hoursWorked = getTotalMonthlyHours();
+        int hours = getHours(hoursWorked);
+        int minutes = getMinutes(hoursWorked);
+        jLabelWorkHours.setText(String.valueOf(hours + " Hours and " + minutes + " Minutes"));
+        
+    }
+    
+    private int getHours (double value) {
+        return (int) value;      
+    }
+    
+    private int getMinutes (double value) {
+        return (int) Math.round((value * 60) % 60);
     }
     
     
@@ -196,8 +230,7 @@ public class JframeDashboard extends javax.swing.JFrame {
         jPanel15 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         jPanel16 = new javax.swing.JPanel();
-        jLabel16 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
+        jLabelWorkHours = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -528,7 +561,7 @@ public class JframeDashboard extends javax.swing.JFrame {
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 183, 229));
-        jLabel7.setText(" GRAPHS");
+        jLabel7.setText(" MONTHLY PAYROLL TRENDS");
         jPanel8.add(jLabel7, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -649,7 +682,7 @@ public class JframeDashboard extends javax.swing.JFrame {
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel13.setText(" INFORMATION");
+        jLabel13.setText(" TODAY'S ATTENDANCE LOG");
         jPanel13.add(jLabel13, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -692,6 +725,8 @@ public class JframeDashboard extends javax.swing.JFrame {
 
         jPanel18.setBackground(new java.awt.Color(0, 51, 102));
         jPanel18.setLayout(new java.awt.BorderLayout());
+
+        jCalendar1.setTodayButtonText("");
         jPanel18.add(jCalendar1, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -717,7 +752,7 @@ public class JframeDashboard extends javax.swing.JFrame {
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel14.setText(" INFORMATION AGAIN");
+        jLabel14.setText(" TOTAL WORK HOURS THIS MONTH");
         jPanel15.add(jLabel14, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -729,13 +764,20 @@ public class JframeDashboard extends javax.swing.JFrame {
 
         jPanel16.setBackground(new java.awt.Color(255, 255, 255));
         jPanel16.setPreferredSize(new java.awt.Dimension(469, 130));
-        jPanel16.setLayout(new java.awt.GridLayout(1, 2));
+        jPanel16.setLayout(new java.awt.GridBagLayout());
 
-        jLabel16.setText("jLabel16");
-        jPanel16.add(jLabel16);
-
-        jLabel17.setText("jLabel17");
-        jPanel16.add(jLabel17);
+        jLabelWorkHours.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabelWorkHours.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelWorkHours.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/www (1).png"))); // NOI18N
+        jLabelWorkHours.setText("2 Hours 35 Minutes");
+        jLabelWorkHours.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jLabelWorkHours.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.01;
+        gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 6);
+        jPanel16.add(jLabelWorkHours, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -816,8 +858,6 @@ public class JframeDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -842,6 +882,7 @@ public class JframeDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelSssNumber;
     private javax.swing.JLabel jLabelStatus;
     private javax.swing.JLabel jLabelTin;
+    private javax.swing.JLabel jLabelWorkHours;
     private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;

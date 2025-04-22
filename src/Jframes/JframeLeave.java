@@ -9,6 +9,7 @@ import Domains.LeaveRequest;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -32,11 +33,13 @@ public class JframeLeave extends javax.swing.JFrame {
     private DefaultTableModel leaveTbl;
     private LeaveCreditsDatabase leaveCreditsDB;
     private LeaveBalance personalLeaveCredits;
-    private SimpleDateFormat dateFormat;
+    private SimpleDateFormat sqlDateFormat;
+    private SimpleDateFormat simpleFormat;
     public JframeLeave(Employee loggedEmployee) {
         this.leaveCreditsDB = new LeaveCreditsDatabase(DatabaseConnection.Connect());
         this.loggedEmployee = loggedEmployee;
-        this.dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        this.sqlDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        this.simpleFormat = new SimpleDateFormat("MMM dd, yyyy");
         initComponents();
         this.leaveTbl = (DefaultTableModel) jTableLeaveHistory.getModel();
         jPanel3.setVisible(false);
@@ -76,8 +79,8 @@ public class JframeLeave extends javax.swing.JFrame {
         return new Object [] {
             request.getLeaveID(),
             request.getLeaveType(),
-            request.getStartDate(),
-            request.getEndDate(),
+            simpleFormat.format(Date.from(request.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant())),
+            simpleFormat.format(Date.from(request.getEndDate().atStartOfDay(ZoneId.systemDefault()).toInstant())),
             request.getStatus(),
             request.getSubmittedDate(),
             request.getProcessedDate(),
@@ -112,9 +115,9 @@ public class JframeLeave extends javax.swing.JFrame {
     private LeaveRequest setupLeaveRequest () {
         LocalDateTime dateTimeNow = LocalDateTime.now();
         Date start = jDateChooserStartDate.getDate();       
-        LocalDate startDate = start != null ? LocalDate.parse(dateFormat.format(start)) : null;
+        LocalDate startDate = start != null ? LocalDate.parse(sqlDateFormat.format(start)) : null;
         Date end = jDateChooserEndDate.getDate();
-        LocalDate endDate = end != null ? LocalDate.parse(dateFormat.format(end)) : null;
+        LocalDate endDate = end != null ? LocalDate.parse(sqlDateFormat.format(end)) : null;
         
         return new LeaveRequest(
             loggedEmployee.getID(),
@@ -154,9 +157,9 @@ public class JframeLeave extends javax.swing.JFrame {
         String errorMessage;
         
         Date unparsedStartDate = jDateChooserStartDate.getDate();       
-        LocalDate startDate = unparsedStartDate != null ? LocalDate.parse(dateFormat.format(unparsedStartDate)) : null;
+        LocalDate startDate = unparsedStartDate != null ? LocalDate.parse(sqlDateFormat.format(unparsedStartDate)) : null;
         Date unparsedEndDate = jDateChooserEndDate.getDate();
-        LocalDate endDate = unparsedEndDate != null ? LocalDate.parse(dateFormat.format(unparsedEndDate)) : null;
+        LocalDate endDate = unparsedEndDate != null ? LocalDate.parse(sqlDateFormat.format(unparsedEndDate)) : null;
         String leaveType = jComboBoxLeaveType.getSelectedItem().toString();
         
         errorMessage = LeaveRequestValidator.validateStartDateWithMessage(startDate, endDate);
@@ -485,7 +488,7 @@ public class JframeLeave extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(9, 12, 9, 12);
         jPanel3.add(jButtonSubmit, gridBagConstraints);
 
-        jDateChooserStartDate.setDateFormatString("yyyy-MM-dd");
+        jDateChooserStartDate.setDateFormatString("MMM dd, yyyy");
         jDateChooserStartDate.setPreferredSize(new java.awt.Dimension(88, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -495,7 +498,7 @@ public class JframeLeave extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(3, 12, 3, 12);
         jPanel3.add(jDateChooserStartDate, gridBagConstraints);
 
-        jDateChooserEndDate.setDateFormatString("yyyy-MM-dd");
+        jDateChooserEndDate.setDateFormatString("MMM dd, yyyy");
         jDateChooserEndDate.setPreferredSize(new java.awt.Dimension(88, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -566,6 +569,7 @@ public class JframeLeave extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTableLeaveHistory.setSelectionBackground(new java.awt.Color(0, 183, 229));
         jScrollPane1.setViewportView(jTableLeaveHistory);
 
         gridBagConstraints = new java.awt.GridBagConstraints();

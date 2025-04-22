@@ -9,10 +9,16 @@ import CustomTable.TableActionCellRendererV2;
 import CustomTable.TableActionEventV2;
 import Domains.LeaveBalance;
 import Domains.LeaveRequest;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import oopClasses.DatabaseConnection;
@@ -33,9 +39,13 @@ public class JframeLeaveManagement extends javax.swing.JFrame {
     private LeaveCreditsDatabase leaveCreditsDB;
     private HR hrEmployee;
     private DefaultTableModel leaveTbl;
+    private SimpleDateFormat simpleFormat;
+    private SimpleDateFormat sqlDateFormat;
     public JframeLeaveManagement(Employee loggedEmployee) {
         this.loggedEmployee = loggedEmployee;
         this.leaveCreditsDB = new LeaveCreditsDatabase(DatabaseConnection.Connect());
+        this.simpleFormat = new SimpleDateFormat("MMM dd, yyyy");
+        this.sqlDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         initComponents();
         this.leaveTbl = (DefaultTableModel) jTableLeaveTable.getModel();
         setExtendedState(MAXIMIZED_BOTH);
@@ -185,16 +195,25 @@ public class JframeLeaveManagement extends javax.swing.JFrame {
     }
     
     private LocalDate getStartDateFromRow (int row) {
-        return (LocalDate) jTableLeaveTable.getValueAt(row, 3);
+        try {
+            return LocalDate.parse(sqlDateFormat.format(simpleFormat.parse(jTableLeaveTable.getValueAt(row, 3).toString())));
+        } catch (ParseException ex) {
+            Logger.getLogger(JframeLeaveManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     private LocalDate getEndDateFromRow (int row) {
-        return (LocalDate) jTableLeaveTable.getValueAt(row, 4);
+        try {
+            return LocalDate.parse(sqlDateFormat.format(simpleFormat.parse(jTableLeaveTable.getValueAt(row, 4).toString())));
+        } catch (ParseException ex) {
+            Logger.getLogger(JframeLeaveManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     private int getLeaveDuration (LocalDate startDate, LocalDate endDate) {
-        return (int) ChronoUnit.DAYS.between(startDate, endDate) + 1;
-        
+        return (int) ChronoUnit.DAYS.between(startDate, endDate) + 1;      
     }
     
     private String getLeaveTypeFromRow (int row) {
@@ -216,8 +235,8 @@ public class JframeLeaveManagement extends javax.swing.JFrame {
             request.getLeaveID(),
             request.getEmployeeID(),
             request.getLeaveType(),
-            request.getStartDate(),
-            request.getEndDate(),
+            simpleFormat.format(Date.from(request.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant())),
+            simpleFormat.format(Date.from(request.getEndDate().atStartOfDay(ZoneId.systemDefault()).toInstant())),
             request.getRemarks(),
             request.getStatus(),
             request.getSubmittedDate(),

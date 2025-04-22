@@ -68,7 +68,7 @@ public class JframePayslip extends javax.swing.JFrame {
     private void enableControls (boolean status) {
         jMonthChooser.setEnabled(status);
         jYearChooser.setEnabled(status);
-        jButtonVerify.setEnabled(status);
+        jButtonGenerate.setEnabled(status);
     }
         
     
@@ -93,7 +93,7 @@ public class JframePayslip extends javax.swing.JFrame {
         jMonthChooser = new com.toedter.calendar.JMonthChooser();
         jLabelSelectYear = new javax.swing.JLabel();
         jYearChooser = new com.toedter.calendar.JYearChooser();
-        jButtonVerify = new javax.swing.JButton();
+        jButtonGenerate = new javax.swing.JButton();
         jLabelVerifyError = new javax.swing.JLabel();
         jLabelHeader = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -181,6 +181,7 @@ public class JframePayslip extends javax.swing.JFrame {
         jPanel2.add(jLabelSelectYear, gridBagConstraints);
 
         jYearChooser.setPreferredSize(new java.awt.Dimension(64, 35));
+        jYearChooser.setYear(2022);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -188,14 +189,14 @@ public class JframePayslip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(3, 0, 3, 0);
         jPanel2.add(jYearChooser, gridBagConstraints);
 
-        jButtonVerify.setBackground(new java.awt.Color(0, 183, 229));
-        jButtonVerify.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButtonVerify.setForeground(new java.awt.Color(255, 255, 255));
-        jButtonVerify.setText("Verify");
-        jButtonVerify.setPreferredSize(new java.awt.Dimension(125, 35));
-        jButtonVerify.addActionListener(new java.awt.event.ActionListener() {
+        jButtonGenerate.setBackground(new java.awt.Color(0, 183, 229));
+        jButtonGenerate.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButtonGenerate.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonGenerate.setText("Generate");
+        jButtonGenerate.setPreferredSize(new java.awt.Dimension(125, 35));
+        jButtonGenerate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonVerifyActionPerformed(evt);
+                jButtonGenerateActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -203,7 +204,7 @@ public class JframePayslip extends javax.swing.JFrame {
         gridBagConstraints.gridy = 5;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(19, 0, 0, 0);
-        jPanel2.add(jButtonVerify, gridBagConstraints);
+        jPanel2.add(jButtonGenerate, gridBagConstraints);
 
         jLabelVerifyError.setForeground(new java.awt.Color(255, 102, 102));
         jLabelVerifyError.setText("No records found");
@@ -543,9 +544,9 @@ public class JframePayslip extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonVerifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVerifyActionPerformed
+    private void jButtonGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGenerateActionPerformed
         displayPayslipDetails();
-    }//GEN-LAST:event_jButtonVerifyActionPerformed
+    }//GEN-LAST:event_jButtonGenerateActionPerformed
 
     private void jButtonBackToDashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBackToDashboardActionPerformed
         this.dispose();
@@ -565,7 +566,7 @@ public class JframePayslip extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBackToDashboard;
     private javax.swing.JButton jButtonClose;
-    private javax.swing.JButton jButtonVerify;
+    private javax.swing.JButton jButtonGenerate;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel19;

@@ -8,6 +8,7 @@ import Domains.AttendanceRecord;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -29,12 +30,14 @@ public class JframeAttendanceManagement extends javax.swing.JFrame {
     private Employee loggedEmployee;
     private AttendanceDatabase attendanceDB;
     private HR hrEmployee;
-    private SimpleDateFormat dateFormat;
+    private SimpleDateFormat sqlDateFormat;
+    private SimpleDateFormat simpleFormat;
     private DefaultTableModel attendanceTbl;
     public JframeAttendanceManagement(Employee loggedEmployee) {
         this.attendanceDB = new AttendanceDatabase(DatabaseConnection.Connect());
         this.loggedEmployee = loggedEmployee;
-        this.dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        this.sqlDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        this.simpleFormat = new SimpleDateFormat("MMM dd, yyyy");
         initComponents();
         attendanceTbl = (DefaultTableModel) jTableAttendance.getModel();
         setExtendedState(MAXIMIZED_BOTH);
@@ -63,13 +66,13 @@ public class JframeAttendanceManagement extends javax.swing.JFrame {
     
     private LocalDate getStartDate () {
         Date chosenDate = jDateChooserStartDate.getDate();
-        return chosenDate != null ? LocalDate.parse(dateFormat.format(chosenDate)) : null;
+        return chosenDate != null ? LocalDate.parse(sqlDateFormat.format(chosenDate)) : null;
         
     }
     
     private LocalDate getEndDate () {
         Date chosenDate = jDateChooserEndDate.getDate();
-        return chosenDate != null? LocalDate.parse(dateFormat.format(chosenDate)): null;
+        return chosenDate != null? LocalDate.parse(sqlDateFormat.format(chosenDate)): null;
     }
     
     private int getSelectedEmployee () {
@@ -86,16 +89,14 @@ public class JframeAttendanceManagement extends javax.swing.JFrame {
         LocalTime out = record.getTimeOut();
         return new Object [] { 
             record.getEmployeeID(),
-            record.getDate(),
+            simpleFormat.format(Date.from(record.getDate().atStartOfDay(ZoneId.systemDefault()).toInstant())),
             in,
             out,
             HoursCalculator.calculateDailyHours(in, out)
         };
     }
     
-    private void populateTable (List<AttendanceRecord> records) {
-        attendanceTbl.setRowCount(0);
-        
+    private void populateTable (List<AttendanceRecord> records) {            
         for (AttendanceRecord record: records) {
             attendanceTbl.addRow(createTableRowData(record));
         }
@@ -105,14 +106,19 @@ public class JframeAttendanceManagement extends javax.swing.JFrame {
         LocalDate start = getStartDate();
         LocalDate end = getEndDate();
         hideErrorLabels();
-        if (validDates(start, end)) {
-            int employeeID = getSelectedEmployee();
-            List <AttendanceRecord> records = fetchAttendanceRecords(employeeID, start, end);
+        attendanceTbl.setRowCount(0);
+        
+        if (!validDates(start, end)) {
+            showInvalidDatesError(start, end);
+            return;
+        }
+        int employeeID = getSelectedEmployee();
+        List <AttendanceRecord> records = fetchAttendanceRecords(employeeID, start, end);  
+        if (!records.isEmpty()) {
             populateTable(records);
         } else {
-            showInvalidDatesError(start, end);
-        }
-        
+            jLabelNoResultError.setVisible(true);
+        }   
     }
     
     public boolean validDates (LocalDate start, LocalDate end) {
@@ -144,6 +150,7 @@ public class JframeAttendanceManagement extends javax.swing.JFrame {
     private void hideErrorLabels () {
         jLabelStartDateError.setVisible(false);
         jLabelEndDateError.setVisible(false);
+        jLabelNoResultError.setVisible(false);
     }
 
     /**
@@ -172,6 +179,7 @@ public class JframeAttendanceManagement extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabelStartDateError = new javax.swing.JLabel();
         jLabelEndDateError = new javax.swing.JLabel();
+        jLabelNoResultError = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -213,6 +221,7 @@ public class JframeAttendanceManagement extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTableAttendance.setSelectionBackground(new java.awt.Color(0, 183, 229));
         jScrollPane1.setViewportView(jTableAttendance);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -310,6 +319,14 @@ public class JframeAttendanceManagement extends javax.swing.JFrame {
         gridBagConstraints.gridy = 1;
         jPanel2.add(jLabelEndDateError, gridBagConstraints);
 
+        jLabelNoResultError.setForeground(new java.awt.Color(255, 102, 102));
+        jLabelNoResultError.setText("No results found");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 37);
+        jPanel2.add(jLabelNoResultError, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -357,6 +374,7 @@ public class JframeAttendanceManagement extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabelEndDateError;
+    private javax.swing.JLabel jLabelNoResultError;
     private javax.swing.JLabel jLabelStartDateError;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
