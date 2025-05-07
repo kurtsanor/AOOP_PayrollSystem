@@ -74,12 +74,27 @@ public class LeaveDatabase {
     }
         
    
-    public boolean submitLeaveRequest (LeaveRequest leaveRequest) {       
-        String query = "INSERT INTO leaves "
-                     + "(employeeID, leaveType, startDate, endDate, status, submittedDate, remarks) VALUES (?,?,?,?,?,?,?)";
-        try (PreparedStatement pst = connection.prepareStatement(query)) {
+    public boolean submitLeaveRequest (LeaveRequest leaveRequest) {
+        int leaveTypeID = -1;
+        
+        String leaveTypeQuery = "SELECT leaveTypeID FROM leavetype WHERE leaveTypeName = ?";
+        try (PreparedStatement leaveTypePst = connection.prepareStatement(leaveTypeQuery)) {
+            leaveTypePst.setString(1, leaveRequest.getLeaveType());
+            ResultSet rs = leaveTypePst.executeQuery();
+            if (rs.next()) {
+                leaveTypeID = rs.getInt("leaveTypeID");
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to get leave type id", e);
+        }
+        
+        String insertQuery = "INSERT INTO leaves "
+                     + "(employeeID, leaveTypeID, startDate, endDate, status, submittedDate, remarks) VALUES (?,?,?,?,?,?,?)";
+        try (PreparedStatement pst = connection.prepareStatement(insertQuery)) {
             pst.setInt(1, leaveRequest.getEmployeeID());
-            pst.setString(2, leaveRequest.getLeaveType());
+            pst.setInt(2, leaveTypeID);
             pst.setDate(3, Date.valueOf(leaveRequest.getStartDate()));
             pst.setDate(4, Date.valueOf(leaveRequest.getEndDate()));
             pst.setString(5, leaveRequest.getStatus());
