@@ -9,7 +9,7 @@ public class DatabaseConnection {
      
     private static String URL = "jdbc:MYSQL://localhost:3306/mtrphdb";
     private static String USER = "root";
-    private static String PASSWORD = "";
+    private static String PASSWORD = "kurt01021974";
     
     public static Connection Connect(){     
         try {
