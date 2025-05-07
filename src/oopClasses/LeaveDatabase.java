@@ -22,7 +22,9 @@ public class LeaveDatabase {
        
     public List <LeaveRequest> getAllRecords () {
         List <LeaveRequest> leaveRecords = new ArrayList<>();
-        String query = "SELECT * FROM leaves";
+        String query = "SELECT l.leaveID, l.employeeID, lt.leaveTypeName, l.startDate, l.endDate, l.status, l.submittedDate, l.processedDate, l.remarks" +
+"                FROM leaves l JOIN leaveType lt ON l.leaveTypeID = lt.leaveTypeID ORDER BY l.leaveID DESC";
+        
         
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             ResultSet rs = pst.executeQuery();                                     
@@ -39,7 +41,8 @@ public class LeaveDatabase {
           
     public List <LeaveRequest> getLeavesByEmployeeID (int employeeID) {
         List <LeaveRequest> leaveRecords = new ArrayList<>();
-        String query = "SELECT * FROM leaves WHERE employeeID = ?";
+        String query = "SELECT l.leaveID, l.employeeID, lt.leaveTypeName, l.startDate, l.endDate, l.status, l.submittedDate, l.processedDate, l.remarks" +
+"                FROM leaves l JOIN leaveType lt ON l.leaveTypeID = lt.leaveTypeID WHERE l.employeeID = ? ORDER BY l.leaveID DESC";
         
         try (PreparedStatement pst = connection.prepareStatement(query)) {            
             pst.setInt(1, employeeID);
@@ -108,7 +111,7 @@ public class LeaveDatabase {
         LocalDateTime processedDate = (timestamp != null) ? timestamp.toLocalDateTime(): null;
         LeaveRequest leaveRequest = new LeaveRequest(
             rs.getInt("employeeID"),
-            rs.getString("leaveType"),
+            rs.getString("leaveTypeName"),
             rs.getDate("startDate").toLocalDate(),
             rs.getDate("endDate").toLocalDate(),
             rs.getString("status"),
