@@ -52,7 +52,7 @@ public abstract class Employee implements EmployeeEssentials {
         this.tinNumber = rs.getString("tinNumber");
         this.hourlyRate = rs.getDouble("hourlyRate");
         this.philhealthNumber = rs.getString("philhealthNumber");
-        this.role = rs.getString("role");
+        this.role = rs.getString("roleName");
         this.supervisor = rs.getString("supervisor");
         this.basicSalary = rs.getDouble("basicSalary");
         this.riceSubsidy = rs.getDouble("riceSubsidy");

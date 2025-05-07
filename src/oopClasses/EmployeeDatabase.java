@@ -18,7 +18,28 @@ public class EmployeeDatabase {
     
     public List <Employee> getAllEmployees () {
         List <Employee> employees = new ArrayList<>();
-        String query = "SELECT * FROM employees";
+        String query = "SELCT "
+                + "e.employeeID, "
+                + "e.firstName, "
+                + "e.lastName, "
+                + "e.position, "
+                + "e.status, "
+                + "e.birthday, "
+                + "e.address, "
+                + "e.phoneNumber, "
+                + "e.sssNumber, "
+                + "e.pagibigNumber, "
+                + "e.tinNumber, "
+                + "e.hourlyRate, "
+                + "e.philhealthNumber,"
+                + "r.roleName, "
+                + "e.supervisor, "
+                + "e.basicSalary, "
+                + "e.riceSubsidy, "
+                + "e.phoneAllowance, "
+                + "e.clothingAllowance, "
+                + "e.grossSemiMonthlyRate "
+                + "FROM employees e JOIN roles r ON e.roleID = r.roleID";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             ResultSet rs = pst.executeQuery();           
             while (rs.next()) {
@@ -52,8 +73,29 @@ public class EmployeeDatabase {
         return result;
     }
      
-    public Employee getEmployeeByID (int employeeID) {  
-        String query = "SELECT * FROM employees WHERE employeeID = ?";
+    public Employee getEmployeeByID (int employeeID) {
+        String query = "SELECT "
+                + "e.employeeID, "
+                + "e.firstName, "
+                + "e.lastName, "
+                + "e.position, "
+                + "e.status, "
+                + "e.birthday, "
+                + "e.address, "
+                + "e.phoneNumber, "
+                + "e.sssNumber, "
+                + "e.pagibigNumber, "
+                + "e.tinNumber, "
+                + "e.hourlyRate, "
+                + "e.philhealthNumber,"
+                + "r.roleName, "
+                + "e.supervisor, "
+                + "e.basicSalary, "
+                + "e.riceSubsidy, "
+                + "e.phoneAllowance, "
+                + "e.clothingAllowance, "
+                + "e.grossSemiMonthlyRate "
+                + "FROM employees e JOIN roles r ON e.roleID = r.roleID WHERE e.employeeID = ?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {            
             pst.setInt(1, employeeID);
             ResultSet rs = pst.executeQuery();

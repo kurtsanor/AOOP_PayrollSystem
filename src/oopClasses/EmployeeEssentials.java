@@ -8,7 +8,6 @@ import Domains.AttendanceRecord;
 import Domains.LeaveRequest;
 import Domains.YearPeriod;
 import java.util.List;
-import java.sql.SQLException;
 
 /**
  *

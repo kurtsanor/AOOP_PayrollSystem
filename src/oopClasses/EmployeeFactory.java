@@ -11,7 +11,7 @@ import java.sql.SQLException;
  */
 public class EmployeeFactory {
     public static  Employee createEmployeeFromResultSet (ResultSet rs) throws SQLException {
-        String role = rs.getString("role");
+        String role = rs.getString("roleName");
         Employee employee;
         
         switch (role.toUpperCase()) {
