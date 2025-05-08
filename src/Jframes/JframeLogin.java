@@ -4,8 +4,8 @@
  */
 package Jframes;
 
-import oopClasses.DatabaseConnection;
-import oopClasses.UserAuthentication;
+import Core.DatabaseConnection;
+import Core.UserAuthentication;
 import java.sql.Connection;
 
 /**

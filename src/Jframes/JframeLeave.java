@@ -15,10 +15,10 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import oopClasses.DatabaseConnection;
-import oopClasses.Employee;
-import oopClasses.LeaveCreditsDatabase;
-import oopClasses.LeaveRequestValidator;
+import Core.DatabaseConnection;
+import Core.Employee;
+import Core.LeaveCreditsDatabase;
+import Core.LeaveRequestValidator;
 
 /**
  *

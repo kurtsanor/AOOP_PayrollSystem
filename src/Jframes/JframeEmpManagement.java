@@ -13,8 +13,8 @@ import java.util.Collections;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JWindow;
-import oopClasses.Employee;
-import oopClasses.HR;
+import Core.Employee;
+import Core.HR;
 
 /**
  *

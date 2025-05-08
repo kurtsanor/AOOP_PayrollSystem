@@ -12,11 +12,11 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
-import oopClasses.AttendanceDatabase;
-import oopClasses.DatabaseConnection;
-import oopClasses.Employee;
-import oopClasses.HR;
-import oopClasses.HoursCalculator;
+import Core.AttendanceDatabase;
+import Core.DatabaseConnection;
+import Core.Employee;
+import Core.HR;
+import Core.HoursCalculator;
 
 /**
  *

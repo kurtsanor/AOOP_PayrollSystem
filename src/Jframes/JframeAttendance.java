@@ -10,10 +10,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
-import oopClasses.AttendanceDatabase;
-import oopClasses.DatabaseConnection;
-import oopClasses.Employee;
-import oopClasses.HoursCalculator;
+import Core.AttendanceDatabase;
+import Core.DatabaseConnection;
+import Core.Employee;
+import Core.HoursCalculator;
 
 /**
  *

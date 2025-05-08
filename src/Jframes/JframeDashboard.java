@@ -7,17 +7,17 @@ package Jframes;
 import Domains.YearPeriod;
 import java.awt.Image;
 import javax.swing.ImageIcon;
-import oopClasses.Employee;
-import oopClasses.EmployeeDatabase;
+import Core.Employee;
+import Core.EmployeeDatabase;
 import java.sql.Connection;
 import java.time.LocalDate;
-import oopClasses.AttendanceDatabase;
-import oopClasses.DatabaseConnection;
-import oopClasses.Finance;
-import oopClasses.HR;
-import oopClasses.HoursCalculator;
-import oopClasses.IT;   
-import oopClasses.RegularEmployee;
+import Core.AttendanceDatabase;
+import Core.DatabaseConnection;
+import Core.Finance;
+import Core.HR;
+import Core.HoursCalculator;
+import Core.IT;
+import Core.RegularEmployee;
 
 /**
  *

@@ -6,8 +6,8 @@ package Jframes;
 
 import java.awt.Image;
 import javax.swing.ImageIcon;
-import oopClasses.Employee;
-import oopClasses.HR;
+import Core.Employee;
+import Core.HR;
 
 /**
  *

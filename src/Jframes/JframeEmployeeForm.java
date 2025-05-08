@@ -8,10 +8,10 @@ import java.time.LocalDate;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
-import oopClasses.Employee;
-import oopClasses.EmployeeValidator;
-import oopClasses.HR;
-import oopClasses.RegularEmployee;
+import Core.Employee;
+import Core.EmployeeValidator;
+import Core.HR;
+import Core.RegularEmployee;
 
 /**
  *

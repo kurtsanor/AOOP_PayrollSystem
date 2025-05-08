@@ -6,7 +6,8 @@ package Jframes;
 
 import Domains.Payslip;
 import Domains.YearPeriod;
-import oopClasses.Employee;
+import Core.Employee;
+import Core.PdfProcessor;
 
 /**
  *
@@ -128,7 +129,9 @@ public class JframePayslip extends javax.swing.JFrame {
         jLabelPagibigAmount = new javax.swing.JLabel();
         jLabelWithholdingTaxAmount = new javax.swing.JLabel();
         jLabelTotalDeductionsAmount = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
         jButtonClose = new javax.swing.JButton();
+        jButtonSavePdf = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -516,6 +519,9 @@ public class JframePayslip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(2, 40, 2, 40);
         jPanel3.add(jLabelTotalDeductionsAmount, gridBagConstraints);
 
+        jPanel7.setBackground(new java.awt.Color(86, 98, 106));
+        jPanel7.setLayout(new java.awt.GridBagLayout());
+
         jButtonClose.setBackground(new java.awt.Color(153, 0, 0));
         jButtonClose.setForeground(new java.awt.Color(255, 255, 255));
         jButtonClose.setText("Close");
@@ -525,11 +531,27 @@ public class JframePayslip extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        jPanel7.add(jButtonClose, gridBagConstraints);
+
+        jButtonSavePdf.setText("Save PDF");
+        jButtonSavePdf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSavePdfActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        jPanel7.add(jButtonSavePdf, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridy = 16;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        jPanel3.add(jButtonClose, gridBagConstraints);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel3.add(jPanel7, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -558,6 +580,11 @@ public class JframePayslip extends javax.swing.JFrame {
         enableControls(true);
     }//GEN-LAST:event_jButtonCloseActionPerformed
 
+    private void jButtonSavePdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSavePdfActionPerformed
+        YearPeriod period = getChosenPeriod();
+        PdfProcessor.createPayslipPdf(loggedEmployee, getPayslipDetails(period));
+    }//GEN-LAST:event_jButtonSavePdfActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -567,6 +594,7 @@ public class JframePayslip extends javax.swing.JFrame {
     private javax.swing.JButton jButtonBackToDashboard;
     private javax.swing.JButton jButtonClose;
     private javax.swing.JButton jButtonGenerate;
+    private javax.swing.JButton jButtonSavePdf;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel19;
@@ -606,6 +634,7 @@ public class JframePayslip extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private com.toedter.calendar.JYearChooser jYearChooser;
     // End of variables declaration//GEN-END:variables
 }
