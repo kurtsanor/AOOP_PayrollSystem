@@ -5,7 +5,6 @@
 package Core;
 
 import Domains.Payslip;
-import static com.itextpdf.kernel.colors.ColorConstants.GRAY;
 import static com.itextpdf.kernel.colors.ColorConstants.LIGHT_GRAY;
 import com.itextpdf.kernel.colors.DeviceRgb;
 import static com.itextpdf.kernel.colors.DeviceRgb.WHITE;
@@ -23,7 +22,6 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.time.Period;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
