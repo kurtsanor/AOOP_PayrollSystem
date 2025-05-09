@@ -34,10 +34,8 @@ import java.util.logging.Logger;
 public class PdfProcessor {
     public static void createPayslipPdf(Employee employee, Payslip payslip) {
         try {
-            // Get Downloads folder in a cross-platform way
-            String userHome = System.getProperty("user.home");
+
             String fileNameFormat = employee.getLastName() + "-Payslip-" + payslip.getPeriod().getMonth() + "-" + payslip.getPeriod().getYear() +".pdf";
-//            String filePath = userHome + File.separator + "Downloads" + File.separator + fileNameFormat;
             String filePath = "generated payslips" + File.separator + fileNameFormat;
             
             // Create PDF writer
@@ -150,12 +148,13 @@ public class PdfProcessor {
                 
                 document.add(new Paragraph("\n\nThis is a system generated payslip.").setTextAlignment(TextAlignment.CENTER));
             }
-                      
+            
+            // redirect to the folder containing the pdf
             File file = new File(filePath);
             if (Desktop.isDesktopSupported()) {
                 Desktop desktop = Desktop.getDesktop();
                 File parentDirectory = file.getParentFile();
-                desktop.open(parentDirectory);  // Open the directory in the file explorer
+                desktop.open(parentDirectory);
             }
             System.out.println("PDF successfully created at: " + file.getAbsolutePath());
 
@@ -180,12 +179,5 @@ public class PdfProcessor {
                         .useAllAvailableWidth();
         }
         
-//        private static Table createTakeHomePayRow (double netPay) {
-//            Table takehomePay = new Table(UnitValue.createPercentArray(new float[]{50,50}))
-//                        .useAllAvailableWidth();
-//                takehomePay.addCell(new Cell().add(new Paragraph("Take Home Pay")).setBorder(Border.NO_BORDER).setBold());
-//                takehomePay.addCell(new Cell().add(new Paragraph(amountToString(netPay))).setTextAlignment(TextAlignment.RIGHT).setBorder(Border.NO_BORDER).setBold()).setBackgroundColor(blue).setFontColor(WHITE);
-//                return takehomePay;
-//        }
     }
 
