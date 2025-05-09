@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import Core.Employee;
 import Core.EmployeeValidator;
 import Core.HR;
+import Core.PayrollCalculator;
 import Core.RegularEmployee;
 
 /**
@@ -715,6 +716,11 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         jPanel5.add(jLabel11, gridBagConstraints);
 
         jTextFieldBasicSalary.setPreferredSize(new java.awt.Dimension(200, 35));
+        jTextFieldBasicSalary.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextFieldBasicSalaryKeyReleased(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -802,6 +808,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(8, 12, 2, 12);
         jPanel5.add(jLabel15, gridBagConstraints);
 
+        jTextFieldHourlyRate.setEditable(false);
         jTextFieldHourlyRate.setPreferredSize(new java.awt.Dimension(200, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1098,6 +1105,16 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         validateThenSaveEmployee();
         
     }//GEN-LAST:event_jButtonSaveActionPerformed
+
+    private void jTextFieldBasicSalaryKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldBasicSalaryKeyReleased
+        try {
+            double value = Double.parseDouble(jTextFieldBasicSalary.getText());
+            jTextFieldHourlyRate.setText(PayrollCalculator.formatAmount(PayrollCalculator.convertToHourlyRate(value)));
+            jTextFieldGrossSemiMonthly.setText(PayrollCalculator.formatAmount(PayrollCalculator.convertToSemiMonthlyRate(value)));
+        } catch (NumberFormatException e) {}
+        
+        
+    }//GEN-LAST:event_jTextFieldBasicSalaryKeyReleased
     
     private void showErrorLabels (boolean visible) {
         jLabelFirstNameError.setVisible(visible);
