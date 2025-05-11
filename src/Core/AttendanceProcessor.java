@@ -17,11 +17,9 @@ import java.util.Map;
 public class AttendanceProcessor {
     
     private final AttendanceDAO database;
-    private final HoursCalculator hoursCalculator;
     
-    public AttendanceProcessor (AttendanceDAO database, HoursCalculator hoursCalculator) {
+    public AttendanceProcessor (AttendanceDAO database) {
         this.database = database;
-        this.hoursCalculator = hoursCalculator;
     }
     
     public Map<EmployeeMonthlyHoursKey, Double> calculateMonthlyHours () {
@@ -34,7 +32,7 @@ public class AttendanceProcessor {
                     record.getDate().getYear(),
                     record.getDate().getMonthValue());
             
-            double hours = hoursCalculator.calculateDailyHours(record.getTimeIn(), record.getTimeOut());
+            double hours = HoursCalculator.calculateDailyHours(record.getTimeIn(), record.getTimeOut());
             
             workHoursMap.put(key, workHoursMap.getOrDefault(key, 0.0) + hours);
         }

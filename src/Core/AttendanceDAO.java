@@ -117,7 +117,7 @@ public class AttendanceDAO {
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
-                AttendanceRecord currentRecord = new AttendanceRecord(rs.getInt("id"),
+                AttendanceRecord currentRecord = new AttendanceRecord(rs.getInt("employeeID"),
                         rs.getDate("date").toLocalDate(),
                         rs.getTime("timeIn").toLocalTime(),
                         rs.getTime("timeOut").toLocalTime());

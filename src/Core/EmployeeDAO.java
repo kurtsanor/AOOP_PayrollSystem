@@ -40,7 +40,7 @@ public class EmployeeDAO {
                 + "e.phoneAllowance, "
                 + "e.clothingAllowance, "
                 + "s.grossSemiMonthlyRate "
-                + "FROM employees e JOIN roles r ON e.roleID = r.roleID JOIN salary s ON e.employeeID = s.employeeID JOIN position p ON e.positionID = p.positionID ORDER BY employeeID DESC";
+                + "FROM employees e JOIN roles r ON e.roleID = r.roleID JOIN salary s ON e.employeeID = s.employeeID JOIN position p ON e.positionID = p.positionID ORDER BY employeeID ASC";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             ResultSet rs = pst.executeQuery();           
             while (rs.next()) {
@@ -91,8 +91,9 @@ public class EmployeeDAO {
     public boolean addEmployee (Employee employee) {
         int newEmployeeID = 0;
         int roleID = getRoleID(employee.getRole());
+        int positionID = getPositionID(employee.getPosition());
         
-        String employeeQuery = "INSERT INTO employees (lastName, firstName, birthday, address, phoneNumber, sssNumber, philhealthNumber, tinNumber, pagibigNumber, status, position, roleID, supervisor, riceSubsidy, phoneAllowance, clothingAllowance) "
+        String employeeQuery = "INSERT INTO employees (lastName, firstName, birthday, address, phoneNumber, sssNumber, philhealthNumber, tinNumber, pagibigNumber, status, positionID, roleID, supervisor, riceSubsidy, phoneAllowance, clothingAllowance) "
                      + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         
         String salaryQuery = "INSERT INTO salary (employeeID, basicSalary, grossSemiMonthlyRate, hourlyRate) VALUES (?,?,?,?)";
@@ -112,7 +113,7 @@ public class EmployeeDAO {
             pstEmployee.setString(8, employee.getTinNumber());
             pstEmployee.setString(9, employee.getPagibigNumber());
             pstEmployee.setString(10, employee.getStatus());
-            pstEmployee.setString(11, employee.getPosition());
+            pstEmployee.setInt(11, positionID);
             pstEmployee.setInt(12, roleID);
             pstEmployee.setInt(13, employee.getSupervisorID());
             pstEmployee.setDouble(14, employee.getRiceSubsidy());

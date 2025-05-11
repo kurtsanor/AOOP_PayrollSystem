@@ -54,21 +54,25 @@ public class JframeDashboard extends javax.swing.JFrame {
             jButtonAttendanceManagement.setVisible(true);
             jButtonEmployeeManagement.setVisible(true);
             jButtonLeaveManagement.setVisible(true);
+            jButtonPayroll.setVisible(false);
         }
         else if (loggedEmployee instanceof RegularEmployee) {
             jButtonAttendanceManagement.setVisible(false);
             jButtonEmployeeManagement.setVisible(false);
             jButtonLeaveManagement.setVisible(false);
+            jButtonPayroll.setVisible(false);
         }
         else if (loggedEmployee instanceof Finance) {
             jButtonAttendanceManagement.setVisible(false);
             jButtonEmployeeManagement.setVisible(false);
             jButtonLeaveManagement.setVisible(false);
+            jButtonPayroll.setVisible(true);
         }
         else if (loggedEmployee instanceof IT) {
             jButtonAttendanceManagement.setVisible(false);
             jButtonEmployeeManagement.setVisible(false);
             jButtonLeaveManagement.setVisible(false);
+            jButtonPayroll.setVisible(false);
         }
     }
     
@@ -170,11 +174,12 @@ public class JframeDashboard extends javax.swing.JFrame {
         jButton17 = new javax.swing.JButton();
         jButton19 = new javax.swing.JButton();
         jButtonAttendance = new javax.swing.JButton();
-        jButtonPayroll = new javax.swing.JButton();
+        jButtonPayslip = new javax.swing.JButton();
         jButtonLeave = new javax.swing.JButton();
         jButtonEmployeeManagement = new javax.swing.JButton();
         jButtonAttendanceManagement = new javax.swing.JButton();
         jButtonLeaveManagement = new javax.swing.JButton();
+        jButtonPayroll = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
@@ -268,7 +273,7 @@ public class JframeDashboard extends javax.swing.JFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.1;
@@ -320,7 +325,7 @@ public class JframeDashboard extends javax.swing.JFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.1;
@@ -342,10 +347,10 @@ public class JframeDashboard extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanelLeft.add(jButtonAttendance, gridBagConstraints);
 
-        jButtonPayroll.setText("Payslip");
-        jButtonPayroll.addActionListener(new java.awt.event.ActionListener() {
+        jButtonPayslip.setText("Payslip");
+        jButtonPayslip.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonPayrollActionPerformed(evt);
+                jButtonPayslipActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -355,7 +360,7 @@ public class JframeDashboard extends javax.swing.JFrame {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanelLeft.add(jButtonPayroll, gridBagConstraints);
+        jPanelLeft.add(jButtonPayslip, gridBagConstraints);
 
         jButtonLeave.setText("Leave");
         jButtonLeave.addActionListener(new java.awt.event.ActionListener() {
@@ -417,6 +422,21 @@ public class JframeDashboard extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanelLeft.add(jButtonLeaveManagement, gridBagConstraints);
 
+        jButtonPayroll.setText("Payroll");
+        jButtonPayroll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPayrollActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanelLeft.add(jButtonPayroll, gridBagConstraints);
+
         jPanel4.setBackground(new java.awt.Color(21, 36, 46));
         jPanel4.setPreferredSize(new java.awt.Dimension(200, 40));
         jPanel4.setLayout(new java.awt.BorderLayout());
@@ -429,7 +449,7 @@ public class JframeDashboard extends javax.swing.JFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.1;
@@ -446,7 +466,7 @@ public class JframeDashboard extends javax.swing.JFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.gridheight = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
@@ -807,10 +827,10 @@ public class JframeDashboard extends javax.swing.JFrame {
         new JframeLeaveManagement(loggedEmployee).setVisible(true);
     }//GEN-LAST:event_jButtonLeaveManagementActionPerformed
 
-    private void jButtonPayrollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPayrollActionPerformed
+    private void jButtonPayslipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPayslipActionPerformed
         this.dispose();
         new JframePayslip(loggedEmployee).setVisible(true);
-    }//GEN-LAST:event_jButtonPayrollActionPerformed
+    }//GEN-LAST:event_jButtonPayslipActionPerformed
 
     private void jButtonLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLogoutActionPerformed
         this.dispose();
@@ -826,6 +846,11 @@ public class JframeDashboard extends javax.swing.JFrame {
         this.dispose();
         new JframeAttendanceManagement(loggedEmployee).setVisible(true);
     }//GEN-LAST:event_jButtonAttendanceManagementActionPerformed
+
+    private void jButtonPayrollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPayrollActionPerformed
+        this.dispose();
+        new JframePayroll(loggedEmployee).setVisible(true);
+    }//GEN-LAST:event_jButtonPayrollActionPerformed
 
     /**
      * @param args the command line arguments
@@ -850,6 +875,7 @@ public class JframeDashboard extends javax.swing.JFrame {
     private javax.swing.JButton jButtonLeaveManagement;
     private javax.swing.JButton jButtonLogout;
     private javax.swing.JButton jButtonPayroll;
+    private javax.swing.JButton jButtonPayslip;
     private com.toedter.calendar.JCalendar jCalendar1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

@@ -16,7 +16,6 @@ import Core.PayrollCalculator;
 import Core.PositionDAO;
 import Core.RegularEmployee;
 import Domains.Position;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
