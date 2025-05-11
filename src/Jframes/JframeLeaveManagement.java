@@ -24,7 +24,7 @@ import javax.swing.table.DefaultTableModel;
 import Core.DatabaseConnection;
 import Core.Employee;
 import Core.HR;
-import Core.LeaveCreditsDatabase;
+import Core.LeaveCreditsDAO;
 
 /**
  *
@@ -36,14 +36,14 @@ public class JframeLeaveManagement extends javax.swing.JFrame {
      * Creates new form JframeLeaveManagement
      */
     private Employee loggedEmployee;
-    private LeaveCreditsDatabase leaveCreditsDB;
+    private LeaveCreditsDAO leaveCreditsDB;
     private HR hrEmployee;
     private DefaultTableModel leaveTbl;
     private SimpleDateFormat simpleFormat;
     private SimpleDateFormat sqlDateFormat;
     public JframeLeaveManagement(Employee loggedEmployee) {
         this.loggedEmployee = loggedEmployee;
-        this.leaveCreditsDB = new LeaveCreditsDatabase(DatabaseConnection.Connect());
+        this.leaveCreditsDB = new LeaveCreditsDAO(DatabaseConnection.Connect());
         this.simpleFormat = new SimpleDateFormat("MMM dd, yyyy");
         this.sqlDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         initComponents();

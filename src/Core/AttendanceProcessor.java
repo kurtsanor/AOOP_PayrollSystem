@@ -16,10 +16,10 @@ import java.util.Map;
  */
 public class AttendanceProcessor {
     
-    private final AttendanceDatabase database;
+    private final AttendanceDAO database;
     private final HoursCalculator hoursCalculator;
     
-    public AttendanceProcessor (AttendanceDatabase database, HoursCalculator hoursCalculator) {
+    public AttendanceProcessor (AttendanceDAO database, HoursCalculator hoursCalculator) {
         this.database = database;
         this.hoursCalculator = hoursCalculator;
     }

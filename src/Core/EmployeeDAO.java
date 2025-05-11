@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.sql.SQLException;
 
-public class EmployeeDatabase {
+public class EmployeeDAO {
     
     private final Connection connection;
     
-    public EmployeeDatabase (Connection connection) {
+    public EmployeeDAO (Connection connection) {
         this.connection = connection;
     } 
     
@@ -23,7 +23,7 @@ public class EmployeeDatabase {
                 + "e.employeeID, "
                 + "e.firstName, "
                 + "e.lastName, "
-                + "e.position, "
+                + "p.positionName, "
                 + "e.status, "
                 + "e.birthday, "
                 + "e.address, "
@@ -34,13 +34,13 @@ public class EmployeeDatabase {
                 + "s.hourlyRate, "
                 + "e.philhealthNumber,"
                 + "r.roleName, "
-                + "e.supervisor, "
+                + "e.supervisorID, "
                 + "s.basicSalary, "
                 + "e.riceSubsidy, "
                 + "e.phoneAllowance, "
                 + "e.clothingAllowance, "
                 + "s.grossSemiMonthlyRate "
-                + "FROM employees e JOIN roles r ON e.roleID = r.roleID JOIN salary s ON e.employeeID = s.employeeID ORDER BY employeeID DESC";
+                + "FROM employees e JOIN roles r ON e.roleID = r.roleID JOIN salary s ON e.employeeID = s.employeeID JOIN position p ON e.positionID = p.positionID ORDER BY employeeID DESC";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             ResultSet rs = pst.executeQuery();           
             while (rs.next()) {
@@ -58,7 +58,7 @@ public class EmployeeDatabase {
                 + "e.employeeID, "
                 + "e.firstName, "
                 + "e.lastName, "
-                + "e.position, "
+                + "p.positionName, "
                 + "e.status, "
                 + "e.birthday, "
                 + "e.address, "
@@ -69,13 +69,13 @@ public class EmployeeDatabase {
                 + "s.hourlyRate, "
                 + "e.philhealthNumber,"
                 + "r.roleName, "
-                + "e.supervisor, "
+                + "e.supervisorID, "
                 + "s.basicSalary, "
                 + "e.riceSubsidy, "
                 + "e.phoneAllowance, "
                 + "e.clothingAllowance, "
                 + "s.grossSemiMonthlyRate "
-                + "FROM employees e JOIN roles r ON e.roleID = r.roleID JOIN salary s ON e.employeeID = s.employeeID WHERE e.employeeID = ?";
+                + "FROM employees e JOIN roles r ON e.roleID = r.roleID JOIN salary s ON e.employeeID = s.employeeID JOIN position p ON e.positionID = p.positionID WHERE e.employeeID = ?";
         try (PreparedStatement pst = connection.prepareStatement(query)) {            
             pst.setInt(1, employeeID);
             ResultSet rs = pst.executeQuery();
@@ -114,7 +114,7 @@ public class EmployeeDatabase {
             pstEmployee.setString(10, employee.getStatus());
             pstEmployee.setString(11, employee.getPosition());
             pstEmployee.setInt(12, roleID);
-            pstEmployee.setString(13, employee.getSupervisor());
+            pstEmployee.setInt(13, employee.getSupervisorID());
             pstEmployee.setDouble(14, employee.getRiceSubsidy());
             pstEmployee.setDouble(15, employee.getPhoneAllowance());
             pstEmployee.setDouble(16, employee.getClothingAllowance());
@@ -158,34 +158,65 @@ public class EmployeeDatabase {
     
     public boolean editEmployee (int chosenEmployeeID, Employee employee) {
         int roleID = getRoleID(employee.getRole());
-        String query = "UPDATE employees SET lastName = ?, firstName = ?, birthday = ?, address = ?, phoneNumber = ?, sssNumber = ?, philhealthNumber = ?, tinNumber = ?, pagibigNumber = ?, status = ?, position = ?, roleID = ?, supervisor = ?, basicSalary = ?, riceSubsidy = ?, phoneAllowance = ?, clothingAllowance = ?, grossSemiMonthlyRate = ?, hourlyRate = ? "
+        int positionID = getPositionID(employee.getPosition());
+        String employeeQuery = "UPDATE employees SET lastName = ?, firstName = ?, birthday = ?, address = ?, phoneNumber = ?, sssNumber = ?, philhealthNumber = ?, tinNumber = ?, pagibigNumber = ?, status = ?, positionID = ?, roleID = ?, supervisorID = ?,  riceSubsidy = ?, phoneAllowance = ?, clothingAllowance = ? "
                      + "WHERE employeeID = ?";
-        try (PreparedStatement pst = connection.prepareStatement(query)) {
-            pst.setString(1,  employee.getLastName());
-            pst.setString(2, employee.getFirstName());
-            pst.setDate(3, Date.valueOf(employee.getBirthday()));
-            pst.setString(4, employee.getAddress());
-            pst.setString(5, employee.getPhoneNumber());
-            pst.setString(6, employee.getSSSNumber());
-            pst.setString(7, employee.getPhilhealthNumber());
-            pst.setString(8, employee.getTinNumber());
-            pst.setString(9, employee.getPagibigNumber());
-            pst.setString(10, employee.getStatus());
-            pst.setString(11, employee.getPosition());
-            pst.setInt(12, roleID);
-            pst.setString(13, employee.getSupervisor());
-            pst.setDouble(14, employee.getBasicSalary());
-            pst.setDouble(15, employee.getRiceSubsidy());
-            pst.setDouble(16, employee.getPhoneAllowance());
-            pst.setDouble(17, employee.getClothingAllowance());
-            pst.setDouble(18, employee.getGrossSemiMonthlyRate());
-            pst.setDouble(19, employee.getHourlyRate());
-            pst.setInt(20,    chosenEmployeeID);
+        
+        String salaryQuery = "UPDATE salary SET basicSalary = ?, grossSemiMonthlyRate = ?, hourlyRate = ? WHERE employeeID = ?";
+        
+        try {
+            // prevents sql queries from altering tables unless all other queries pass
+            connection.setAutoCommit(false);
             
-            return pst.executeUpdate() > 0;                       
+            try (PreparedStatement employeePst = connection.prepareStatement(employeeQuery);
+                  PreparedStatement salaryPst = connection.prepareStatement(salaryQuery) ) {
+                
+            employeePst.setString(1,  employee.getLastName());
+            employeePst.setString(2, employee.getFirstName());
+            employeePst.setDate(3, Date.valueOf(employee.getBirthday()));
+            employeePst.setString(4, employee.getAddress());
+            employeePst.setString(5, employee.getPhoneNumber());
+            employeePst.setString(6, employee.getSSSNumber());
+            employeePst.setString(7, employee.getPhilhealthNumber());
+            employeePst.setString(8, employee.getTinNumber());
+            employeePst.setString(9, employee.getPagibigNumber());
+            employeePst.setString(10, employee.getStatus());
+            employeePst.setInt(11, positionID);
+            employeePst.setInt(12, roleID);
+            employeePst.setInt(13, employee.getSupervisorID());
+            employeePst.setDouble(14, employee.getRiceSubsidy());
+            employeePst.setDouble(15, employee.getPhoneAllowance());
+            employeePst.setDouble(16, employee.getClothingAllowance());
+            employeePst.setInt(17, chosenEmployeeID);
+            
+            int employeeAffectedRows = employeePst.executeUpdate();
+            
+            salaryPst.setDouble(1, employee.getBasicSalary());
+            salaryPst.setDouble(2, employee.getGrossSemiMonthlyRate());
+            salaryPst.setDouble(3, employee.getHourlyRate());
+            salaryPst.setInt(4, chosenEmployeeID);
+            
+            int salaryAffectedRows = salaryPst.executeUpdate();
+            
+            connection.commit();
+            
+            return employeeAffectedRows > 0 && salaryAffectedRows > 0;
+            
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to edit record", e);
+            connection.rollback();
+            throw new RuntimeException("Transaction failed, rolled back", e);
         }
+            
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to edit employee record",e);
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {             
+                throw new RuntimeException("Failed to set auto commit to true", e);
+            }
+        }
+        
     }
     
     public boolean deleteEmployee (int employeeId) {
@@ -211,4 +242,18 @@ public class EmployeeDatabase {
             throw new RuntimeException("Failed to retrieve role id", e);
         }
     }
+    
+    public int getPositionID (String positionName) {
+        String query = "SELECT positionID from position WHERE positionName = ?";
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setString(1, positionName);
+            ResultSet rs = pst.executeQuery();
+            
+            return rs.next()? rs.getInt("positionID") : -1;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to retrieve position id", e);
+        }
+    }
+    
 }

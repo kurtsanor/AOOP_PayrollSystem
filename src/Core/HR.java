@@ -37,7 +37,7 @@ public class HR extends Employee {
         this.hourlyRate = employee.getHourlyRate();
         this.philhealthNumber = employee.getPhilhealthNumber();
         this.role = employee.getRole();
-        this.supervisor = employee.getSupervisor();
+        this.supervisorID = employee.getSupervisorID();
         this.basicSalary = employee.getBasicSalary();
         this.riceSubsidy = employee.getRiceSubsidy();
         this.phoneAllowance = employee.getPhoneAllowance();
@@ -47,7 +47,7 @@ public class HR extends Employee {
     
     public boolean addEmployeeRecord (Employee employee) {
         try (Connection connection = DatabaseConnection.Connect()) {
-            EmployeeDatabase employeeDB = new EmployeeDatabase(connection);
+            EmployeeDAO employeeDB = new EmployeeDAO(connection);
             return employeeDB.addEmployee(employee);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -56,7 +56,7 @@ public class HR extends Employee {
     
     public boolean updateEmployeeRecordByID (int employeeID, Employee updatedEmployee) {
         try (Connection connection = DatabaseConnection.Connect()) {
-            EmployeeDatabase employeeDB = new EmployeeDatabase(connection);
+            EmployeeDAO employeeDB = new EmployeeDAO(connection);
             return employeeDB.editEmployee(employeeID, updatedEmployee);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -65,7 +65,7 @@ public class HR extends Employee {
     
     public boolean deleteEmployeeByID (int employeeID) {
         try (Connection connection = DatabaseConnection.Connect()) {
-            EmployeeDatabase employeeDB = new EmployeeDatabase(connection);
+            EmployeeDAO employeeDB = new EmployeeDAO(connection);
             return employeeDB.deleteEmployee(employeeID);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -75,7 +75,7 @@ public class HR extends Employee {
     
     public Employee viewEmployeeByID (int employeeID) {
         try (Connection connection = DatabaseConnection.Connect()) {
-            EmployeeDatabase employeeDB = new EmployeeDatabase(connection);
+            EmployeeDAO employeeDB = new EmployeeDAO(connection);
             return employeeDB.getEmployeeByID(employeeID);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -84,7 +84,7 @@ public class HR extends Employee {
     
     public boolean updateLeaveStatus (int leaveID, String newStatus, LocalDateTime dateProcessed) {
         try (Connection connection = DatabaseConnection.Connect()) {
-            LeaveDatabase leaveDB = new LeaveDatabase(connection);
+            LeaveDAO leaveDB = new LeaveDAO(connection);
             return leaveDB.updateStatus(leaveID, newStatus, dateProcessed);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -94,7 +94,7 @@ public class HR extends Employee {
     
     public List<LeaveRequest> loadEmployeeLeaves () {
         try (Connection connection = DatabaseConnection.Connect()) {
-            LeaveDatabase leaveDB = new LeaveDatabase(connection);
+            LeaveDAO leaveDB = new LeaveDAO(connection);
             return leaveDB.getAllRecords();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -103,7 +103,7 @@ public class HR extends Employee {
     
     public LeaveRequest getLeavebyLeaveID (int leaveID) {
         try (Connection connection = DatabaseConnection.Connect()) {
-            LeaveDatabase leaveDB = new LeaveDatabase(connection);
+            LeaveDAO leaveDB = new LeaveDAO(connection);
             return leaveDB.getLeaveByLeaveID(leaveID);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -112,7 +112,7 @@ public class HR extends Employee {
     
     public List<AttendanceRecord> loadAttendanceByIdAndPeriod (int employeeID, YearPeriod period) {
         try (Connection connection = DatabaseConnection.Connect()) {
-            AttendanceDatabase attendanceDB = new AttendanceDatabase(connection);
+            AttendanceDAO attendanceDB = new AttendanceDAO(connection);
             return attendanceDB.getAttendanceByIdAndPeriod(employeeID, period);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -121,7 +121,7 @@ public class HR extends Employee {
     
     public List<Employee> loadEmployees () {
         try (Connection connection = DatabaseConnection.Connect()) {
-            EmployeeDatabase employeeDB = new EmployeeDatabase(connection);
+            EmployeeDAO employeeDB = new EmployeeDAO(connection);
             return employeeDB.getAllEmployees();
         } catch (SQLException e) {
             throw new RuntimeException(e);

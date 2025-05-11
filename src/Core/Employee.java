@@ -27,7 +27,7 @@ public abstract class Employee implements EmployeeEssentials {
     protected double hourlyRate;
     protected String philhealthNumber;
     protected String role;
-    protected String supervisor;
+    protected int supervisorID;
     protected double basicSalary;
     protected double riceSubsidy;
     protected double phoneAllowance;
@@ -42,7 +42,7 @@ public abstract class Employee implements EmployeeEssentials {
         this.employeeID = rs.getInt("employeeID");
         this.firstName = rs.getString("firstName");
         this.lastName = rs.getString("lastName");
-        this.position = rs.getString("position");
+        this.position = rs.getString("positionName");
         this.status = rs.getString("status");
         this.birthday = rs.getDate("birthday").toLocalDate();
         this.address = rs.getString("address");
@@ -53,7 +53,7 @@ public abstract class Employee implements EmployeeEssentials {
         this.hourlyRate = rs.getDouble("hourlyRate");
         this.philhealthNumber = rs.getString("philhealthNumber");
         this.role = rs.getString("roleName");
-        this.supervisor = rs.getString("supervisor");
+        this.supervisorID = rs.getInt("supervisorID");
         this.basicSalary = rs.getDouble("basicSalary");
         this.riceSubsidy = rs.getDouble("riceSubsidy");
         this.phoneAllowance = rs.getDouble("phoneAllowance");
@@ -75,7 +75,7 @@ public abstract class Employee implements EmployeeEssentials {
     public String getTinNumber () { return tinNumber;}
     public double getHourlyRate() { return hourlyRate;}
     public String getRole() { return role;}
-    public String getSupervisor() { return supervisor;}
+    public int getSupervisorID() { return supervisorID;}
     public double getBasicSalary() { return basicSalary;}
     public double getRiceSubsidy() { return riceSubsidy;}
     public double getPhoneAllowance() { return phoneAllowance;}
@@ -85,7 +85,7 @@ public abstract class Employee implements EmployeeEssentials {
     @Override
     public boolean requestForLeave (LeaveRequest request) {  
         try (Connection connection = DatabaseConnection.Connect()) {
-            LeaveDatabase leaveDB = new LeaveDatabase(connection);
+            LeaveDAO leaveDB = new LeaveDAO(connection);
             return leaveDB.submitLeaveRequest(request);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -95,7 +95,7 @@ public abstract class Employee implements EmployeeEssentials {
     @Override
     public List<AttendanceRecord> viewPersonalAttendance(int employeeID, YearPeriod period) {
         try (Connection connection = DatabaseConnection.Connect()) {
-            AttendanceDatabase attendanceDB = new AttendanceDatabase(connection);
+            AttendanceDAO attendanceDB = new AttendanceDAO(connection);
             return attendanceDB.getAttendanceByIdAndPeriod(employeeID, period);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -106,7 +106,7 @@ public abstract class Employee implements EmployeeEssentials {
     @Override
     public List<LeaveRequest> viewPersonalLeaves(int employeeID) {
         try (Connection connection = DatabaseConnection.Connect()) {
-            LeaveDatabase leaveDB = new LeaveDatabase(connection);
+            LeaveDAO leaveDB = new LeaveDAO(connection);
             return leaveDB.getLeavesByEmployeeID(employeeID);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -115,7 +115,7 @@ public abstract class Employee implements EmployeeEssentials {
     
     public Payslip viewPersonalSalary (YearPeriod period) {
         try (Connection connection = DatabaseConnection.Connect()) {
-            AttendanceDatabase attendanceDB = new AttendanceDatabase(connection);
+            AttendanceDAO attendanceDB = new AttendanceDAO(connection);
             double empWorkHours = HoursCalculator.calculateTotalHoursByPeriod(getID(), period, attendanceDB);
             double empBasicSalary = getHourlyRate() * empWorkHours;
             double totalAllowance = getRiceSubsidy() + getPhoneAllowance() + getClothingAllowance();

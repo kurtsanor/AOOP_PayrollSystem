@@ -14,10 +14,10 @@ import java.sql.ResultSet;
  *
  * @author keith
  */
-public class LeaveCreditsDatabase {
+public class LeaveCreditsDAO {
     private final Connection connection;
     
-    public LeaveCreditsDatabase(Connection connection) {
+    public LeaveCreditsDAO(Connection connection) {
         this.connection = connection;
     }
     

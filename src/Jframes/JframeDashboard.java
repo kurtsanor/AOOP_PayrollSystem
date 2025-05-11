@@ -8,10 +8,10 @@ import Domains.YearPeriod;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import Core.Employee;
-import Core.EmployeeDatabase;
+import Core.EmployeeDAO;
 import java.sql.Connection;
 import java.time.LocalDate;
-import Core.AttendanceDatabase;
+import Core.AttendanceDAO;
 import Core.DatabaseConnection;
 import Core.Finance;
 import Core.HR;
@@ -29,11 +29,11 @@ public class JframeDashboard extends javax.swing.JFrame {
      * Creates new form JframeDashboard
      */
     private Employee loggedEmployee;
-    private EmployeeDatabase employeeDB;
+    private EmployeeDAO employeeDB;
     private Connection connection;
     public JframeDashboard(int employeeID) {
         this.connection = DatabaseConnection.Connect();
-        this.employeeDB = new EmployeeDatabase(connection);
+        this.employeeDB = new EmployeeDAO(connection);
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
         initImages();
@@ -121,7 +121,7 @@ public class JframeDashboard extends javax.swing.JFrame {
     }
     
     private double getTotalMonthlyHours () {              
-        AttendanceDatabase attendanceDB = new AttendanceDatabase(DatabaseConnection.Connect());
+        AttendanceDAO attendanceDB = new AttendanceDAO(DatabaseConnection.Connect());
         YearPeriod period = getMonthPeriod();
         
         return HoursCalculator.calculateTotalHoursByPeriod(loggedEmployee.getID(), period, attendanceDB);      

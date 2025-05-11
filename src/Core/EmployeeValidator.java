@@ -100,34 +100,7 @@ public class EmployeeValidator {
         }
         return "";
     }
-    
-    public static String validatePositionWithMessage (String position) {
-        if (position == null || position.isBlank()) {
-            return "This is required";
-        }
-        for (char c: position.toCharArray()) {
-            if (Character.isDigit(c)) {
-                return "Digits are not allowed";
-            }
-        }
-        return "";
-    }
-    
-    
-    
-    
-    public static String validateSupervisorWithMessage (String supervisor) {
-        if (supervisor == null || supervisor.isBlank()) {
-            return "This is required";
-        }
-        for (char c: supervisor.toCharArray()) {
-            if (Character.isDigit(c)) {
-                return "Digits are not allowed";
-            }
-        }
-        return "";
-    }
-    
+         
     public static String validateAmountWithMessage (String amount) {
         if (amount == null || amount.isBlank()) {
             return "This is required";

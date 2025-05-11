@@ -15,11 +15,11 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 // handles database operations of employee attendance
-public class AttendanceDatabase {
+public class AttendanceDAO {
     
     private final Connection connection;
     
-    public AttendanceDatabase (Connection connection) {
+    public AttendanceDAO (Connection connection) {
         this.connection = connection;
     }
     // Fetch all attendance records that match the given month and year.

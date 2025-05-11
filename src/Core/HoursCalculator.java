@@ -25,7 +25,7 @@ public class HoursCalculator {
         return Math.round(hours * 100.0) / 100.0;
     }
     
-    public static double calculateTotalHoursByPeriod (int employeeID, YearPeriod period, AttendanceDatabase database) {
+    public static double calculateTotalHoursByPeriod (int employeeID, YearPeriod period, AttendanceDAO database) {
         List <AttendanceRecord> records = database.getAttendanceByIdAndPeriod(employeeID, period);
         
         return calculateTotalHours(records);

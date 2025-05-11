@@ -12,11 +12,11 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-public class LeaveDatabase {
+public class LeaveDAO {
    
     private final Connection connection;
     
-    public LeaveDatabase(Connection connection) {
+    public LeaveDAO(Connection connection) {
         this.connection = connection;
     }
        

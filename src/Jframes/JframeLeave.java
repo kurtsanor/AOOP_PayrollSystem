@@ -17,7 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import Core.DatabaseConnection;
 import Core.Employee;
-import Core.LeaveCreditsDatabase;
+import Core.LeaveCreditsDAO;
 import Core.LeaveRequestValidator;
 
 /**
@@ -31,12 +31,12 @@ public class JframeLeave extends javax.swing.JFrame {
      */
     private Employee loggedEmployee;
     private DefaultTableModel leaveTbl;
-    private LeaveCreditsDatabase leaveCreditsDB;
+    private LeaveCreditsDAO leaveCreditsDB;
     private LeaveBalance personalLeaveCredits;
     private SimpleDateFormat sqlDateFormat;
     private SimpleDateFormat simpleFormat;
     public JframeLeave(Employee loggedEmployee) {
-        this.leaveCreditsDB = new LeaveCreditsDatabase(DatabaseConnection.Connect());
+        this.leaveCreditsDB = new LeaveCreditsDAO(DatabaseConnection.Connect());
         this.loggedEmployee = loggedEmployee;
         this.sqlDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         this.simpleFormat = new SimpleDateFormat("MMM dd, yyyy");

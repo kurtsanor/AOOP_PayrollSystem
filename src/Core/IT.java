@@ -21,7 +21,7 @@ public class IT extends Employee {
         this.hourlyRate = employee.getHourlyRate();
         this.philhealthNumber = employee.getPhilhealthNumber();
         this.role = employee.getRole();
-        this.supervisor = employee.getSupervisor();
+        this.supervisorID = employee.getSupervisorID();
         this.basicSalary = employee.getBasicSalary();
         this.riceSubsidy = employee.getRiceSubsidy();
         this.phoneAllowance = employee.getPhoneAllowance();

@@ -12,7 +12,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
-import Core.AttendanceDatabase;
+import Core.AttendanceDAO;
 import Core.DatabaseConnection;
 import Core.Employee;
 import Core.HR;
@@ -28,13 +28,13 @@ public class JframeAttendanceManagement extends javax.swing.JFrame {
      * Creates new form JframeAttendanceManagement
      */
     private Employee loggedEmployee;
-    private AttendanceDatabase attendanceDB;
+    private AttendanceDAO attendanceDB;
     private HR hrEmployee;
     private SimpleDateFormat sqlDateFormat;
     private SimpleDateFormat simpleFormat;
     private DefaultTableModel attendanceTbl;
     public JframeAttendanceManagement(Employee loggedEmployee) {
-        this.attendanceDB = new AttendanceDatabase(DatabaseConnection.Connect());
+        this.attendanceDB = new AttendanceDAO(DatabaseConnection.Connect());
         this.loggedEmployee = loggedEmployee;
         this.sqlDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         this.simpleFormat = new SimpleDateFormat("MMM dd, yyyy");

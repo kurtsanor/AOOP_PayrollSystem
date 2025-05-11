@@ -4,6 +4,7 @@
  */
 package Jframes;
 
+import Core.DatabaseConnection;
 import java.time.LocalDate;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -12,7 +13,11 @@ import Core.Employee;
 import Core.EmployeeValidator;
 import Core.HR;
 import Core.PayrollCalculator;
+import Core.PositionDAO;
 import Core.RegularEmployee;
+import Domains.Position;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -37,6 +42,8 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         setExtendedState(MAXIMIZED_BOTH);
         showErrorLabels(false);
         initHrUser(loggedEmployee);
+        populatecomboBoxWithPositions();
+        populatecomboBoxWithEmployees();
     }
     // constructor for editing employee
     public JframeEmployeeForm (Employee loggedEmployee, int employeeIdToEdit) {
@@ -49,8 +56,29 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         showErrorLabels(false);
         jLabelHeader.setText("Edit an employee");
         initHrUser(loggedEmployee);
+        populatecomboBoxWithPositions();
+        populatecomboBoxWithEmployees();
         populateTextFields();
         
+    }
+    
+    private void populatecomboBoxWithPositions() {
+        PositionDAO positionDAO = new PositionDAO(DatabaseConnection.Connect());
+        List<Position> positions = positionDAO.getAllPositions();
+        
+        for (Position position: positions) {
+            jComboBoxPositions.addItem(position.getPositionName());
+        }
+    }
+    
+    private void populatecomboBoxWithEmployees () {
+        if (hrEmployee != null) {
+            List<Employee> employees = hrEmployee.loadEmployees();
+            
+            for (Employee employee: employees) {
+                jComboBoxSupervisors.addItem(String.valueOf(employee.getID()));
+            }
+        }
     }
     
     // creates an HR object if employee is instance of HR class
@@ -71,9 +99,9 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
             jTextFieldPhoneNumber.setText(employee.getPhoneNumber().trim());
             jTextFieldAddress.setText(employee.getAddress().trim());
             jComboBoxStatus.setSelectedItem(employee.getStatus().trim());
-            jTextFieldPosition.setText(employee.getPosition().trim());
+            jComboBoxPositions.setSelectedItem(employee.getPosition());
             jComboBoxRole.setSelectedItem(employee.getRole().trim());
-            jTextFieldSupervisor.setText(employee.getSupervisor().trim());
+            jComboBoxSupervisors.setSelectedItem(String.valueOf(employee.getSupervisorID()));
             jTextFieldBasicSalary.setText(convertToString(employee.getBasicSalary()));
             jTextFieldGrossSemiMonthly.setText(convertToString(employee.getGrossSemiMonthlyRate()));
             jTextFieldHourlyRate.setText(convertToString(employee.getHourlyRate()));
@@ -98,7 +126,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         0,
         jTextFieldFirstName.getText(),
         jTextFieldLastName.getText(),
-        jTextFieldPosition.getText(),
+        jComboBoxPositions.getSelectedItem().toString(),
         jComboBoxStatus.getSelectedItem().toString(),
         LocalDate.parse(dateFormat.format(jDateChooserBirthday.getDate())),
         jTextFieldAddress.getText(),
@@ -109,7 +137,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         Double.parseDouble(jTextFieldHourlyRate.getText()),
         jTextFieldPhilhealthNumber.getText(),
         jComboBoxRole.getSelectedItem().toString(),
-        jTextFieldSupervisor.getText(),
+        Integer.parseInt(jComboBoxSupervisors.getSelectedItem().toString()),
         Double.parseDouble(jTextFieldBasicSalary.getText()),
         Double.parseDouble(jTextFieldRiceSubsidy.getText()),        
         Double.parseDouble(jTextFieldPhoneAllowance.getText()),
@@ -164,15 +192,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         errorMessage = EmployeeValidator.validateAddressWithMessage(jTextFieldAddress.getText());
         if (!errorMessage.isBlank()) { validEmployee = false;}
         setAddressErrorMessage(errorMessage);
-        
-        errorMessage = EmployeeValidator.validatePositionWithMessage(jTextFieldPosition.getText());
-        if (!errorMessage.isBlank()) { validEmployee = false;}
-        setPositionErrorMessage(errorMessage);
-        
-        errorMessage = EmployeeValidator.validateSupervisorWithMessage(jTextFieldSupervisor.getText());
-        if (!errorMessage.isBlank()) { validEmployee = false;}
-        setSupervisorErrorMessage(errorMessage);
-        
+                      
         errorMessage = EmployeeValidator.validateAmountWithMessage(jTextFieldBasicSalary.getText());
         if (!errorMessage.isBlank()) { validEmployee = false;}
         setBasicSalaryErrorMessage(errorMessage);
@@ -289,14 +309,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
             jLabelBasicSalaryError.setVisible(true);
         }
     }
-    
-    private void setSupervisorErrorMessage (String message) {
-        if (!message.isBlank()) {
-            jLabelSupervisorError.setText(message);
-            jLabelSupervisorError.setVisible(true);
-        }
-    }
-    
+     
     private void setPositionErrorMessage (String message) {
         if (!message.isBlank()) {
             jLabelPositionError.setText(message);
@@ -370,10 +383,8 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         jTextFieldAddress = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jTextFieldPosition = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jTextFieldSupervisor = new javax.swing.JTextField();
         jPanel7 = new javax.swing.JPanel();
         jLabelFirstNameError = new javax.swing.JLabel();
         jLabelLastNameError = new javax.swing.JLabel();
@@ -381,9 +392,10 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         jLabelPhoneNumberError = new javax.swing.JLabel();
         jLabelAddressError = new javax.swing.JLabel();
         jLabelPositionError = new javax.swing.JLabel();
-        jLabelSupervisorError = new javax.swing.JLabel();
         jComboBoxRole = new javax.swing.JComboBox<>();
         jComboBoxStatus = new javax.swing.JComboBox<>();
+        jComboBoxSupervisors = new javax.swing.JComboBox<>();
+        jComboBoxPositions = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jTextFieldBasicSalary = new javax.swing.JTextField();
@@ -571,14 +583,6 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(8, 12, 2, 12);
         jPanel4.add(jLabel8, gridBagConstraints);
 
-        jTextFieldPosition.setPreferredSize(new java.awt.Dimension(200, 35));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(8, 12, 2, 12);
-        jPanel4.add(jTextFieldPosition, gridBagConstraints);
-
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Role*");
@@ -591,21 +595,13 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setText("Supervisor*");
+        jLabel10.setText("Supervisor ID*");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(8, 12, 2, 12);
         jPanel4.add(jLabel10, gridBagConstraints);
-
-        jTextFieldSupervisor.setPreferredSize(new java.awt.Dimension(200, 35));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 13;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(8, 12, 2, 12);
-        jPanel4.add(jTextFieldSupervisor, gridBagConstraints);
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -669,13 +665,6 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.gridy = 11;
         jPanel4.add(jLabelPositionError, gridBagConstraints);
 
-        jLabelSupervisorError.setForeground(new java.awt.Color(255, 102, 102));
-        jLabelSupervisorError.setText("This is required");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 14;
-        jPanel4.add(jLabelSupervisorError, gridBagConstraints);
-
         jComboBoxRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "HR", "Finance", "IT", "Employee" }));
         jComboBoxRole.setPreferredSize(new java.awt.Dimension(200, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -693,6 +682,22 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(8, 12, 2, 12);
         jPanel4.add(jComboBoxStatus, gridBagConstraints);
+
+        jComboBoxSupervisors.setPreferredSize(new java.awt.Dimension(200, 35));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(8, 12, 2, 12);
+        jPanel4.add(jComboBoxSupervisors, gridBagConstraints);
+
+        jComboBoxPositions.setPreferredSize(new java.awt.Dimension(200, 35));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(8, 12, 2, 12);
+        jPanel4.add(jComboBoxPositions, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -742,6 +747,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(8, 12, 2, 12);
         jPanel5.add(jLabel12, gridBagConstraints);
 
+        jTextFieldGrossSemiMonthly.setEditable(false);
         jTextFieldGrossSemiMonthly.setPreferredSize(new java.awt.Dimension(200, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -1123,7 +1129,6 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         jLabelPhoneNumberError.setVisible(visible);
         jLabelAddressError.setVisible(visible);     
         jLabelPositionError.setVisible(visible);
-        jLabelSupervisorError.setVisible(visible);
         jLabelBasicSalaryError.setVisible(visible);
         jLabelHourlyRateError.setVisible(visible);
         jLabelPhoneAllowanceError.setVisible(visible);
@@ -1143,8 +1148,10 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonDiscard;
     private javax.swing.JButton jButtonSave;
+    private javax.swing.JComboBox<String> jComboBoxPositions;
     private javax.swing.JComboBox<String> jComboBoxRole;
     private javax.swing.JComboBox<String> jComboBoxStatus;
+    private javax.swing.JComboBox<String> jComboBoxSupervisors;
     private com.toedter.calendar.JDateChooser jDateChooserBirthday;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -1181,7 +1188,6 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelPositionError;
     private javax.swing.JLabel jLabelRiceSubisdyError;
     private javax.swing.JLabel jLabelSssNumberError;
-    private javax.swing.JLabel jLabelSupervisorError;
     private javax.swing.JLabel jLabelTinNumberError;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -1203,10 +1209,8 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldPhilhealthNumber;
     private javax.swing.JTextField jTextFieldPhoneAllowance;
     private javax.swing.JTextField jTextFieldPhoneNumber;
-    private javax.swing.JTextField jTextFieldPosition;
     private javax.swing.JTextField jTextFieldRiceSubsidy;
     private javax.swing.JTextField jTextFieldSssNumber;
-    private javax.swing.JTextField jTextFieldSupervisor;
     private javax.swing.JTextField jTextFieldTinNumber;
     // End of variables declaration//GEN-END:variables
 }

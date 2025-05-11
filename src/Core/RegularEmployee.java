@@ -11,7 +11,7 @@ public class RegularEmployee extends Employee {
     public RegularEmployee(int employeeID, String firstName, String lastName, String position, String status,
                            LocalDate birthday, String address, String phoneNumber, String sssNumber,
                            String pagIbigNumber, String tinNumber, double hourlyRate, String philhealthNumber, String role,
-                           String supervisor, double basicSalary, double riceSubsidy, double phoneAllowance, double clothingAllowance,
+                           int supervisorID, double basicSalary, double riceSubsidy, double phoneAllowance, double clothingAllowance,
                            double grossSemiMonthlyRate) {
         this.employeeID = employeeID;
         this.firstName = firstName;
@@ -27,7 +27,7 @@ public class RegularEmployee extends Employee {
         this.hourlyRate = hourlyRate;
         this.philhealthNumber = philhealthNumber;
         this.role = role;
-        this.supervisor = supervisor;
+        this.supervisorID = supervisorID;
         this.basicSalary = basicSalary;
         this.riceSubsidy = riceSubsidy;
         this.phoneAllowance = phoneAllowance;
@@ -50,7 +50,7 @@ public class RegularEmployee extends Employee {
         this.hourlyRate = employee.getHourlyRate();
         this.philhealthNumber = employee.getPhilhealthNumber();
         this.role = employee.getRole();
-        this.supervisor = employee.getSupervisor();
+        this.supervisorID = employee.getSupervisorID();
         this.basicSalary = employee.getBasicSalary();
         this.riceSubsidy = employee.getRiceSubsidy();
         this.phoneAllowance = employee.getPhoneAllowance();
