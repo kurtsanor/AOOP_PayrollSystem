@@ -10,10 +10,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
-import Core.AttendanceDAO;
-import Core.DatabaseConnection;
-import Core.Employee;
-import Core.HoursCalculator;
+import Model.Employee;
+import Model.HoursCalculator;
 
 /**
  *
@@ -25,12 +23,10 @@ public class JframeAttendance extends javax.swing.JFrame {
      * Creates new form JframeAttendance
      */
     private Employee loggedEmployee;
-    private AttendanceDAO attendanceDB;
     private DefaultTableModel attendanceTbl;
     private boolean dateYearChoosersEnabled;
     public JframeAttendance(Employee loggedEmployee) {
         this.dateYearChoosersEnabled = false;
-        this.attendanceDB = new AttendanceDAO(DatabaseConnection.Connect());
         this.loggedEmployee = loggedEmployee;
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);

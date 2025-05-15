@@ -6,8 +6,8 @@ package Jframes;
 
 import Domains.Payslip;
 import Domains.YearPeriod;
-import Core.Employee;
-import Core.PdfProcessor;
+import Model.Employee;
+import Model.PdfProcessor;
 
 /**
  *

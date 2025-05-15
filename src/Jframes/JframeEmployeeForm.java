@@ -4,18 +4,18 @@
  */
 package Jframes;
 
-import Core.DatabaseConnection;
 import java.time.LocalDate;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
-import Core.Employee;
-import Core.EmployeeValidator;
-import Core.HR;
-import Core.PayrollCalculator;
-import Core.PositionDAO;
-import Core.RegularEmployee;
+import Model.Employee;
+import Model.EmployeeValidator;
+import Model.HR;
+import Model.PayrollCalculator;
+import Model.PositionDAO;
+import Model.RegularEmployee;
 import Domains.Position;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -62,11 +62,15 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
     }
     
     private void populatecomboBoxWithPositions() {
-        PositionDAO positionDAO = new PositionDAO(DatabaseConnection.Connect());
-        List<Position> positions = positionDAO.getAllPositions();
-        
-        for (Position position: positions) {
-            jComboBoxPositions.addItem(position.getPositionName());
+        try {
+            PositionDAO positionDAO = new PositionDAO();
+            List<Position> positions = positionDAO.getAllPositions();
+            
+            for (Position position: positions) {
+                jComboBoxPositions.addItem(position.getPositionName());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
     
@@ -309,12 +313,6 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         }
     }
      
-    private void setPositionErrorMessage (String message) {
-        if (!message.isBlank()) {
-            jLabelPositionError.setText(message);
-            jLabelPositionError.setVisible(true);
-        }
-    }
     
     private void setAddressErrorMessage (String message) {
         if (!message.isBlank()) {

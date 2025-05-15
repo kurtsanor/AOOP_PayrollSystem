@@ -7,17 +7,26 @@ package Jframes;
 import Domains.YearPeriod;
 import java.awt.Image;
 import javax.swing.ImageIcon;
-import Core.Employee;
-import Core.EmployeeDAO;
+import Model.Employee;
+import Model.EmployeeDAO;
 import java.sql.Connection;
 import java.time.LocalDate;
-import Core.AttendanceDAO;
-import Core.DatabaseConnection;
-import Core.Finance;
-import Core.HR;
-import Core.HoursCalculator;
-import Core.IT;
-import Core.RegularEmployee;
+import Model.AttendanceDAO;
+import DatabaseConnection.DatabaseConnection;
+import Model.Finance;
+import Model.HR;
+import Model.HoursCalculator;
+import Model.IT;
+import Model.RegularEmployee;
+import Domains.AttendanceRecord;
+import java.time.LocalDateTime;
+import javax.swing.JOptionPane;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+
 
 /**
  *
@@ -29,23 +38,28 @@ public class JframeDashboard extends javax.swing.JFrame {
      * Creates new form JframeDashboard
      */
     private Employee loggedEmployee;
-    private EmployeeDAO employeeDB;
-    private Connection connection;
+    private DefaultTableModel attendancetbl;
     public JframeDashboard(int employeeID) {
-        this.connection = DatabaseConnection.Connect();
-        this.employeeDB = new EmployeeDAO(connection);
         initComponents();
+        attendancetbl = (DefaultTableModel) jTableAttendanceLogs.getModel();
         setExtendedState(MAXIMIZED_BOTH);
         initImages();
         loadEmployeeInformation(employeeID);
         configureRoleBasedButtons(loggedEmployee);
         populateLabelsWithInfo(loggedEmployee);        
         setWorkHoursValue();
+        populateAttendanceLogsTable();
     }
     
-    // intialize employee variable
     private void loadEmployeeInformation (int employeeID) {
-        loggedEmployee = employeeDB.getEmployeeByID(employeeID);            
+        
+        try {
+            EmployeeDAO dao = new EmployeeDAO();
+            loggedEmployee = dao.getEmployeeByID(employeeID);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+                    
     }
     
     // enable or disable buttons based on user roles
@@ -125,30 +139,75 @@ public class JframeDashboard extends javax.swing.JFrame {
     }
     
     private double getTotalMonthlyHours () {              
-        AttendanceDAO attendanceDB = new AttendanceDAO(DatabaseConnection.Connect());
+        AttendanceDAO dao = new AttendanceDAO();
         YearPeriod period = getMonthPeriod();
         
-        return HoursCalculator.calculateTotalHoursByPeriod(loggedEmployee.getID(), period, attendanceDB);      
+        return HoursCalculator.calculateTotalHoursByPeriod(loggedEmployee.getID(), period, dao);      
     }
     
     private void setWorkHoursValue () {
         double hoursWorked = getTotalMonthlyHours();
-        int hours = getHours(hoursWorked);
-        int minutes = getMinutes(hoursWorked);
-        jLabelWorkHours.setText(String.valueOf(hours + " Hours and " + minutes + " Minutes"));
+        int hours = HoursCalculator.getHours(hoursWorked);
+        int minutes = HoursCalculator.getMinutes(hoursWorked);
+        jLabelWorkHours.setText(String.valueOf(hours + " Hours and " + minutes + " Minutes"));       
+    }
+    
+    public void timeIn () {
         
+        try {
+            AttendanceDAO attendanceDAO = new AttendanceDAO();
+            LocalDateTime now = LocalDateTime.now();
+            boolean hasUnclosedEntry = attendanceDAO.hasUnclosedAttendanceEntry(loggedEmployee.getID(), now.toLocalDate());
+            if (!hasUnclosedEntry) {
+                boolean timeInSuccessful = loggedEmployee.timeIn(loggedEmployee.getID(), now);
+                populateAttendanceLogsTable();
+                showTimeInResult(timeInSuccessful);  
+            } else {
+                JOptionPane.showMessageDialog(this, "You have not yet timed out", "Invalid", JOptionPane.WARNING_MESSAGE);
+            }    
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+                          
     }
     
-    private int getHours (double value) {
-        return (int) value;      
+    public void timeOut () {        
+        LocalDateTime now = LocalDateTime.now();
+        boolean timeOutSuccessful = loggedEmployee.timeOut(loggedEmployee.getID(), now);       
+        populateAttendanceLogsTable();
+        showTimeOutResult(timeOutSuccessful);
     }
     
-    private int getMinutes (double value) {
-        return (int) Math.round((value * 60) % 60);
+    public void showTimeInResult (boolean timeInSuccessful) {
+        JOptionPane.showMessageDialog(this, timeInSuccessful ? "Time in has been recorded" : "Unable to time in" , timeInSuccessful ? "Success" : "Error" , timeInSuccessful? JOptionPane.INFORMATION_MESSAGE:JOptionPane.ERROR_MESSAGE);
+    }
+    
+    public void showTimeOutResult (boolean timeOutSuccessful) {
+        JOptionPane.showMessageDialog(this, timeOutSuccessful ? "Time out has been recorded" : "Unable to time out" , timeOutSuccessful ? "Success" : "Error" , timeOutSuccessful? JOptionPane.INFORMATION_MESSAGE:JOptionPane.ERROR_MESSAGE);
+    }
+    
+    public void populateAttendanceLogsTable () { 
+        try {
+            LocalDateTime now = LocalDateTime.now();
+            AttendanceDAO attendanceDAO = new AttendanceDAO();
+            List<AttendanceRecord> attendanceRecords = attendanceDAO.getAttendanceByIdAndPeriod(loggedEmployee.getID(), now.toLocalDate(), now.toLocalDate());
+            attendancetbl.setRowCount(0);
+            for (AttendanceRecord record: attendanceRecords) {
+                attendancetbl.addRow(createTableRowData(record));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public Object [] createTableRowData (AttendanceRecord record) {
+        return new Object [] {record.getEmployeeID(), 
+                record.getDate(), 
+                record.getTimeIn(), 
+                record.getTimeOut()};
     }
     
     
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -229,7 +288,7 @@ public class JframeDashboard extends javax.swing.JFrame {
         jPanel14 = new javax.swing.JPanel();
         jPanel17 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableAttendanceLogs = new javax.swing.JTable();
         jPanel18 = new javax.swing.JPanel();
         jCalendar1 = new com.toedter.calendar.JCalendar();
         jPanel15 = new javax.swing.JPanel();
@@ -538,6 +597,11 @@ public class JframeDashboard extends javax.swing.JFrame {
         jPanel7.setLayout(new java.awt.GridLayout(3, 2));
 
         jButtonClockIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/time (1).png"))); // NOI18N
+        jButtonClockIn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonClockInActionPerformed(evt);
+            }
+        });
         jPanel7.add(jButtonClockIn);
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -546,6 +610,11 @@ public class JframeDashboard extends javax.swing.JFrame {
         jPanel7.add(jLabel9);
 
         jButtonClockOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/clock (2).png"))); // NOI18N
+        jButtonClockOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonClockOutActionPerformed(evt);
+            }
+        });
         jPanel7.add(jButtonClockOut);
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -719,18 +788,15 @@ public class JframeDashboard extends javax.swing.JFrame {
         jPanel17.setBackground(new java.awt.Color(255, 255, 255));
         jPanel17.setLayout(new java.awt.BorderLayout());
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableAttendanceLogs.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Employee ID", "Date", "Time in", "Time out"
             }
         ));
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setViewportView(jTableAttendanceLogs);
 
         jPanel17.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
@@ -852,6 +918,14 @@ public class JframeDashboard extends javax.swing.JFrame {
         new JframePayroll(loggedEmployee).setVisible(true);
     }//GEN-LAST:event_jButtonPayrollActionPerformed
 
+    private void jButtonClockInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClockInActionPerformed
+       timeIn();
+    }//GEN-LAST:event_jButtonClockInActionPerformed
+
+    private void jButtonClockOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClockOutActionPerformed
+        timeOut();
+    }//GEN-LAST:event_jButtonClockOutActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -934,6 +1008,6 @@ public class JframeDashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanelTop;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableAttendanceLogs;
     // End of variables declaration//GEN-END:variables
 }

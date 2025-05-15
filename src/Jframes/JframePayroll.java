@@ -4,17 +4,16 @@
  */
 package Jframes;
 
-import Core.AttendanceDAO;
-import Core.AttendanceProcessor;
-import Core.DatabaseConnection;
-import Core.Employee;
-import Core.EmployeeDAO;
-import Core.Finance;
-import Core.PayrollCalculator;
-import Core.PayrollService;
+import Model.AttendanceProcessor;
+import Model.Employee;
+import Model.EmployeeDAO;
+import Model.Finance;
+import Model.PayrollCalculator;
+import Model.PayrollService;
 import Domains.EmployeeMonthlyHoursKey;
 import Domains.PayrollEntry;
 import Domains.YearPeriod;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
@@ -30,16 +29,11 @@ public class JframePayroll extends javax.swing.JFrame {
      */
     private Employee loggedEmployee;
     private Finance financeEmployee;
-    private EmployeeDAO employeeDAO;
-    private AttendanceDAO attendanceDAO;
     private AttendanceProcessor attendanceProcessor;
     private Map<EmployeeMonthlyHoursKey, Double> workHoursMap;
     private List<Employee> employeeList;
     private DefaultTableModel tblModel;
-    public JframePayroll(Employee loggedEmployee) {
-        this.employeeDAO = new EmployeeDAO(DatabaseConnection.Connect());
-        this.attendanceDAO = new AttendanceDAO(DatabaseConnection.Connect());
-        this.attendanceProcessor = new AttendanceProcessor(attendanceDAO);       
+    public JframePayroll(Employee loggedEmployee) {      
         this.loggedEmployee = loggedEmployee;
         initComponents();
         this.tblModel = (DefaultTableModel) jTablePayroll.getModel();
@@ -66,7 +60,12 @@ public class JframePayroll extends javax.swing.JFrame {
     }
     
     private void populateEmployeeList () {
-        employeeList = employeeDAO.getAllEmployees();
+        try {
+            EmployeeDAO dao = new EmployeeDAO();
+            employeeList = dao.getAllEmployees();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     
     private void loadPayrollTable () {
@@ -148,7 +147,7 @@ public class JframePayroll extends javax.swing.JFrame {
 
         jLabelTitle.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabelTitle.setForeground(new java.awt.Color(0, 183, 229));
-        jLabelTitle.setText("MONTHLY PAYROLL REPORT");
+        jLabelTitle.setText("MONTHLY PAYROLL SUMMARY REPORT");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -166,6 +165,8 @@ public class JframePayroll extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(8, 0, 8, 5);
         jPanel3.add(jMonthChooser, gridBagConstraints);
+
+        jYearChooser.setValue(2022);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;

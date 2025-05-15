@@ -21,10 +21,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import Core.DatabaseConnection;
-import Core.Employee;
-import Core.HR;
-import Core.LeaveCreditsDAO;
+import Model.Employee;
+import Model.HR;
+import Model.LeaveCreditsDAO;
+import java.sql.SQLException;
 
 /**
  *
@@ -36,14 +36,12 @@ public class JframeLeaveManagement extends javax.swing.JFrame {
      * Creates new form JframeLeaveManagement
      */
     private Employee loggedEmployee;
-    private LeaveCreditsDAO leaveCreditsDB;
     private HR hrEmployee;
     private DefaultTableModel leaveTbl;
     private SimpleDateFormat simpleFormat;
     private SimpleDateFormat sqlDateFormat;
     public JframeLeaveManagement(Employee loggedEmployee) {
         this.loggedEmployee = loggedEmployee;
-        this.leaveCreditsDB = new LeaveCreditsDAO(DatabaseConnection.Connect());
         this.simpleFormat = new SimpleDateFormat("MMM dd, yyyy");
         this.sqlDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         initComponents();
@@ -61,15 +59,26 @@ public class JframeLeaveManagement extends javax.swing.JFrame {
     }
     
     private LeaveBalance fetchLeaveCreditsByEmployeeID (int employeeID) {
-        return leaveCreditsDB.getLeaveCreditsByEmpID(employeeID);
+        try {
+            LeaveCreditsDAO dao = new LeaveCreditsDAO();
+            return dao.getLeaveCreditsByEmpID(employeeID);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
     
     private void updateLeaveCredits (int employeeID, String leaveType, int leaveDuration) {
-        LeaveBalance leaveBalance = fetchLeaveCreditsByEmployeeID(employeeID);
-        leaveBalance = deductBalanceByLeaveType(leaveType, leaveBalance, leaveDuration);
-        
-        boolean updated = leaveCreditsDB.updateLeaveCreditsByEmpID(employeeID, leaveBalance);
-        System.out.println("updated balance = " + updated);
+        try {
+            LeaveCreditsDAO dao = new LeaveCreditsDAO();
+            LeaveBalance leaveBalance = fetchLeaveCreditsByEmployeeID(employeeID);
+            leaveBalance = deductBalanceByLeaveType(leaveType, leaveBalance, leaveDuration);
+            
+            boolean updated = dao.updateLeaveCreditsByEmpID(employeeID, leaveBalance);
+            System.out.println("updated balance = " + updated);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     
     private LeaveBalance deductBalanceByLeaveType (String leaveType, LeaveBalance leaveBalance, int leaveDuration) {
@@ -82,9 +91,9 @@ public class JframeLeaveManagement extends javax.swing.JFrame {
     }
     
     private void updateLeaveStatus (int leaveID, String status) {
-            LocalDateTime dateTimeNow = LocalDateTime.now();
-            boolean updated = hrEmployee.updateLeaveStatus(leaveID, status, dateTimeNow);
-            showUpdatedLeaveStatusResult(updated, status);                          
+        LocalDateTime dateTimeNow = LocalDateTime.now();
+        boolean updated = hrEmployee.updateLeaveStatus(leaveID, status, dateTimeNow);
+        showUpdatedLeaveStatusResult(updated, status);                          
     }
     
     private void showUpdatedLeaveStatusResult (boolean updated, String status) {

@@ -12,11 +12,13 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
-import Core.AttendanceDAO;
-import Core.DatabaseConnection;
-import Core.Employee;
-import Core.HR;
-import Core.HoursCalculator;
+import Model.AttendanceDAO;
+import Model.Employee;
+import Model.HR;
+import Model.HoursCalculator;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -28,13 +30,11 @@ public class JframeAttendanceManagement extends javax.swing.JFrame {
      * Creates new form JframeAttendanceManagement
      */
     private Employee loggedEmployee;
-    private AttendanceDAO attendanceDB;
     private HR hrEmployee;
     private SimpleDateFormat sqlDateFormat;
     private SimpleDateFormat simpleFormat;
     private DefaultTableModel attendanceTbl;
     public JframeAttendanceManagement(Employee loggedEmployee) {
-        this.attendanceDB = new AttendanceDAO(DatabaseConnection.Connect());
         this.loggedEmployee = loggedEmployee;
         this.sqlDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         this.simpleFormat = new SimpleDateFormat("MMM dd, yyyy");
@@ -80,8 +80,14 @@ public class JframeAttendanceManagement extends javax.swing.JFrame {
         return employeeID;
     }
     
-    private List<AttendanceRecord> fetchAttendanceRecords (int employeeID, LocalDate start, LocalDate end) {           
-        return attendanceDB.getAttendanceByIdAndPeriod(employeeID, start, end);
+    private List<AttendanceRecord> fetchAttendanceRecords (int employeeID, LocalDate start, LocalDate end) {
+        try {
+            AttendanceDAO dao = new AttendanceDAO();
+            return dao.getAttendanceByIdAndPeriod(employeeID, start, end);
+        } catch (SQLException ex) {
+            Logger.getLogger(JframeAttendanceManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     private Object [] createTableRowData (AttendanceRecord record) {

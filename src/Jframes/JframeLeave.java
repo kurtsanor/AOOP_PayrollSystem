@@ -15,10 +15,10 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import Core.DatabaseConnection;
-import Core.Employee;
-import Core.LeaveCreditsDAO;
-import Core.LeaveRequestValidator;
+import Model.Employee;
+import Model.LeaveCreditsDAO;
+import Model.LeaveRequestValidator;
+import java.sql.SQLException;
 
 /**
  *
@@ -31,12 +31,10 @@ public class JframeLeave extends javax.swing.JFrame {
      */
     private Employee loggedEmployee;
     private DefaultTableModel leaveTbl;
-    private LeaveCreditsDAO leaveCreditsDB;
     private LeaveBalance personalLeaveCredits;
     private SimpleDateFormat sqlDateFormat;
     private SimpleDateFormat simpleFormat;
     public JframeLeave(Employee loggedEmployee) {
-        this.leaveCreditsDB = new LeaveCreditsDAO(DatabaseConnection.Connect());
         this.loggedEmployee = loggedEmployee;
         this.sqlDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         this.simpleFormat = new SimpleDateFormat("MMM dd, yyyy");
@@ -63,7 +61,12 @@ public class JframeLeave extends javax.swing.JFrame {
     }
     
     private void loadPersonalLeaveCredits () {
-        this.personalLeaveCredits = leaveCreditsDB.getLeaveCreditsByEmpID(loggedEmployee.getID());
+        try {
+            LeaveCreditsDAO dao = new LeaveCreditsDAO();
+            this.personalLeaveCredits = dao.getLeaveCreditsByEmpID(loggedEmployee.getID());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     
     private List<LeaveRequest> fetchPersonalLeaves () {

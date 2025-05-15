@@ -4,9 +4,8 @@
  */
 package Jframes;
 
-import Core.DatabaseConnection;
-import Core.UserAuthentication;
-import java.sql.Connection;
+import Model.CredentialsDAO;
+import java.sql.SQLException;
 
 /**
  *
@@ -17,11 +16,7 @@ public class JframeLogin extends javax.swing.JFrame {
     /**
      * Creates new form JframeLogin
      */
-    private UserAuthentication userAuth;
-    private Connection connection;
     public JframeLogin() {
-        this.connection = DatabaseConnection.Connect();
-        this.userAuth = new UserAuthentication(connection);
         initComponents();       
         this.setExtendedState(MAXIMIZED_BOTH);
         jLabelInvalid.setVisible(false);
@@ -128,16 +123,21 @@ public class JframeLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     
     private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLoginActionPerformed
-       String username = jTextFieldUsername.getText();
-       String password = new String (jPasswordField.getPassword());
-       
-        int employeeID = userAuth.getAuthenticatedID(username, password);
-        
-        if (employeeID != -1) {
-            this.dispose();
-            new JframeDashboard(employeeID).setVisible(true);
-        } else {
-            jLabelInvalid.setVisible(true);
+        try {
+            CredentialsDAO dao = new CredentialsDAO();
+            String username = jTextFieldUsername.getText();
+            String password = new String (jPasswordField.getPassword());
+            
+            int employeeID = dao.getAuthenticatedID(username, password);
+            
+            if (employeeID != -1) {
+                this.dispose();
+                new JframeDashboard(employeeID).setVisible(true);
+            } else {
+                jLabelInvalid.setVisible(true);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
        
     }//GEN-LAST:event_jButtonLoginActionPerformed

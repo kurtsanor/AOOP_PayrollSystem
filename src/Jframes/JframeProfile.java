@@ -6,8 +6,8 @@ package Jframes;
 
 import java.awt.Image;
 import javax.swing.ImageIcon;
-import Core.Employee;
-import Core.HR;
+import Model.Employee;
+import Model.HR;
 
 /**
  *
@@ -20,10 +20,8 @@ public class JframeProfile extends javax.swing.JFrame {
      */
     private Employee loggedEmployee;
     private HR hrEmployee;
-    private int employeeID;
     public JframeProfile(Employee loggedEmployee, int employeeID) {
         this.loggedEmployee = loggedEmployee;
-        this.employeeID = employeeID;
         initComponents();
         initImages();
         initHrUser(loggedEmployee);
@@ -51,6 +49,7 @@ public class JframeProfile extends javax.swing.JFrame {
             jLabelBirthday.setText(employeeToView.getBirthday().toString());
             jLabelPhoneNumber.setText(employeeToView.getPhoneNumber());
             jLabelAddress.setText(employeeToView.getAddress());
+            jLabelStatus.setText(employeeToView.getStatus());
             jLabelPosition.setText(employeeToView.getPosition());
             jLabelRole.setText(employeeToView.getRole());
             jLabelBasicSalary.setText(amountToString(employeeToView.getBasicSalary()));
@@ -149,7 +148,7 @@ public class JframeProfile extends javax.swing.JFrame {
 
         jLabelHeader.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabelHeader.setForeground(new java.awt.Color(255, 255, 255));
-        jLabelHeader.setText("MANUEL GARCIA - CHIEF EXECUTIVE OWNER");
+        jLabelHeader.setText("name - position");
         jPanel2.add(jLabelHeader, new java.awt.GridBagConstraints());
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.PAGE_START);
@@ -223,7 +222,7 @@ public class JframeProfile extends javax.swing.JFrame {
         jPanel5.add(jLabel1, gridBagConstraints);
 
         jLabelFullName.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        jLabelFullName.setText("Manuel Garcia");
+        jLabelFullName.setText("name..");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -244,7 +243,7 @@ public class JframeProfile extends javax.swing.JFrame {
         jPanel5.add(jLabel3, gridBagConstraints);
 
         jLabelBirthday.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        jLabelBirthday.setText("2003-05-23");
+        jLabelBirthday.setText("dob..");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -265,7 +264,7 @@ public class JframeProfile extends javax.swing.JFrame {
         jPanel5.add(jLabel5, gridBagConstraints);
 
         jLabelPhoneNumber.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        jLabelPhoneNumber.setText("09773654897");
+        jLabelPhoneNumber.setText("#####");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -329,7 +328,7 @@ public class JframeProfile extends javax.swing.JFrame {
         jPanel5.add(jLabel11, gridBagConstraints);
 
         jLabelStatus.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        jLabelStatus.setText("Regular");
+        jLabelStatus.setText("status...");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
@@ -340,7 +339,7 @@ public class JframeProfile extends javax.swing.JFrame {
         jPanel5.add(jLabelStatus, gridBagConstraints);
 
         jLabelPosition.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        jLabelPosition.setText("Chief Executive Owner");
+        jLabelPosition.setText("pos");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
@@ -351,7 +350,7 @@ public class JframeProfile extends javax.swing.JFrame {
         jPanel5.add(jLabelPosition, gridBagConstraints);
 
         jLabelRole.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        jLabelRole.setText("HR");
+        jLabelRole.setText("role");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
@@ -411,7 +410,7 @@ public class JframeProfile extends javax.swing.JFrame {
         jPanel5.add(jLabel19, gridBagConstraints);
 
         jLabelBasicSalary.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        jLabelBasicSalary.setText("90,000");
+        jLabelBasicSalary.setText("##");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 9;
@@ -422,7 +421,7 @@ public class JframeProfile extends javax.swing.JFrame {
         jPanel5.add(jLabelBasicSalary, gridBagConstraints);
 
         jLabelGrossSemiMonthly.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        jLabelGrossSemiMonthly.setText("45,000");
+        jLabelGrossSemiMonthly.setText("##");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 9;
@@ -433,7 +432,7 @@ public class JframeProfile extends javax.swing.JFrame {
         jPanel5.add(jLabelGrossSemiMonthly, gridBagConstraints);
 
         jLabelHourlyRate.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        jLabelHourlyRate.setText("535.71");
+        jLabelHourlyRate.setText("##");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 9;
@@ -474,7 +473,7 @@ public class JframeProfile extends javax.swing.JFrame {
         jPanel5.add(jLabel25, gridBagConstraints);
 
         jLabelRiceSubsidy.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        jLabelRiceSubsidy.setText("1500");
+        jLabelRiceSubsidy.setText("##");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 11;
@@ -485,7 +484,7 @@ public class JframeProfile extends javax.swing.JFrame {
         jPanel5.add(jLabelRiceSubsidy, gridBagConstraints);
 
         jLabelPhoneAllowance.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        jLabelPhoneAllowance.setText("2000");
+        jLabelPhoneAllowance.setText("##");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 11;
@@ -496,7 +495,7 @@ public class JframeProfile extends javax.swing.JFrame {
         jPanel5.add(jLabelPhoneAllowance, gridBagConstraints);
 
         jLabelClothingAllowance.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        jLabelClothingAllowance.setText("2500");
+        jLabelClothingAllowance.setText("##");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 11;
