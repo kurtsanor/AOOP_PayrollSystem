@@ -32,10 +32,10 @@ import java.util.logging.Logger;
  * @author keith
  */
 public class PdfProcessor {
-    public static void createPayslipPdf(Employee employee, Payslip payslip) {
+    public static void createPayslipPdf(Payslip payslip) {
         try {
 
-            String fileNameFormat = employee.getLastName() + "-Payslip-" + payslip.getPeriod().getMonth() + "-" + payslip.getPeriod().getYear() +".pdf";
+            String fileNameFormat = payslip.getEmployee().getLastName()+ "-Payslip-" + payslip.getPeriod().getMonth() + "-" + payslip.getPeriod().getYear() +".pdf";
             String filePath = "generated payslips" + File.separator + fileNameFormat;
             
             // Create PDF writer
@@ -54,10 +54,10 @@ public class PdfProcessor {
                 DeviceRgb blue = new DeviceRgb(56,60,76);
                 DeviceRgb lightGray = new DeviceRgb(240,236,236);
                 
-                table.addCell(new Cell().add(new Paragraph("Employee Name: " + employee.getFirstName() + " " + employee.getLastName())));
+                table.addCell(new Cell().add(new Paragraph("Employee Name: " + payslip.getEmployee().getFirstName() + " " + payslip.getEmployee().getLastName())));
                 table.addCell("Period Month: " + payslip.getPeriod().getMonth());
 
-                table.addCell("Employee ID: " + employee.getID());
+                table.addCell("Employee ID: " + payslip.getEmployee().getID());
                 table.addCell("Period Year: " + payslip.getPeriod().getYear());
                 
                 document.add(table);
@@ -69,7 +69,7 @@ public class PdfProcessor {
                 
                 Table hourlyRate = create2ColumnTable();
                 hourlyRate.addCell(new Cell().add(new Paragraph("Hourly Rate")).setBorder(Border.NO_BORDER));
-                hourlyRate.addCell(new Cell().add(new Paragraph(amountToString(employee.getHourlyRate()))).setTextAlignment(TextAlignment.RIGHT).setBorder(Border.NO_BORDER));
+                hourlyRate.addCell(new Cell().add(new Paragraph(amountToString(payslip.getEmployee().getHourlyRate()))).setTextAlignment(TextAlignment.RIGHT).setBorder(Border.NO_BORDER));
                 document.add(hourlyRate);
                 
                 Table hoursWorked = create2ColumnTable();

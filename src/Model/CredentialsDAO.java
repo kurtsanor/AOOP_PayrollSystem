@@ -1,9 +1,9 @@
 package Model;
 import DatabaseConnection.DatabaseConnection;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.CallableStatement;
 
 
 public class CredentialsDAO  {    
@@ -11,12 +11,11 @@ public class CredentialsDAO  {
     public CredentialsDAO () {}
                    
     public int getAuthenticatedID (String username, String password) throws SQLException {
-        String query = "SELECT employeeID FROM credentials WHERE BINARY username = ? AND password = ?";
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement pst = connection.prepareStatement(query)) {
-            pst.setString(1, username);
-            pst.setString(2, password);
-            ResultSet rs = pst.executeQuery();
+             CallableStatement stmt = connection.prepareCall("{CALL credentialsGetUserID(?,?)}")) {
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            ResultSet rs = stmt.executeQuery();
             
             if (rs.next()) {
                 int employeeID = rs.getInt("employeeID");

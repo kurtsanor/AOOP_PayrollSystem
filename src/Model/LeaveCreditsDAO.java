@@ -6,9 +6,9 @@ package Model;
 
 import DatabaseConnection.DatabaseConnection;
 import Domains.LeaveBalance;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 /**
@@ -20,11 +20,10 @@ public class LeaveCreditsDAO {
     public LeaveCreditsDAO() {}
     
     public LeaveBalance getLeaveCreditsByEmpID (int employeeID) throws SQLException {
-        String query = "SELECT * FROM leavecredits WHERE employeeID = ?";
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement pst = connection.prepareStatement(query)) {
-            pst.setInt(1, employeeID);
-            ResultSet rs = pst.executeQuery();
+             CallableStatement stmt = connection.prepareCall("{CALL leavecreditsGetByID(?)}")) {
+            stmt.setInt(1, employeeID);
+            ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new LeaveBalance(rs.getInt("employeeID"), rs.getInt("vacationLeaveCredits"), rs.getInt("medicalLeaveCredits"), rs.getInt("personalLeaveCredits"));
             }
@@ -36,14 +35,13 @@ public class LeaveCreditsDAO {
     }
     
     public boolean updateLeaveCreditsByEmpID (int employeeID, LeaveBalance newBalance) throws SQLException {
-        String query = "UPDATE leavecredits SET vacationLeaveCredits = ?, medicalLeaveCredits = ?, personalLeaveCredits = ? WHERE employeeID = ?";
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement pst = connection.prepareStatement(query)) {
-            pst.setInt(1, newBalance.getVacationLeaveCredits());
-            pst.setInt(2, newBalance.getMedicalLeaveCredits());
-            pst.setInt(3, newBalance.getPersonalLeaveCredits());
-            pst.setInt(4, employeeID);
-            return pst.executeUpdate() > 0;
+             CallableStatement stmt = connection.prepareCall("{CALL leavecreditsUpdatebyID(?,?,?,?)}")) {
+            stmt.setInt(1, newBalance.getVacationLeaveCredits());
+            stmt.setInt(2, newBalance.getMedicalLeaveCredits());
+            stmt.setInt(3, newBalance.getPersonalLeaveCredits());
+            stmt.setInt(4, employeeID);
+            return stmt.executeUpdate() > 0;
                                  
         } catch (SQLException e) {
             throw new SQLException("Failed to retrieve vacation leave credits", e);

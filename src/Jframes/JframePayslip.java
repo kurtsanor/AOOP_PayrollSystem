@@ -582,7 +582,7 @@ public class JframePayslip extends javax.swing.JFrame {
 
     private void jButtonSavePdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSavePdfActionPerformed
         YearPeriod period = getChosenPeriod();
-        PdfProcessor.createPayslipPdf(loggedEmployee, getPayslipDetails(period));
+        PdfProcessor.createPayslipPdf(getPayslipDetails(period));
     }//GEN-LAST:event_jButtonSavePdfActionPerformed
 
     /**

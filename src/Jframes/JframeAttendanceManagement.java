@@ -83,7 +83,7 @@ public class JframeAttendanceManagement extends javax.swing.JFrame {
     private List<AttendanceRecord> fetchAttendanceRecords (int employeeID, LocalDate start, LocalDate end) {
         try {
             AttendanceDAO dao = new AttendanceDAO();
-            return dao.getAttendanceByIdAndPeriod(employeeID, start, end);
+            return dao.getAttendanceByCustomRange(employeeID, start, end);
         } catch (SQLException ex) {
             Logger.getLogger(JframeAttendanceManagement.class.getName()).log(Level.SEVERE, null, ex);
         }

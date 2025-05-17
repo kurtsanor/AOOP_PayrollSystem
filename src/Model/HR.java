@@ -103,17 +103,7 @@ public class HR extends Employee {
         }       
         return null;
     }
-    
-    public LeaveRequest getLeavebyLeaveID (int leaveID) {
-        try {
-            LeaveDAO leaveDB = new LeaveDAO();
-            return leaveDB.getLeaveByLeaveID(leaveID);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } 
-        return null;
-    }
-    
+       
     public List<AttendanceRecord> loadAttendanceByIdAndPeriod (int employeeID, YearPeriod period) {
         try {
             AttendanceDAO attendanceDB = new AttendanceDAO();

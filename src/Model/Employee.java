@@ -123,14 +123,14 @@ public abstract class Employee implements EmployeeEssentials {
             double totalAllowance = getRiceSubsidy() + getPhoneAllowance() + getClothingAllowance();
             double grossPay = PayrollCalculator.getGrossSalary(empBasicSalary, totalAllowance);
             double taxableIncome = PayrollCalculator.getTaxableIncome(grossPay);
-            double sssDeduction = TaxAndDeductionsModule.getSSSDeduction(grossPay);
-            double philhealthDeduction = TaxAndDeductionsModule.getPhilHealthDeduction(grossPay);
-            double taxDeduction = TaxAndDeductionsModule.getWithholdingTax(taxableIncome);
-            double pagibigDeduction = TaxAndDeductionsModule.getPagIbigDeduction(grossPay);
+            double sssDeduction = DeductionCalculator.getSssContribution(grossPay);
+            double philhealthDeduction = DeductionCalculator.getPhilhealthContribution(grossPay);
+            double taxDeduction = DeductionCalculator.getTaxContribution(taxableIncome);
+            double pagibigDeduction = DeductionCalculator.getPagibigContribution(grossPay);
             double netPay = PayrollCalculator.getNetSalary(grossPay);
            
             Payslip payslip = new Payslip(
-                getID(), 
+                this, 
                 period,
                 empWorkHours,
                 empBasicSalary, 

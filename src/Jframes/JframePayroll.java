@@ -13,6 +13,7 @@ import Model.PayrollService;
 import Domains.EmployeeMonthlyHoursKey;
 import Domains.PayrollEntry;
 import Domains.YearPeriod;
+import Model.AttendanceDAO;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,6 @@ public class JframePayroll extends javax.swing.JFrame {
      */
     private Employee loggedEmployee;
     private Finance financeEmployee;
-    private AttendanceProcessor attendanceProcessor;
     private Map<EmployeeMonthlyHoursKey, Double> workHoursMap;
     private List<Employee> employeeList;
     private DefaultTableModel tblModel;
@@ -44,7 +44,9 @@ public class JframePayroll extends javax.swing.JFrame {
     }
     
     private void populateWorkHoursMap () {
-        workHoursMap = attendanceProcessor.calculateMonthlyHours();
+        AttendanceDAO dao = new AttendanceDAO();
+        AttendanceProcessor processor = new AttendanceProcessor(dao);
+        workHoursMap = processor.mapMonthlyHoursOfEmployees();
     }
     
     private void initFinanceUser (Employee loggedEmployee) {
@@ -241,7 +243,10 @@ public class JframePayroll extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButtonGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGenerateActionPerformed
+        long start = System.currentTimeMillis();
         loadPayrollTable();
+        long end = System.currentTimeMillis();
+        System.out.println(end-start);
     }//GEN-LAST:event_jButtonGenerateActionPerformed
 
     /**

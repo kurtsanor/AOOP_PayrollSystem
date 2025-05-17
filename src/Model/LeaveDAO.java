@@ -12,20 +12,18 @@ import java.util.List;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.sql.CallableStatement;
 
 public class LeaveDAO {   
     
     public LeaveDAO() {}
        
     public List <LeaveRequest> getAllRecords () throws SQLException {
+        
         List <LeaveRequest> leaveRecords = new ArrayList<>();
-        String query = "SELECT l.leaveID, l.employeeID, lt.leaveTypeName, l.startDate, l.endDate, l.status, l.submittedDate, l.processedDate, l.remarks" +
-"                FROM leaves l JOIN leaveType lt ON l.leaveTypeID = lt.leaveTypeID ORDER BY l.leaveID DESC";
-        
-        
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement pst = connection.prepareStatement(query)) {
-            ResultSet rs = pst.executeQuery();                                     
+             CallableStatement stmt = connection.prepareCall("{CALL leavesGetAll}")) {
+            ResultSet rs = stmt.executeQuery();                                     
             while (rs.next()) {
                 LeaveRequest leaveRequest = createLeaveFromResultSet(rs);
                 leaveRecords.add(leaveRequest);
@@ -38,14 +36,12 @@ public class LeaveDAO {
     }
           
     public List <LeaveRequest> getLeavesByEmployeeID (int employeeID) throws SQLException {
-        List <LeaveRequest> leaveRecords = new ArrayList<>();
-        String query = "SELECT l.leaveID, l.employeeID, lt.leaveTypeName, l.startDate, l.endDate, l.status, l.submittedDate, l.processedDate, l.remarks" +
-"                FROM leaves l JOIN leaveType lt ON l.leaveTypeID = lt.leaveTypeID WHERE l.employeeID = ? ORDER BY l.leaveID DESC";
         
+        List <LeaveRequest> leaveRecords = new ArrayList<>();       
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement pst = connection.prepareStatement(query)) {            
-            pst.setInt(1, employeeID);
-            ResultSet rs = pst.executeQuery();                                    
+             CallableStatement stmt = connection.prepareCall("{CALL leavesGetByID(?)}")) {            
+            stmt.setInt(1, employeeID);
+            ResultSet rs = stmt.executeQuery();                                    
             while (rs.next()) {
                 LeaveRequest leaveRequest = createLeaveFromResultSet(rs);
                 leaveRecords.add(leaveRequest);
@@ -56,32 +52,14 @@ public class LeaveDAO {
         
         return leaveRecords;
     }
-    
-    public LeaveRequest getLeaveByLeaveID (int leaveID) throws SQLException {
-        String query = "SELECT * FROM leaves WHERE leaveID = ?";
-        
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement pst = connection.prepareStatement(query)) {            
-            pst.setInt(1, leaveID);
-            ResultSet rs = pst.executeQuery();                                    
-            if (rs.next()) {
-                return createLeaveFromResultSet(rs);
-            }
-        } catch (SQLException e) {
-            throw new SQLException("Failed to retrieve leave record by leave id", e);
-        }
-        return null;
-    }
-        
-   
+             
     public boolean submitLeaveRequest (LeaveRequest leaveRequest) throws SQLException {
         int leaveTypeID = -1;
         
-        String leaveTypeQuery = "SELECT leaveTypeID FROM leavetype WHERE leaveTypeName = ?";
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement leaveTypePst = connection.prepareStatement(leaveTypeQuery)) {
-            leaveTypePst.setString(1, leaveRequest.getLeaveType());
-            ResultSet rs = leaveTypePst.executeQuery();
+             CallableStatement leaveTypeStmt = connection.prepareCall("{CALL leavetypeGetIdByName(?)}")) {
+            leaveTypeStmt.setString(1, leaveRequest.getLeaveType());
+            ResultSet rs = leaveTypeStmt.executeQuery();
             if (rs.next()) {
                 leaveTypeID = rs.getInt("leaveTypeID");
             } else {
@@ -89,12 +67,10 @@ public class LeaveDAO {
             }
         } catch (SQLException e) {
             throw new SQLException("Failed to get leave type id", e);
-        }
+        }   
         
-        String insertQuery = "INSERT INTO leaves "
-                     + "(employeeID, leaveTypeID, startDate, endDate, status, submittedDate, remarks) VALUES (?,?,?,?,?,?,?)";
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement pst = connection.prepareStatement(insertQuery)) {
+             CallableStatement pst = connection.prepareCall("{CALL leavesInsert(?,?,?,?,?,?,?)}")) {
             pst.setInt(1, leaveRequest.getEmployeeID());
             pst.setInt(2, leaveTypeID);
             pst.setDate(3, Date.valueOf(leaveRequest.getStartDate()));
@@ -111,13 +87,12 @@ public class LeaveDAO {
     }
         
     public boolean updateStatus (int leaveID, String newStatus, LocalDateTime dateProcesed) throws SQLException {
-        String query = "UPDATE leaves SET status = ?, processedDate = ? WHERE leaveID = ?";
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement pst = connection.prepareStatement(query)) {             
-            pst.setString(1, newStatus);
-            pst.setTimestamp(2, Timestamp.valueOf(dateProcesed));
-            pst.setInt(3, leaveID);
-            return pst.executeUpdate() > 0;
+             CallableStatement stmt = connection.prepareCall("{CALL leavesUpdateStatus(?,?,?)}")) {             
+            stmt.setString(1, newStatus);
+            stmt.setTimestamp(2, Timestamp.valueOf(dateProcesed));
+            stmt.setInt(3, leaveID);
+            return stmt.executeUpdate() > 0;
                                                                  
         } catch (SQLException e) {
             throw new SQLException("Failed to update status", e);

@@ -9,10 +9,8 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import Model.Employee;
 import Model.EmployeeDAO;
-import java.sql.Connection;
 import java.time.LocalDate;
 import Model.AttendanceDAO;
-import DatabaseConnection.DatabaseConnection;
 import Model.Finance;
 import Model.HR;
 import Model.HoursCalculator;
@@ -23,8 +21,6 @@ import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -190,7 +186,7 @@ public class JframeDashboard extends javax.swing.JFrame {
         try {
             LocalDateTime now = LocalDateTime.now();
             AttendanceDAO attendanceDAO = new AttendanceDAO();
-            List<AttendanceRecord> attendanceRecords = attendanceDAO.getAttendanceByIdAndPeriod(loggedEmployee.getID(), now.toLocalDate(), now.toLocalDate());
+            List<AttendanceRecord> attendanceRecords = attendanceDAO.getAttendanceByCustomRange(loggedEmployee.getID(), now.toLocalDate(), now.toLocalDate());
             attendancetbl.setRowCount(0);
             for (AttendanceRecord record: attendanceRecords) {
                 attendancetbl.addRow(createTableRowData(record));

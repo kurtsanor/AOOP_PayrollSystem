@@ -4,12 +4,14 @@
  */
 package Domains;
 
+import Model.Employee;
+
 /**
  *
  * @author keith
  */
 public class Payslip {
-    private int employeeID;
+    private Employee employee;
     private YearPeriod period;
     private double workHours;
     private double basicSalary;
@@ -23,9 +25,9 @@ public class Payslip {
     private double phoneAllowance;
     private double clothingAllowance;
     
-    public Payslip (int employeeID, YearPeriod period, double workHours, double basicSalary, double sssDeduction, double philhealthDeduction, 
+    public Payslip (Employee employee, YearPeriod period, double workHours, double basicSalary, double sssDeduction, double philhealthDeduction, 
             double taxDeduction, double pagibigDeduction, double grossPay, double netPay, double riceSubsidy, double phoneAllowance, double clothingAllowance) {
-        this.employeeID = employeeID;
+        this.employee = employee;
         this.period = period;
         this.workHours = workHours;
         this.basicSalary = basicSalary;
@@ -48,8 +50,8 @@ public class Payslip {
         return sssDeduction + philhealthDeduction + taxDeduction + pagibigDeduction;
     }
     
-    public int getEmployeeID() {
-        return employeeID;
+    public Employee getEmployee() {
+        return employee;
     }
 
     public YearPeriod getPeriod() {

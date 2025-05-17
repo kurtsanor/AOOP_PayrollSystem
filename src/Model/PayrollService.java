@@ -34,11 +34,11 @@ public class PayrollService {
             double basicSalary = employee.getHourlyRate() * workHoursMap.getOrDefault(key,0.0);
             double totalAllowance = employee.getRiceSubsidy() + employee.getPhoneAllowance() + employee.getClothingAllowance();
             double grossIncome = basicSalary + totalAllowance;
-            double sss = TaxAndDeductionsModule.getSSSDeduction(grossIncome);
-            double philhealth = TaxAndDeductionsModule.getPhilHealthDeduction(grossIncome);
-            double pagibig = TaxAndDeductionsModule.getPagIbigDeduction(grossIncome);
+            double sss = DeductionCalculator.getSssContribution(grossIncome);
+            double philhealth = DeductionCalculator.getPhilhealthContribution(grossIncome);
+            double pagibig = DeductionCalculator.getPagibigContribution(grossIncome);
             double taxableIncome = PayrollCalculator.getTaxableIncome(grossIncome);
-            double withholdingTax = TaxAndDeductionsModule.getWithholdingTax(taxableIncome);
+            double withholdingTax = DeductionCalculator.getTaxContribution(taxableIncome);
             double netPay = PayrollCalculator.getNetSalary(grossIncome);
             
             return new PayrollEntry(employeeID, fullName, position, grossIncome, sss, philhealth, pagibig, withholdingTax, netPay);

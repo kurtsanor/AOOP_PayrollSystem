@@ -25,7 +25,7 @@ public class AttendanceProcessor {
         this.database = database;
     }
     
-    public Map<EmployeeMonthlyHoursKey, Double> calculateMonthlyHours () {
+    public Map<EmployeeMonthlyHoursKey, Double> mapMonthlyHoursOfEmployees () {
         try {
             List<AttendanceRecord> records = database.getAllRecords();
             Map<EmployeeMonthlyHoursKey, Double> workHoursMap = new HashMap<>();
