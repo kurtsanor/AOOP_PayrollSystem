@@ -184,7 +184,7 @@ public class JframeLeaveManagement extends javax.swing.JFrame {
     }
     
     private int getLeaveDuration (LocalDate startDate, LocalDate endDate) {
-        return (int) ChronoUnit.DAYS.between(startDate, endDate) + 1;      
+        return LeaveService.getLeaveDuration(startDate, endDate);
     }
     
     private String getLeaveTypeFromRow (int row) {
