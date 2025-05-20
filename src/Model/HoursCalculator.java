@@ -20,11 +20,27 @@ import java.util.logging.Logger;
 public class HoursCalculator {
     
     public static double calculateDailyHours (LocalTime timeIn, LocalTime timeOut) {
-        if (timeOut == null || timeIn == null) {
+        if (timeIn == null || timeOut == null) {
             return 0.0;
-        }       
-        long minutes = ChronoUnit.MINUTES.between(timeIn, timeOut);
-        double hours = minutes / 60.0;
+        }
+        
+        if (timeIn.equals(timeOut)) {
+            return 0.0;
+        }
+              
+        long minutesWorked;
+
+        if (timeOut.isAfter(timeIn)) {
+            // Same day
+            minutesWorked = ChronoUnit.MINUTES.between(timeIn, timeOut);
+        } else {
+            // Overnight shift:
+            long minutesUntilMidnight = ChronoUnit.MINUTES.between(timeIn, LocalTime.MAX) + 1; // till 23:59:59 + 1 minute = midnight
+            long minutesAfterMidnight = ChronoUnit.MINUTES.between(LocalTime.MIN, timeOut);    // from 00:00 to timeOut
+            minutesWorked = minutesUntilMidnight + minutesAfterMidnight;
+        }
+
+        double hours = minutesWorked / 60.0;
         return Math.round(hours * 100.0) / 100.0;
     }
     

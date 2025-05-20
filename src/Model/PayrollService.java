@@ -6,6 +6,7 @@ package Model;
 
 import Domains.EmployeeMonthlyHoursKey;
 import Domains.PayrollEntry;
+import Domains.PayrollSummary;
 import Domains.YearPeriod;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +43,26 @@ public class PayrollService {
             double netPay = PayrollCalculator.getNetSalary(grossIncome);
             
             return new PayrollEntry(employeeID, fullName, position, grossIncome, sss, philhealth, pagibig, withholdingTax, netPay);
+    }
+    
+    public static PayrollSummary calculatePayrollSummary(List<PayrollEntry> payrollEntries) {
+        double totalGrossIncome = 0;
+        double totalSSS = 0;
+        double totalPhilhealth = 0;
+        double totalPagibig = 0;
+        double totalTax = 0;
+        double totalNetPay = 0;
+        
+        for (PayrollEntry entry: payrollEntries) {
+            totalGrossIncome += entry.getGrossIncome();
+            totalSSS += entry.getSss();
+            totalPhilhealth += entry.getPhilhealth();
+            totalPagibig += entry.getPagibig();
+            totalTax += entry.getWithholdingTax();
+            totalNetPay += entry.getNetPay();
+        }
+        
+        return new PayrollSummary(totalGrossIncome, totalSSS, totalPhilhealth, totalPagibig, totalTax, totalNetPay);
     }
     
 }

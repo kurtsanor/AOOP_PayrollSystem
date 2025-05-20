@@ -37,6 +37,11 @@ public class EmployeeMonthlyHoursKey {
     }
     
     @Override
+    public String toString() {
+        return "EmployeeMonthlyHoursKey{" + "employeeID=" + employeeID + ", year=" + year + ", month=" + month + '}';
+    }
+    
+    @Override
     public int hashCode() {
         return Objects.hash(employeeID, year, month);
     }

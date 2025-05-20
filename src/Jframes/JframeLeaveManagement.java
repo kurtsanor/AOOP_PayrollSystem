@@ -7,7 +7,6 @@ package Jframes;
 import CustomTable.TableActionCellEditorV2;
 import CustomTable.TableActionCellRendererV2;
 import CustomTable.TableActionEventV2;
-import Domains.LeaveBalance;
 import Domains.LeaveRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,8 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import Model.Employee;
 import Model.HR;
-import Model.LeaveCreditsDAO;
-import java.sql.SQLException;
+import Model.LeaveService;
 
 /**
  *
@@ -58,36 +56,9 @@ public class JframeLeaveManagement extends javax.swing.JFrame {
         }
     }
     
-    private LeaveBalance fetchLeaveCreditsByEmployeeID (int employeeID) {
-        try {
-            LeaveCreditsDAO dao = new LeaveCreditsDAO();
-            return dao.getLeaveCreditsByEmpID(employeeID);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    
     private void updateLeaveCredits (int employeeID, String leaveType, int leaveDuration) {
-        try {
-            LeaveCreditsDAO dao = new LeaveCreditsDAO();
-            LeaveBalance leaveBalance = fetchLeaveCreditsByEmployeeID(employeeID);
-            leaveBalance = deductBalanceByLeaveType(leaveType, leaveBalance, leaveDuration);
-            
-            boolean updated = dao.updateLeaveCreditsByEmpID(employeeID, leaveBalance);
-            System.out.println("updated balance = " + updated);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    private LeaveBalance deductBalanceByLeaveType (String leaveType, LeaveBalance leaveBalance, int leaveDuration) {
-        switch (leaveType) {
-            case "Vacation" -> leaveBalance = leaveBalance.deductVacationCredits(leaveDuration);
-            case "Medical" -> leaveBalance = leaveBalance.deductMedicalCredits(leaveDuration);
-            case "Personal" -> leaveBalance = leaveBalance.deductPersonalCredits(leaveDuration);
-        }
-        return leaveBalance;
+        LeaveService service = new LeaveService();
+        service.updateLeaveCredits(employeeID, leaveType, leaveDuration);
     }
     
     private void updateLeaveStatus (int leaveID, String status) {
@@ -108,17 +79,8 @@ public class JframeLeaveManagement extends javax.swing.JFrame {
     }
        
     private boolean hasEnoughCredits (int employeeID, int leaveDuration, String leaveType) {
-        LeaveBalance leaveBalance = fetchLeaveCreditsByEmployeeID(employeeID);
-        
-        switch (leaveType) {
-            case "Vacation":
-                return leaveBalance.getVacationLeaveCredits() >= leaveDuration;
-            case "Medical":
-                return leaveBalance.getMedicalLeaveCredits() >= leaveDuration;
-            case "Personal":
-                return leaveBalance.getPersonalLeaveCredits() >= leaveDuration;
-        }      
-        return false; // should be unreachable
+        LeaveService service = new LeaveService();
+        return service.hasEnoughCredits(employeeID, leaveDuration, leaveType);
     }
     
     private void showInsufficientLeaveCreditsWarning (String leaveType) {

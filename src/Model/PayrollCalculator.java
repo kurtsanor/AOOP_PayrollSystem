@@ -15,13 +15,13 @@ public class PayrollCalculator {
     
     public static double getTotalDeductions (double grossSalary) {
         double taxableIncome = getTaxableIncome(grossSalary);
-        return getGovernmentDeductionsTotal(grossSalary) + TaxAndDeductionsModule.getWithholdingTax(taxableIncome);
+        return getGovernmentDeductionsTotal(grossSalary) + DeductionCalculator.getTaxContribution(taxableIncome);
     }
     
     public static double getGovernmentDeductionsTotal (double grossSalary) {
-        return TaxAndDeductionsModule.getPagIbigDeduction(grossSalary)
-             + TaxAndDeductionsModule.getPhilHealthDeduction(grossSalary)
-             + TaxAndDeductionsModule.getSSSDeduction(grossSalary);
+        return DeductionCalculator.getPagibigContribution(grossSalary)
+             + DeductionCalculator.getPhilhealthContribution(grossSalary)
+             + DeductionCalculator.getSssContribution(grossSalary);
     }
     
     public static double getTaxableIncome (double grossSalary) {       

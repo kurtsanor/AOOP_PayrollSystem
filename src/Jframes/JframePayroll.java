@@ -12,8 +12,10 @@ import Model.PayrollCalculator;
 import Model.PayrollService;
 import Domains.EmployeeMonthlyHoursKey;
 import Domains.PayrollEntry;
+import Domains.PayrollSummary;
 import Domains.YearPeriod;
 import Model.AttendanceDAO;
+import Model.PdfProcessor;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +35,7 @@ public class JframePayroll extends javax.swing.JFrame {
     private Map<EmployeeMonthlyHoursKey, Double> workHoursMap;
     private List<Employee> employeeList;
     private DefaultTableModel tblModel;
+    private YearPeriod latestGeneratedPeriod;
     public JframePayroll(Employee loggedEmployee) {      
         this.loggedEmployee = loggedEmployee;
         initComponents();
@@ -42,7 +45,7 @@ public class JframePayroll extends javax.swing.JFrame {
         populateEmployeeList();
         populateWorkHoursMap();
     }
-    
+      
     private void populateWorkHoursMap () {
         AttendanceDAO dao = new AttendanceDAO();
         AttendanceProcessor processor = new AttendanceProcessor(dao);
@@ -73,6 +76,7 @@ public class JframePayroll extends javax.swing.JFrame {
     private void loadPayrollTable () {
         tblModel.setRowCount(0);
         YearPeriod period = getPeriod();
+        latestGeneratedPeriod = period;
         List<PayrollEntry> payrollEntries = PayrollService.computeBatchPayroll(employeeList, workHoursMap, period);
         
         for (PayrollEntry payrollEntry: payrollEntries) {
@@ -115,6 +119,7 @@ public class JframePayroll extends javax.swing.JFrame {
         jMonthChooser = new com.toedter.calendar.JMonthChooser();
         jYearChooser = new com.toedter.calendar.JYearChooser();
         jButtonGenerate = new javax.swing.JButton();
+        jButtonSavePdf = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTablePayroll = new javax.swing.JTable();
@@ -187,6 +192,19 @@ public class JframePayroll extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(8, 0, 8, 8);
         jPanel3.add(jButtonGenerate, gridBagConstraints);
 
+        jButtonSavePdf.setText("Save PDF");
+        jButtonSavePdf.setEnabled(false);
+        jButtonSavePdf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSavePdfActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(8, 0, 8, 8);
+        jPanel3.add(jButtonSavePdf, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -243,11 +261,18 @@ public class JframePayroll extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButtonGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGenerateActionPerformed
-        long start = System.currentTimeMillis();
+        if (!jButtonSavePdf.isEnabled()) {
+            jButtonSavePdf.setEnabled(true);
+        }
         loadPayrollTable();
-        long end = System.currentTimeMillis();
-        System.out.println(end-start);
     }//GEN-LAST:event_jButtonGenerateActionPerformed
+
+    private void jButtonSavePdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSavePdfActionPerformed
+        YearPeriod period = getPeriod();
+        List<PayrollEntry> payrollEntries = PayrollService.computeBatchPayroll(employeeList, workHoursMap, period);
+        PayrollSummary summary = PayrollService.calculatePayrollSummary(payrollEntries);
+        PdfProcessor.createPayrollReportPdf(payrollEntries, latestGeneratedPeriod, summary);
+    }//GEN-LAST:event_jButtonSavePdfActionPerformed
 
     /**
      * @param args the command line arguments
@@ -257,6 +282,7 @@ public class JframePayroll extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonGenerate;
+    private javax.swing.JButton jButtonSavePdf;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabelTitle;
     private com.toedter.calendar.JMonthChooser jMonthChooser;
