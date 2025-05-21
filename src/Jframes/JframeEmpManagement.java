@@ -48,6 +48,25 @@ public class JframeEmpManagement extends javax.swing.JFrame {
         overlay.setVisible(true);
     }
     
+    private void searchEmployee (int employeeID) {
+        if (hrEmployee != null) {
+            Employee employee = hrEmployee.viewEmployeeByID(employeeID);
+            if (employee != null) {
+                populateTableWithSearchedEmployee(employee);
+                clearTableSelection();
+            } else {
+                JOptionPane.showMessageDialog(this, "Employee ID does not exist. Refreshing table", "No id found", JOptionPane.ERROR_MESSAGE);
+                refreshTable();
+            }
+            
+        }
+    }
+    
+    private void populateTableWithSearchedEmployee (Employee employee) {
+        clearTable();
+        employeeTbl.addRow(createEmployeeData(employee));
+    }
+    
     private List<Employee> fetchEmployees () {
         return hrEmployee != null ? hrEmployee.loadEmployees() : Collections.emptyList();
     }
@@ -187,6 +206,8 @@ public class JframeEmpManagement extends javax.swing.JFrame {
         jLabelEmployeeList = new javax.swing.JLabel();
         jButtonAddNewEmployee = new javax.swing.JButton();
         jTextFieldSearch = new javax.swing.JTextField();
+        jButtonSearch = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableEmployeeList = new javax.swing.JTable();
@@ -243,18 +264,37 @@ public class JframeEmpManagement extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         jPanel2.add(jButtonAddNewEmployee, gridBagConstraints);
 
-        jTextFieldSearch.setText("Search by ID..");
         jTextFieldSearch.setPreferredSize(new java.awt.Dimension(147, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         jPanel2.add(jTextFieldSearch, gridBagConstraints);
+
+        jButtonSearch.setBackground(new java.awt.Color(0, 183, 229));
+        jButtonSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/search-interface-symbol.png"))); // NOI18N
+        jButtonSearch.setPreferredSize(new java.awt.Dimension(60, 35));
+        jButtonSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSearchActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        jPanel2.add(jButtonSearch, gridBagConstraints);
+
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("jLabel1sd");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        jPanel2.add(jLabel1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -338,6 +378,19 @@ public class JframeEmpManagement extends javax.swing.JFrame {
         new JframeEmployeeForm(loggedEmployee).setVisible(true);         
     }//GEN-LAST:event_jButtonAddNewEmployeeActionPerformed
 
+    private void jButtonSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchActionPerformed
+        // TODO add your handling code here:
+        
+        try {
+            int employeeID = Integer.parseInt(jTextFieldSearch.getText());
+            searchEmployee(employeeID);
+            
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid id format. Refreshing table", "Invalid", JOptionPane.ERROR_MESSAGE);
+            refreshTable();
+        }
+    }//GEN-LAST:event_jButtonSearchActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -345,6 +398,8 @@ public class JframeEmpManagement extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAddNewEmployee;
     private javax.swing.JButton jButtonDashboard;
+    private javax.swing.JButton jButtonSearch;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelEmployeeList;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
