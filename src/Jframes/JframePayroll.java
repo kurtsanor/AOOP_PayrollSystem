@@ -78,10 +78,13 @@ public class JframePayroll extends javax.swing.JFrame {
         YearPeriod period = getPeriod();
         latestGeneratedPeriod = period;
         List<PayrollEntry> payrollEntries = PayrollService.computeBatchPayroll(employeeList, workHoursMap, period);
+        PayrollSummary summary = PayrollService.calculatePayrollSummary(payrollEntries);
         
         for (PayrollEntry payrollEntry: payrollEntries) {
             tblModel.addRow(createPayrollRowData(payrollEntry));
         }
+        
+        populateTotalTable(summary);
     }
     
     private Object [] createPayrollRowData (PayrollEntry payrollEntry) {
@@ -96,6 +99,22 @@ public class JframePayroll extends javax.swing.JFrame {
                     PayrollCalculator.formatAmount(payrollEntry.getWithholdingTax()),
                     PayrollCalculator.formatAmount(payrollEntry.getNetPay())
             };
+    }
+    
+    private void populateTotalTable (PayrollSummary summary) {
+        Object [] totalColumn = {"Total",
+            "",
+            "", 
+            PayrollCalculator.formatAmount(summary.getTotalGrossIncome()),
+            PayrollCalculator.formatAmount(summary.getTotalSSS()),
+            PayrollCalculator.formatAmount(summary.getTotalPhilhealth()), 
+            PayrollCalculator.formatAmount(summary.getTotalPagibig()), 
+            PayrollCalculator.formatAmount(summary.getTotalTax()), 
+            PayrollCalculator.formatAmount(summary.getTotalNetPay())
+        };
+        DefaultTableModel model = new DefaultTableModel(totalColumn, 0);
+        
+        jTableTotal.setModel(model);
     }
     
     
@@ -123,6 +142,8 @@ public class JframePayroll extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTablePayroll = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTableTotal = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -222,6 +243,7 @@ public class JframePayroll extends javax.swing.JFrame {
                 "Employee ID", "Full Name", "Position", "Gross Income", "SSS", "Philhealth", "Pagibig", "Withholding Tax", "Net Pay"
             }
         ));
+        jTablePayroll.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTablePayroll);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -233,12 +255,35 @@ public class JframePayroll extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(8, 8, 8, 8);
         jPanel4.add(jScrollPane1, gridBagConstraints);
 
+        jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+        jTableTotal.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Total", "", "", "", "", "", "", "", ""
+            }
+        ));
+        jTableTotal.setPreferredSize(new java.awt.Dimension(675, 0));
+        jTableTotal.setShowGrid(false);
+        jTableTotal.getTableHeader().setResizingAllowed(false);
+        jTableTotal.getTableHeader().setReorderingAllowed(false);
+        jScrollPane2.setViewportView(jTableTotal);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 8, 8, 8);
+        jPanel4.add(jScrollPane2, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.weighty = 1.0;
         jPanel2.add(jPanel4, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -291,7 +336,9 @@ public class JframePayroll extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTablePayroll;
+    private javax.swing.JTable jTableTotal;
     private com.toedter.calendar.JYearChooser jYearChooser;
     // End of variables declaration//GEN-END:variables
 }

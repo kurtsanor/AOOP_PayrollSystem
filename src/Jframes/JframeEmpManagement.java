@@ -382,13 +382,14 @@ public class JframeEmpManagement extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         try {
+            clearTableSelection();
             int employeeID = Integer.parseInt(jTextFieldSearch.getText());
             searchEmployee(employeeID);
             
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Invalid id format. Refreshing table", "Invalid", JOptionPane.ERROR_MESSAGE);
             refreshTable();
-        }
+        }       
     }//GEN-LAST:event_jButtonSearchActionPerformed
 
     /**
