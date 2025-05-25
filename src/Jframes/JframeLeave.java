@@ -594,7 +594,7 @@ public class JframeLeave extends javax.swing.JFrame {
         jPanel4.add(jPanel5, gridBagConstraints);
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel14.setForeground(new java.awt.Color(0, 183, 229));
+        jLabel14.setForeground(new java.awt.Color(255, 255, 255));
         jLabel14.setText("My Leave History");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;

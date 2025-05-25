@@ -273,7 +273,7 @@ public class JframeLeaveManagement extends javax.swing.JFrame {
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 183, 229));
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("LEAVE REQUESTS");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;

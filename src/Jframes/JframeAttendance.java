@@ -145,7 +145,7 @@ public class JframeAttendance extends javax.swing.JFrame {
         jPanel1.add(jYearChooser, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 183, 229));
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("MY ATTENDANCE");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;

@@ -21,11 +21,11 @@ public class LeaveCreditsDAO {
     
     public LeaveBalance getLeaveCreditsByEmpID (int employeeID) throws SQLException {
         try (Connection connection = DatabaseConnection.getConnection();
-             CallableStatement stmt = connection.prepareCall("{CALL leavecreditsGetByID(?)}")) {
+             CallableStatement stmt = connection.prepareCall("{CALL leavecreditGetByID(?)}")) {
             stmt.setInt(1, employeeID);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new LeaveBalance(rs.getInt("employeeID"), rs.getInt("vacationLeaveCredits"), rs.getInt("medicalLeaveCredits"), rs.getInt("personalLeaveCredits"));
+                return new LeaveBalance(rs.getInt("employeeID"), rs.getInt("vacationCredits"), rs.getInt("medicalCredits"), rs.getInt("personalCredits"));
             }
                       
         } catch (SQLException e) {
@@ -36,16 +36,40 @@ public class LeaveCreditsDAO {
     
     public boolean updateLeaveCreditsByEmpID (int employeeID, LeaveBalance newBalance) throws SQLException {
         try (Connection connection = DatabaseConnection.getConnection();
-             CallableStatement stmt = connection.prepareCall("{CALL leavecreditsUpdatebyID(?,?,?,?)}")) {
-            stmt.setInt(1, newBalance.getVacationLeaveCredits());
-            stmt.setInt(2, newBalance.getMedicalLeaveCredits());
+             CallableStatement stmt = connection.prepareCall("{CALL leavecreditUpdatebyID(?,?,?)}")) {
+            stmt.setInt(1, employeeID);
+            stmt.setInt(2, 1);
+            stmt.setInt(3, newBalance.getVacationLeaveCredits());
+            stmt.addBatch();
+            
+            stmt.setInt(1, employeeID);
+            stmt.setInt(2, 2);
+            stmt.setInt(3, newBalance.getMedicalLeaveCredits());
+            stmt.addBatch();
+            
+            stmt.setInt(1, employeeID);
+            stmt.setInt(2, 3);
             stmt.setInt(3, newBalance.getPersonalLeaveCredits());
-            stmt.setInt(4, employeeID);
-            return stmt.executeUpdate() > 0;
+            stmt.addBatch();
+            
+            int [] result = stmt.executeBatch();
+            
+            return batchUpdateSuccessful(result);
                                  
         } catch (SQLException e) {
             throw new SQLException("Failed to retrieve vacation leave credits", e);
         }
+    }
+    
+    // helper method
+    private boolean batchUpdateSuccessful (int result []) {
+        for (int val: result) {
+            // if statement execute failed (-3), return false
+            if (val == -3) {
+                return false;
+            }
+        }
+        return true;
     }
     
     

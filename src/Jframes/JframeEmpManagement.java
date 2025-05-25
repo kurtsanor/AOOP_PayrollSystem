@@ -245,7 +245,6 @@ public class JframeEmpManagement extends javax.swing.JFrame {
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
         jLabelEmployeeList.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabelEmployeeList.setForeground(new java.awt.Color(0, 183, 229));
         jLabelEmployeeList.setText("EMPLOYEE LIST");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -253,7 +252,7 @@ public class JframeEmpManagement extends javax.swing.JFrame {
         gridBagConstraints.weightx = 1.0;
         jPanel2.add(jLabelEmployeeList, gridBagConstraints);
 
-        jButtonAddNewEmployee.setBackground(new java.awt.Color(21, 36, 46));
+        jButtonAddNewEmployee.setBackground(new java.awt.Color(0, 183, 229));
         jButtonAddNewEmployee.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButtonAddNewEmployee.setForeground(new java.awt.Color(255, 255, 255));
         jButtonAddNewEmployee.setText("Add New Employee");

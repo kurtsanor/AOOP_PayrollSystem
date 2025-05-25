@@ -251,7 +251,6 @@ public class JframeAttendanceManagement extends javax.swing.JFrame {
         jPanel2.add(jDateChooserStartDate, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 183, 229));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("TIMESHEET");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -292,6 +291,9 @@ public class JframeAttendanceManagement extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(14, 2, 0, 0);
         jPanel2.add(jLabel4, gridBagConstraints);
 
+        jButtonView.setBackground(new java.awt.Color(0, 183, 229));
+        jButtonView.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButtonView.setForeground(new java.awt.Color(255, 255, 255));
         jButtonView.setText("View");
         jButtonView.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

@@ -174,7 +174,6 @@ public class JframePayroll extends javax.swing.JFrame {
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         jLabelTitle.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabelTitle.setForeground(new java.awt.Color(0, 183, 229));
         jLabelTitle.setText("MONTHLY PAYROLL SUMMARY REPORT");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -201,6 +200,9 @@ public class JframePayroll extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(8, 0, 8, 5);
         jPanel3.add(jYearChooser, gridBagConstraints);
 
+        jButtonGenerate.setBackground(new java.awt.Color(0, 183, 229));
+        jButtonGenerate.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButtonGenerate.setForeground(new java.awt.Color(255, 255, 255));
         jButtonGenerate.setText("Generate");
         jButtonGenerate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -265,7 +267,6 @@ public class JframePayroll extends javax.swing.JFrame {
                 "Total", "", "", "", "", "", "", "", ""
             }
         ));
-        jTableTotal.setPreferredSize(new java.awt.Dimension(675, 0));
         jTableTotal.setShowGrid(false);
         jTableTotal.getTableHeader().setResizingAllowed(false);
         jTableTotal.getTableHeader().setReorderingAllowed(false);
