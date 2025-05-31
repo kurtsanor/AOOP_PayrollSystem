@@ -250,10 +250,11 @@ public class JframeLeaveManagement extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(86, 98, 106));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jButtonBackToDashboard.setBackground(new java.awt.Color(0, 183, 229));
+        jButtonBackToDashboard.setBackground(new java.awt.Color(100, 110, 120));
         jButtonBackToDashboard.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButtonBackToDashboard.setForeground(new java.awt.Color(255, 255, 255));
         jButtonBackToDashboard.setText("Back To Dashboard");
+        jButtonBackToDashboard.setFocusable(false);
         jButtonBackToDashboard.setPreferredSize(new java.awt.Dimension(75, 35));
         jButtonBackToDashboard.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -309,6 +310,7 @@ public class JframeLeaveManagement extends javax.swing.JFrame {
         });
         jTableLeaveTable.setRowHeight(30);
         jTableLeaveTable.setSelectionBackground(new java.awt.Color(0, 183, 229));
+        jTableLeaveTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTableLeaveTable);
 
         gridBagConstraints = new java.awt.GridBagConstraints();

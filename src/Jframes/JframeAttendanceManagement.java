@@ -192,10 +192,11 @@ public class JframeAttendanceManagement extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(86, 98, 106));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jButtonBackToDashboard.setBackground(new java.awt.Color(0, 183, 229));
+        jButtonBackToDashboard.setBackground(new java.awt.Color(100, 110, 120));
         jButtonBackToDashboard.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButtonBackToDashboard.setForeground(new java.awt.Color(255, 255, 255));
         jButtonBackToDashboard.setText("Back To Dashboard");
+        jButtonBackToDashboard.setFocusable(false);
         jButtonBackToDashboard.setPreferredSize(new java.awt.Dimension(75, 35));
         jButtonBackToDashboard.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -228,6 +229,7 @@ public class JframeAttendanceManagement extends javax.swing.JFrame {
             }
         });
         jTableAttendance.setSelectionBackground(new java.awt.Color(0, 183, 229));
+        jTableAttendance.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTableAttendance);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -251,6 +253,7 @@ public class JframeAttendanceManagement extends javax.swing.JFrame {
         jPanel2.add(jDateChooserStartDate, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(51, 51, 51));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("TIMESHEET");
         gridBagConstraints = new java.awt.GridBagConstraints();

@@ -232,7 +232,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         if (!errorMessage.isBlank()) { validEmployee = false;}
         setPagibigErrorMessage(errorMessage);
         
-        errorMessage = EmployeeValidator.validateTinNumber(jTextFieldTinNumber.getText());
+        errorMessage = EmployeeValidator.validateTinWithMessage(jTextFieldTinNumber.getText());
         if (!errorMessage.isBlank()) { validEmployee = false;}
         setTinErrorMessage(errorMessage);
          

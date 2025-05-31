@@ -88,10 +88,11 @@ public class JframeAttendance extends javax.swing.JFrame {
         jPanel4.setBackground(new java.awt.Color(86, 98, 106));
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
-        jButtonBackToDashboard.setBackground(new java.awt.Color(0, 183, 229));
+        jButtonBackToDashboard.setBackground(new java.awt.Color(100, 110, 120));
         jButtonBackToDashboard.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButtonBackToDashboard.setForeground(new java.awt.Color(255, 255, 255));
         jButtonBackToDashboard.setText("Back To Dashboard");
+        jButtonBackToDashboard.setFocusable(false);
         jButtonBackToDashboard.setPreferredSize(new java.awt.Dimension(75, 35));
         jButtonBackToDashboard.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -166,7 +167,7 @@ public class JframeAttendance extends javax.swing.JFrame {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.weighty = 0.1;
         jPanel4.add(jPanel1, gridBagConstraints);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -182,6 +183,7 @@ public class JframeAttendance extends javax.swing.JFrame {
             }
         ));
         jTableAttendance.setSelectionBackground(new java.awt.Color(0, 183, 229));
+        jTableAttendance.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTableAttendance);
 
         gridBagConstraints = new java.awt.GridBagConstraints();

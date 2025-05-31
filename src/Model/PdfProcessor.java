@@ -8,8 +8,11 @@ import Domains.PayrollEntry;
 import Domains.PayrollSummary;
 import Domains.Payslip;
 import Domains.YearPeriod;
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
 import static com.itextpdf.kernel.colors.ColorConstants.LIGHT_GRAY;
 import com.itextpdf.kernel.colors.DeviceRgb;
+import static com.itextpdf.kernel.colors.DeviceRgb.BLACK;
 import static com.itextpdf.kernel.colors.DeviceRgb.WHITE;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -17,15 +20,21 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.property.HorizontalAlignment;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
+import com.itextpdf.layout.property.VerticalAlignment;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 
@@ -36,9 +45,10 @@ import java.util.List;
 public class PdfProcessor {
     public static void createPayslipPdf(Payslip payslip) {
         try {
-
+            
             String fileNameFormat = payslip.getEmployee().getLastName()+ "-Payslip-" + payslip.getPeriod().getMonth() + "-" + payslip.getPeriod().getYear() +".pdf";
             String filePath = "generated payslips" + File.separator + fileNameFormat;
+            String imagePath = "src/Images/motorphlogo.png";
             
             // Create PDF writer
             PdfWriter writer = new PdfWriter(filePath);
@@ -47,22 +57,37 @@ public class PdfProcessor {
             PdfDocument pdf = new PdfDocument(writer);
             pdf.setDefaultPageSize(PageSize.A4);
             
+            DeviceRgb blue = new DeviceRgb(56,60,76);
+            DeviceRgb lightGray = new DeviceRgb(248,244,244);
+            
             try (Document document = new Document(pdf)) {
-                document.add(new Paragraph("MotorPH").setFontSize(20f).setTextAlignment(TextAlignment.CENTER).setBold());
-                document.add(new Paragraph("EMPLOYEE PAYSLIP").setTextAlignment(TextAlignment.CENTER));
+                ImageData data = ImageDataFactory.create(imagePath);
+                Image image = new Image(data);
+                image.setWidth(120);
+                image.setHeight(120);
                 
-                Table table = create2ColumnTable();
+                Table headerTable = create3ColumnTable();
+                headerTable.addCell(new Cell().add(image.setHorizontalAlignment(HorizontalAlignment.LEFT)).setBorder(Border.NO_BORDER));
+                headerTable.addCell(new Cell().add(new Paragraph("MotorPH").setFontSize(30f).setTextAlignment(TextAlignment.CENTER).setBold()).setBorder(Border.NO_BORDER).setVerticalAlignment(VerticalAlignment.MIDDLE)
+                        .add(new Paragraph("EMPLOYEE PAYSLIP")).setTextAlignment(TextAlignment.CENTER));
+                headerTable.addCell(new Cell().add(new Paragraph()).setBorder(Border.NO_BORDER));
                 
-                DeviceRgb blue = new DeviceRgb(56,60,76);
-                DeviceRgb lightGray = new DeviceRgb(248,244,244);
+                document.add(headerTable);
                 
-                table.addCell(new Cell().add(new Paragraph("Employee Name: " + payslip.getEmployee().getFirstName() + " " + payslip.getEmployee().getLastName())));
-                table.addCell("Period Month: " + payslip.getPeriod().getMonth());
-
-                table.addCell("Employee ID: " + payslip.getEmployee().getID());
-                table.addCell("Period Year: " + payslip.getPeriod().getYear());
+                Table info = create4ColumnTable();
                 
-                document.add(table);
+                info.addCell(new Cell().add(new Paragraph("Employee ID")).setBackgroundColor(blue).setFontColor(WHITE).setBorder(Border.NO_BORDER).setBold());
+                info.addCell(new Cell().add(new Paragraph(""+payslip.getEmployee().getID())));
+                info.addCell(new Cell().add(new Paragraph("Period Month")).setBackgroundColor(blue).setFontColor(WHITE).setBorder(Border.NO_BORDER).setBold());
+                info.addCell(new Cell().add(new Paragraph(""+payslip.getPeriod().getMonth())));
+                
+                info.addCell(new Cell().add(new Paragraph("Employee Name")).setBackgroundColor(blue).setFontColor(WHITE).setBorder(Border.NO_BORDER).setBold());
+                info.addCell(new Cell().add(new Paragraph(payslip.getEmployee().getFirstName() + " " + payslip.getEmployee().getLastName())));
+                info.addCell(new Cell().add(new Paragraph("Period Year")).setBackgroundColor(blue).setFontColor(WHITE).setBorder(Border.NO_BORDER).setBold());
+                info.addCell(new Cell().add(new Paragraph(""+payslip.getPeriod().getYear())));
+                
+                document.add(info);
+                               
                 document.add(new Paragraph("\n\n"));
                 
                 Table earnings = create1ColumnTable();               
@@ -135,20 +160,22 @@ public class PdfProcessor {
                 totalDeductions.addCell(new Cell().add(new Paragraph(amountToString(payslip.getTotalDeductions()))).setTextAlignment(TextAlignment.RIGHT).setBorder(Border.NO_BORDER).setBold()).setBackgroundColor(lightGray);
                 document.add(totalDeductions);
                 
-                document.add(new Paragraph(""));
+                document.add(new Paragraph("\n"));
                 
-                Table serparator = create1ColumnTable();
-                serparator.addCell(new Cell().add(new Paragraph()).setBackgroundColor(LIGHT_GRAY).setBorder(Border.NO_BORDER));
-                document.add(serparator);
+                Table separator = create1ColumnTable();
+                separator.addCell(new Cell().add(new Paragraph()).setBackgroundColor(BLACK).setBorder(Border.NO_BORDER));
+                document.add(separator);
                 
                 document.add(new Paragraph(""));
                 
                 Table takehomePay = create2ColumnTable();
                 takehomePay.addCell(new Cell().add(new Paragraph("Take Home Pay")).setBorder(Border.NO_BORDER).setBold());
-                takehomePay.addCell(new Cell().add(new Paragraph(amountToString(payslip.getNetPay()))).setTextAlignment(TextAlignment.RIGHT).setBorder(Border.NO_BORDER).setBold()).setBackgroundColor(blue).setFontColor(WHITE);
+                takehomePay.addCell(new Cell().add(new Paragraph(amountToString(payslip.getNetPay()))).setTextAlignment(TextAlignment.RIGHT).setBorder(Border.NO_BORDER).setBold());
                 document.add(takehomePay);
                 
                 document.add(new Paragraph("\n\nThis is a system generated payslip.").setTextAlignment(TextAlignment.CENTER));
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(PdfProcessor.class.getName()).log(Level.SEVERE, null, ex);
             }
             
             // redirect to the folder containing the pdf
@@ -191,6 +218,16 @@ public class PdfProcessor {
     
     private static Table create9ColumnTable () {
         return new Table(UnitValue.createPercentArray(new float[]{10,15,15,10,10,10,10,10,10}))
+            .useAllAvailableWidth();
+    }
+    
+    private static Table create3ColumnTable () {
+        return new Table(UnitValue.createPercentArray(new float[]{33,33,33}))
+            .useAllAvailableWidth();
+    }
+    
+    private static Table create4ColumnTable () {
+        return new Table(UnitValue.createPercentArray(new float[]{25,25,25,25}))
             .useAllAvailableWidth();
     }
     

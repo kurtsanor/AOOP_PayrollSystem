@@ -138,10 +138,11 @@ public class JframePayslip extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(86, 98, 106));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jButtonBackToDashboard.setBackground(new java.awt.Color(0, 183, 229));
+        jButtonBackToDashboard.setBackground(new java.awt.Color(100, 110, 120));
         jButtonBackToDashboard.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButtonBackToDashboard.setForeground(new java.awt.Color(255, 255, 255));
         jButtonBackToDashboard.setText("Back To Dashboard");
+        jButtonBackToDashboard.setFocusable(false);
         jButtonBackToDashboard.setPreferredSize(new java.awt.Dimension(75, 35));
         jButtonBackToDashboard.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -210,7 +211,7 @@ public class JframePayslip extends javax.swing.JFrame {
         jPanel2.add(jButtonGenerate, gridBagConstraints);
 
         jLabelVerifyError.setForeground(new java.awt.Color(255, 102, 102));
-        jLabelVerifyError.setText("No records found");
+        jLabelVerifyError.setText("No work hours found");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
@@ -534,6 +535,9 @@ public class JframePayslip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         jPanel7.add(jButtonClose, gridBagConstraints);
 
+        jButtonSavePdf.setBackground(new java.awt.Color(100, 110, 120));
+        jButtonSavePdf.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButtonSavePdf.setForeground(new java.awt.Color(255, 255, 255));
         jButtonSavePdf.setText("Save PDF");
         jButtonSavePdf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

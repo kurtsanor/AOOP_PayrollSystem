@@ -8,6 +8,7 @@ import Domains.AttendanceRecord;
 import Domains.LeaveRequest;
 import Domains.Payslip;
 import Domains.YearPeriod;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -19,4 +20,6 @@ public interface EmployeeEssentials {
     List<AttendanceRecord> viewPersonalAttendance(int employeeID, YearPeriod period);
     List<LeaveRequest> viewPersonalLeaves(int employeeID);
     Payslip viewPersonalSalary(YearPeriod period);
+    boolean timeIn(int employeeID, LocalDateTime dateTime);
+    boolean timeOut(int employeeID, LocalDateTime dateTime);
 }

@@ -18,7 +18,6 @@ public class EmployeeValidator {
     private static final int PAGIBIG_NUMBER_MAX_CHAR = 12;
     private static final int TIN_NUMBER_MAX_CHAR = 15;
     
-    // first name validations
     public static String validateFirstNameWithMessage (String firstName) {
         if (firstName == null || firstName.trim().isBlank()) {
             return "This is required";
@@ -184,7 +183,7 @@ public class EmployeeValidator {
     }
     
     
-    public static String validateTinNumber (String tinNumber) {
+    public static String validateTinWithMessage (String tinNumber) {
         if (tinNumber == null || tinNumber.isBlank()) {
             return "This is required";
         }

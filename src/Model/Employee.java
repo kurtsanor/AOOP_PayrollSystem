@@ -147,6 +147,7 @@ public abstract class Employee implements EmployeeEssentials {
             return payslip;                   
     }
     
+    @Override
    public boolean timeIn (int employeeID, LocalDateTime dateTime) {
        try {
            AttendanceDAO attendanceDAO = new AttendanceDAO();
@@ -157,6 +158,7 @@ public abstract class Employee implements EmployeeEssentials {
         return false;
    }
        
+    @Override
     public boolean timeOut (int employeeID, LocalDateTime dateTime) {
        try {
            AttendanceDAO attendanceDAO = new AttendanceDAO();

@@ -217,10 +217,11 @@ public class JframeEmpManagement extends javax.swing.JFrame {
         jPanelBg.setBackground(new java.awt.Color(86, 98, 106));
         jPanelBg.setLayout(new java.awt.GridBagLayout());
 
-        jButtonDashboard.setBackground(new java.awt.Color(0, 183, 229));
+        jButtonDashboard.setBackground(new java.awt.Color(100, 110, 120));
         jButtonDashboard.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButtonDashboard.setForeground(new java.awt.Color(255, 255, 255));
         jButtonDashboard.setText("Back to Dashboard");
+        jButtonDashboard.setFocusable(false);
         jButtonDashboard.setPreferredSize(new java.awt.Dimension(146, 35));
         jButtonDashboard.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -245,6 +246,7 @@ public class JframeEmpManagement extends javax.swing.JFrame {
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
         jLabelEmployeeList.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabelEmployeeList.setForeground(new java.awt.Color(51, 51, 51));
         jLabelEmployeeList.setText("EMPLOYEE LIST");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -275,8 +277,8 @@ public class JframeEmpManagement extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         jPanel2.add(jTextFieldSearch, gridBagConstraints);
 
-        jButtonSearch.setBackground(new java.awt.Color(0, 183, 229));
-        jButtonSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/search-interface-symbol.png"))); // NOI18N
+        jButtonSearch.setBackground(new java.awt.Color(230, 230, 230));
+        jButtonSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/search-interface-symbol (1).png"))); // NOI18N
         jButtonSearch.setPreferredSize(new java.awt.Dimension(60, 35));
         jButtonSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

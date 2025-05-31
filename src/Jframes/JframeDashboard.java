@@ -792,6 +792,7 @@ public class JframeDashboard extends javax.swing.JFrame {
                 "Employee ID", "Date", "Time in", "Time out"
             }
         ));
+        jTableAttendanceLogs.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(jTableAttendanceLogs);
 
         jPanel17.add(jScrollPane2, java.awt.BorderLayout.CENTER);

@@ -265,7 +265,7 @@ public class JframeLeave extends javax.swing.JFrame {
 
         jLabelVacationLeaveBalance.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabelVacationLeaveBalance.setForeground(new java.awt.Color(255, 255, 255));
-        jLabelVacationLeaveBalance.setText("21");
+        jLabelVacationLeaveBalance.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -350,7 +350,7 @@ public class JframeLeave extends javax.swing.JFrame {
 
         jLabelPersonalLeaveBalance.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabelPersonalLeaveBalance.setForeground(new java.awt.Color(255, 255, 255));
-        jLabelPersonalLeaveBalance.setText("11");
+        jLabelPersonalLeaveBalance.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -573,6 +573,7 @@ public class JframeLeave extends javax.swing.JFrame {
             }
         });
         jTableLeaveHistory.setSelectionBackground(new java.awt.Color(0, 183, 229));
+        jTableLeaveHistory.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTableLeaveHistory);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -602,7 +603,10 @@ public class JframeLeave extends javax.swing.JFrame {
         jPanel4.add(jLabel14, gridBagConstraints);
 
         jButtonAddLeave.setBackground(new java.awt.Color(0, 183, 229));
+        jButtonAddLeave.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButtonAddLeave.setForeground(new java.awt.Color(255, 255, 255));
         jButtonAddLeave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/add (3).png"))); // NOI18N
+        jButtonAddLeave.setText("Request Leave");
         jButtonAddLeave.setPreferredSize(new java.awt.Dimension(72, 25));
         jButtonAddLeave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -612,7 +616,7 @@ public class JframeLeave extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 20, 0);
         jPanel4.add(jButtonAddLeave, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -623,10 +627,11 @@ public class JframeLeave extends javax.swing.JFrame {
         gridBagConstraints.weighty = 1.0;
         jPanel1.add(jPanel4, gridBagConstraints);
 
-        jButtonBackToDashboard.setBackground(new java.awt.Color(0, 183, 229));
+        jButtonBackToDashboard.setBackground(new java.awt.Color(100, 110, 120));
         jButtonBackToDashboard.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButtonBackToDashboard.setForeground(new java.awt.Color(255, 255, 255));
         jButtonBackToDashboard.setText("Back To Dashboard");
+        jButtonBackToDashboard.setFocusable(false);
         jButtonBackToDashboard.setPreferredSize(new java.awt.Dimension(131, 35));
         jButtonBackToDashboard.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
