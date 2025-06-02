@@ -5,7 +5,6 @@ import Domains.AttendanceRecord;
 import Domains.YearPeriod;
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Time;
 import java.time.LocalDate;
@@ -15,6 +14,7 @@ import java.util.List;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
 
 public class AttendanceDAO {
       
@@ -123,7 +123,37 @@ public class AttendanceDAO {
         }
         return records;
     }
-
     
+    public boolean insertLeaveAttendance(int employeeID, LocalDate start, LocalDate end) throws SQLException {
+        LocalTime timeIn = LocalTime.of(8, 0);
+        LocalTime timeOut = LocalTime.of(16, 0);
+        try (Connection connection = DatabaseConnection.getConnection();
+             CallableStatement stmt = connection.prepareCall("CALL attendanceInsertLeaveAttendance(?, ?, ?, ?)")){
+            
+            for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) {
+                stmt.setInt(1, employeeID);
+                stmt.setDate(2, Date.valueOf(date));
+                stmt.setTime(3, Time.valueOf(timeIn));
+                stmt.setTime(4, Time.valueOf(timeOut));
+                stmt.addBatch();
+            }
+            int result [] = stmt.executeBatch();
+            
+            return batchUpdateSuccessful(result);
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+    
+    // helper method
+    private boolean batchUpdateSuccessful (int result []) {
+        for (int val: result) {
+            // if statement execute failed (-3), return false
+            if (val == -3) {
+                return false;
+            }
+        }
+        return true;
+    }
     
 }

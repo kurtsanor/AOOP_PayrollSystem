@@ -237,6 +237,7 @@ public class PdfProcessor {
             
             String fileNameFormat = period.getMonth() + "-" + period.getYear() + "-Payroll-Summary-Report.pdf";
             String filePath = "generated reports" + File.separator + fileNameFormat;
+            String imagePath = "src/Images/motorphlogo.png";
             
             PdfWriter writer = new PdfWriter(filePath);
             PdfDocument pdf = new PdfDocument(writer);
@@ -247,8 +248,18 @@ public class PdfProcessor {
             
             DeviceRgb blue = new DeviceRgb(56,60,76);
             
-            document.add(new Paragraph("MotorPH").setFontSize(20f).setTextAlignment(TextAlignment.CENTER).setBold());
-            document.add(new Paragraph("MONTHLY PAYROLL SUMMARY REPORT\n").setTextAlignment(TextAlignment.CENTER));
+            ImageData data = ImageDataFactory.create(imagePath);
+                Image image = new Image(data);
+                image.setWidth(120);
+                image.setHeight(120);
+                
+                Table headerTable = create3ColumnTable();
+                headerTable.addCell(new Cell().add(image.setHorizontalAlignment(HorizontalAlignment.LEFT)).setBorder(Border.NO_BORDER));
+                headerTable.addCell(new Cell().add(new Paragraph("MotorPH").setFontSize(30f).setTextAlignment(TextAlignment.CENTER).setBold()).setBorder(Border.NO_BORDER).setVerticalAlignment(VerticalAlignment.MIDDLE)
+                        .add(new Paragraph("MONTHLY PAYROLL SUMMARY REPORT")).setTextAlignment(TextAlignment.CENTER));
+                headerTable.addCell(new Cell().add(new Paragraph()).setBorder(Border.NO_BORDER));
+                
+                document.add(headerTable);
             
             Table columnNames = create9ColumnTable();
             for (String colName: colNames) {
@@ -257,32 +268,36 @@ public class PdfProcessor {
             
             document.add(columnNames);
             
-            int rowNumber = 1;
             DeviceRgb lightGray = new DeviceRgb(248,244,244);
             
-            for (PayrollEntry entry: payrollEntries) {
-                Table newTable = create9ColumnTable();
-                // for alternate row colors
-                if (rowNumber % 2 == 0) {
-                    newTable.setBackgroundColor(lightGray);
-                }
-                newTable.addCell(new Cell().add(new Paragraph(String.valueOf(entry.getEmployeeID())).setFontSize(9f)).setBorder(Border.NO_BORDER));
-                newTable.addCell(new Cell().add(new Paragraph(entry.getFullName()).setFontSize(9f)).setBorder(Border.NO_BORDER));
-                newTable.addCell(new Cell().add(new Paragraph(entry.getPosition()).setFontSize(9f)).setBorder(Border.NO_BORDER));
-                newTable.addCell(new Cell().add(new Paragraph(PayrollCalculator.formatAmount(entry.getGrossIncome())).setFontSize(9f)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT));
-                newTable.addCell(new Cell().add(new Paragraph(PayrollCalculator.formatAmount(entry.getSss())).setFontSize(9f)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT));
-                newTable.addCell(new Cell().add(new Paragraph(PayrollCalculator.formatAmount(entry.getPhilhealth())).setFontSize(9f)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT));
-                newTable.addCell(new Cell().add(new Paragraph(PayrollCalculator.formatAmount(entry.getPagibig())).setFontSize(9f)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT));
-                newTable.addCell(new Cell().add(new Paragraph(PayrollCalculator.formatAmount(entry.getWithholdingTax())).setFontSize(9f)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT));
-                newTable.addCell(new Cell().add(new Paragraph(PayrollCalculator.formatAmount(entry.getNetPay())).setFontSize(9f)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT));
-                document.add(newTable);
-                
-                rowNumber++;
-            }          
+            int rowNumber = 1;
             
-            Table serparator = create1ColumnTable();
-            serparator.addCell(new Cell().add(new Paragraph()).setBackgroundColor(LIGHT_GRAY).setBorder(Border.NO_BORDER));
-            document.add(serparator);
+                       
+            Table newTable = create9ColumnTable();
+            
+            for (PayrollEntry entry: payrollEntries) {    
+                boolean isEvenRow = rowNumber % 2 == 0;
+                DeviceRgb rowBg = isEvenRow ? lightGray : new DeviceRgb(255,255,255);
+                
+                newTable.addCell(new Cell().add(new Paragraph(String.valueOf(entry.getEmployeeID())).setFontSize(9f)).setBorder(Border.NO_BORDER).setBackgroundColor(rowBg));
+                newTable.addCell(new Cell().add(new Paragraph(entry.getFullName()).setFontSize(9f)).setBorder(Border.NO_BORDER).setBackgroundColor(rowBg));
+                newTable.addCell(new Cell().add(new Paragraph(entry.getPosition()).setFontSize(9f)).setBorder(Border.NO_BORDER).setBackgroundColor(rowBg));
+                newTable.addCell(new Cell().add(new Paragraph(PayrollCalculator.formatAmount(entry.getGrossIncome())).setFontSize(9f)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setBackgroundColor(rowBg));
+                newTable.addCell(new Cell().add(new Paragraph(PayrollCalculator.formatAmount(entry.getSss())).setFontSize(9f)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setBackgroundColor(rowBg));
+                newTable.addCell(new Cell().add(new Paragraph(PayrollCalculator.formatAmount(entry.getPhilhealth())).setFontSize(9f)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setBackgroundColor(rowBg));
+                newTable.addCell(new Cell().add(new Paragraph(PayrollCalculator.formatAmount(entry.getPagibig())).setFontSize(9f)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setBackgroundColor(rowBg));
+                newTable.addCell(new Cell().add(new Paragraph(PayrollCalculator.formatAmount(entry.getWithholdingTax())).setFontSize(9f)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setBackgroundColor(rowBg));
+                newTable.addCell(new Cell().add(new Paragraph(PayrollCalculator.formatAmount(entry.getNetPay())).setFontSize(9f)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setBackgroundColor(rowBg));
+                
+               
+                rowNumber++;
+            } 
+            
+            document.add(newTable);
+            
+            Table separator = create1ColumnTable();
+            separator.addCell(new Cell().add(new Paragraph()).setBackgroundColor(BLACK).setBorder(Border.NO_BORDER));
+            document.add(separator);
             
             // add summary total at the bottom
             Table summaryTable = create9ColumnTable();
@@ -298,6 +313,8 @@ public class PdfProcessor {
             
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(PdfProcessor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

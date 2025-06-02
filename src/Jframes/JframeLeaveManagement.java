@@ -8,6 +8,7 @@ import CustomTable.TableActionCellEditorV2;
 import CustomTable.TableActionCellRendererV2;
 import CustomTable.TableActionEventV2;
 import Domains.LeaveRequest;
+import Model.AttendanceDAO;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -23,7 +24,7 @@ import javax.swing.table.DefaultTableModel;
 import Model.Employee;
 import Model.HR;
 import Model.LeaveService;
-
+import java.sql.SQLException;
 /**
  *
  * @author keith
@@ -54,6 +55,16 @@ public class JframeLeaveManagement extends javax.swing.JFrame {
         if (loggedEmployee instanceof HR) {
             this.hrEmployee = new HR(loggedEmployee);
         }
+    }
+    
+    private void insertLeaveAttendance(int employeeID, LocalDate start, LocalDate end) {
+        try {
+            AttendanceDAO dao = new AttendanceDAO();
+            dao.insertLeaveAttendance(employeeID, start, end);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
     }
     
     private void updateLeaveCredits (int employeeID, String leaveType, int leaveDuration) {
@@ -110,6 +121,7 @@ public class JframeLeaveManagement extends javax.swing.JFrame {
                 if (confirmAction(action)) {
                     updateLeaveStatus(leaveID, action);
                     updateLeaveCredits(employeeID, leaveType, leaveDuration);
+                    insertLeaveAttendance(employeeID, startDate, endDate);
                     refreshLeaveTable();
                     jTableLeaveTable.setRowSelectionInterval(row, row);
                 }              

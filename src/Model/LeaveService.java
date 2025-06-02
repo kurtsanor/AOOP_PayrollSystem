@@ -22,7 +22,7 @@ public class LeaveService {
             leaveBalance = deductBalanceByLeaveType(leaveType, leaveBalance, leaveDuration);
             
             return dao.updateLeaveCreditsByEmpID(employeeID, leaveBalance);
-
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }
