@@ -1,11 +1,10 @@
 
 package Model;
 
-import DatabaseConnection.DatabaseConnection;
+import Util.DatabaseConnection;
 import Domains.LeaveRequest;
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.sql.CallableStatement;
+import java.time.LocalDate;
 
 public class LeaveDAO {   
     
@@ -98,7 +98,7 @@ public class LeaveDAO {
             throw new SQLException("Failed to update status", e);
         }
     }
-       
+    
     private LeaveRequest createLeaveFromResultSet (ResultSet rs) throws SQLException {
         Timestamp timestamp = rs.getTimestamp("processedDate");
         LocalDateTime processedDate = (timestamp != null) ? timestamp.toLocalDateTime(): null;
@@ -114,6 +114,20 @@ public class LeaveDAO {
         leaveRequest.setLeaveID(rs.getInt("leaveID"));
         leaveRequest.setProcessedDate(processedDate);
         return leaveRequest;
+    }
+    
+    public boolean hasOverlappingApprovedLeave (int employeeID, LocalDate start, LocalDate end) throws SQLException {
+        try (Connection connection = DatabaseConnection.getConnection();
+            CallableStatement stmt = connection.prepareCall("CALL leavesHasOverlap(?,?,?)")) {
+            stmt.setInt(1, employeeID);
+            stmt.setDate(2, Date.valueOf(start));
+            stmt.setDate(3, Date.valueOf(end));
+            
+            return stmt.executeQuery().next();
+            
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
     }
   
 }

@@ -65,24 +65,28 @@ public class JframeDashboard extends javax.swing.JFrame {
             jButtonEmployeeManagement.setVisible(true);
             jButtonLeaveManagement.setVisible(true);
             jButtonPayroll.setVisible(false);
+            jButtonLeaveCreditsManagement.setVisible(true);
         }
         else if (loggedEmployee instanceof RegularEmployee) {
             jButtonAttendanceManagement.setVisible(false);
             jButtonEmployeeManagement.setVisible(false);
             jButtonLeaveManagement.setVisible(false);
             jButtonPayroll.setVisible(false);
+            jButtonLeaveCreditsManagement.setVisible(false);
         }
         else if (loggedEmployee instanceof Finance) {
             jButtonAttendanceManagement.setVisible(false);
             jButtonEmployeeManagement.setVisible(false);
             jButtonLeaveManagement.setVisible(false);
             jButtonPayroll.setVisible(true);
+            jButtonLeaveCreditsManagement.setVisible(false);
         }
         else if (loggedEmployee instanceof IT) {
             jButtonAttendanceManagement.setVisible(false);
             jButtonEmployeeManagement.setVisible(false);
             jButtonLeaveManagement.setVisible(false);
             jButtonPayroll.setVisible(false);
+            jButtonLeaveCreditsManagement.setVisible(false);
         }
     }
     
@@ -94,7 +98,7 @@ public class JframeDashboard extends javax.swing.JFrame {
         jLabel8.setIcon(logoIcon2);
         
         ImageIcon logoIcon = new ImageIcon(getClass().getResource("/images/www (1).png"));
-        Image img = logoIcon.getImage().getScaledInstance(jLabel4.getWidth(), jLabel4.getHeight(), Image.SCALE_SMOOTH);
+        Image img = logoIcon.getImage().getScaledInstance(jLabel4.getWidth(), jLabel4.getHeight()+50, Image.SCALE_SMOOTH);
         logoIcon = new ImageIcon(img);
         jLabel4.setIcon(logoIcon);             
         
@@ -239,6 +243,7 @@ public class JframeDashboard extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
+        jButtonLeaveCreditsManagement = new javax.swing.JButton();
         jPanelRight = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
@@ -328,7 +333,7 @@ public class JframeDashboard extends javax.swing.JFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.1;
@@ -380,7 +385,7 @@ public class JframeDashboard extends javax.swing.JFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.1;
@@ -485,7 +490,7 @@ public class JframeDashboard extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.1;
@@ -504,7 +509,7 @@ public class JframeDashboard extends javax.swing.JFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.1;
@@ -521,7 +526,7 @@ public class JframeDashboard extends javax.swing.JFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.gridheight = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
@@ -529,6 +534,21 @@ public class JframeDashboard extends javax.swing.JFrame {
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 1, 2);
         jPanelLeft.add(jPanel5, gridBagConstraints);
+
+        jButtonLeaveCreditsManagement.setText("Leave Credits Management");
+        jButtonLeaveCreditsManagement.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonLeaveCreditsManagementActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanelLeft.add(jButtonLeaveCreditsManagement, gridBagConstraints);
 
         getContentPane().add(jPanelLeft, java.awt.BorderLayout.LINE_START);
 
@@ -923,6 +943,12 @@ public class JframeDashboard extends javax.swing.JFrame {
         timeOut();
     }//GEN-LAST:event_jButtonClockOutActionPerformed
 
+    private void jButtonLeaveCreditsManagementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLeaveCreditsManagementActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        new JframeLeaveCredits(loggedEmployee).setVisible(true);
+    }//GEN-LAST:event_jButtonLeaveCreditsManagementActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -943,6 +969,7 @@ public class JframeDashboard extends javax.swing.JFrame {
     private javax.swing.JButton jButtonClockOut;
     private javax.swing.JButton jButtonEmployeeManagement;
     private javax.swing.JButton jButtonLeave;
+    private javax.swing.JButton jButtonLeaveCreditsManagement;
     private javax.swing.JButton jButtonLeaveManagement;
     private javax.swing.JButton jButtonLogout;
     private javax.swing.JButton jButtonPayroll;

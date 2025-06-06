@@ -1,6 +1,6 @@
 package Model;
 
-import DatabaseConnection.DatabaseConnection;
+import Util.DatabaseConnection;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;

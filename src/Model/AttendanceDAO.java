@@ -1,6 +1,6 @@
 package Model;
 
-import DatabaseConnection.DatabaseConnection;
+import Util.DatabaseConnection;
 import Domains.AttendanceRecord;
 import Domains.YearPeriod;
 import java.sql.Connection;

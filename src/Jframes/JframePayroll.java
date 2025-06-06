@@ -15,10 +15,14 @@ import Domains.PayrollEntry;
 import Domains.PayrollSummary;
 import Domains.YearPeriod;
 import Model.AttendanceDAO;
-import Model.PdfProcessor;
+import Util.PdfProcessor;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -74,10 +78,14 @@ public class JframePayroll extends javax.swing.JFrame {
     }
     
     private void loadPayrollTable () {
+        if (financeEmployee == null) {
+            JOptionPane.showMessageDialog(this, "Only finance employees are authorized to this feature", "Invalid Role", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         tblModel.setRowCount(0);
         YearPeriod period = getPeriod();
         latestGeneratedPeriod = period;
-        List<PayrollEntry> payrollEntries = PayrollService.computeBatchPayroll(employeeList, workHoursMap, period);
+        List<PayrollEntry> payrollEntries = financeEmployee.generatePayroll(employeeList, workHoursMap, period);
         PayrollSummary summary = PayrollService.calculatePayrollSummary(payrollEntries);
         
         for (PayrollEntry payrollEntry: payrollEntries) {
@@ -115,6 +123,23 @@ public class JframePayroll extends javax.swing.JFrame {
         DefaultTableModel model = new DefaultTableModel(totalColumn, 0);
         
         jTableTotal.setModel(model);
+    }
+    
+    private static void redirectToDirectory(File file) {
+        try {
+            if (Desktop.isDesktopSupported()) {         
+            Desktop desktop = Desktop.getDesktop();
+            File parentDirectory = file.getParentFile();
+            desktop.open(parentDirectory);
+        }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+    }
+    
+    private void showGenerateReportResult (File filePath) {
+        JOptionPane.showMessageDialog(this, filePath != null? "Pdf successfully created at: " + filePath.getAbsolutePath() : "There was a problem generating the report", filePath != null ? "Success": "Error", filePath != null ? JOptionPane.INFORMATION_MESSAGE: JOptionPane.ERROR_MESSAGE);
     }
     
     
@@ -321,7 +346,9 @@ public class JframePayroll extends javax.swing.JFrame {
         YearPeriod period = getPeriod();
         List<PayrollEntry> payrollEntries = PayrollService.computeBatchPayroll(employeeList, workHoursMap, period);
         PayrollSummary summary = PayrollService.calculatePayrollSummary(payrollEntries);
-        PdfProcessor.createPayrollReportPdf(payrollEntries, latestGeneratedPeriod, summary);
+        File filePath = PdfProcessor.createPayrollReportPdf(payrollEntries, latestGeneratedPeriod, summary);
+        showGenerateReportResult(filePath);
+        redirectToDirectory(filePath);
     }//GEN-LAST:event_jButtonSavePdfActionPerformed
 
     /**

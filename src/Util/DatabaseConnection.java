@@ -1,5 +1,5 @@
 
-package DatabaseConnection;
+package Util;
 
 import java.io.InputStream;
 import java.sql.Connection;

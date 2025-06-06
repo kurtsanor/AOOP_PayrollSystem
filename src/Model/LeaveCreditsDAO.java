@@ -4,12 +4,14 @@
  */
 package Model;
 
-import DatabaseConnection.DatabaseConnection;
+import Util.DatabaseConnection;
 import Domains.LeaveBalance;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -70,6 +72,24 @@ public class LeaveCreditsDAO {
             }
         }
         return true;
+    }
+    
+    public List<LeaveBalance> getAllEmployeeLeaveCredits() throws SQLException {
+        List<LeaveBalance> balances = new ArrayList<>();
+        try (Connection connection = DatabaseConnection.getConnection();
+            CallableStatement stmt = connection.prepareCall("CALL leavecreditGetAll()")){
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                balances.add(new LeaveBalance(rs.getInt("employeeID"), 
+                        rs.getInt("vacationCredits"), 
+                        rs.getInt("medicalCredits"), 
+                        rs.getInt("personalCredits")));
+            }
+            
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+        return balances;
     }
     
     

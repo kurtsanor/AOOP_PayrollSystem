@@ -4,7 +4,7 @@
  */
 package Model;
 
-import DatabaseConnection.DatabaseConnection;
+import Util.DatabaseConnection;
 import Domains.Position;
 import java.sql.Connection;
 import java.util.List;

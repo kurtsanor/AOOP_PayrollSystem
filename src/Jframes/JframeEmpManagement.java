@@ -277,7 +277,6 @@ public class JframeEmpManagement extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         jPanel2.add(jTextFieldSearch, gridBagConstraints);
 
-        jButtonSearch.setBackground(new java.awt.Color(230, 230, 230));
         jButtonSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/search-interface-symbol (1).png"))); // NOI18N
         jButtonSearch.setPreferredSize(new java.awt.Dimension(60, 35));
         jButtonSearch.addActionListener(new java.awt.event.ActionListener() {

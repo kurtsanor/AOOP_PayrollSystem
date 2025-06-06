@@ -71,7 +71,7 @@ public class EmployeeValidator {
         }
         
         if (phoneNumber.length() != PHONE_NUMBER_MAX_CHAR) {
-            return "Invalid format (e.g., XXX-XXX-XXX)";
+            return "Invalid format (e.g., 123-123-123)";
         }
         
         int hyphenCount = 0;
@@ -86,7 +86,7 @@ public class EmployeeValidator {
             }           
         }
         if (phoneNumber.charAt(3) != '-' || phoneNumber.charAt(7) != '-' || hyphenCount != 2 || digitCount != 9) {
-            return "Invalid format (e.g., XXX-XXX-XXX)";
+            return "Invalid format (e.g., 123-123-123)";
         }
         return "";
     }
@@ -125,7 +125,7 @@ public class EmployeeValidator {
         }
         
         if (sssNumber.length() != SSS_NUMBER_MAX_CHAR) {
-            return "Invalid format (e.g., XX-XXXXXXX-X)";
+            return "Invalid format (e.g., 12-1234567-1)";
         }
         
         int hyphenCount = 0;
@@ -141,7 +141,7 @@ public class EmployeeValidator {
             }
         }
         if (sssNumber.charAt(2) != '-' || sssNumber.charAt(10) != '-' || hyphenCount != 2 || digitCount != 10) {
-            return "Invalid format (e.g., XX-XXXXXXX-X)";
+            return "Invalid format (e.g., 12-1234567-1)";
         }
         return "";
     }
@@ -189,7 +189,7 @@ public class EmployeeValidator {
         }
         
         if (tinNumber.length() != TIN_NUMBER_MAX_CHAR) {
-            return "Invalid format (e.g., XXX-XXX-XXX-XXX)";
+            return "Invalid format (e.g., 123-123-123-123)";
         }
         
         int hyphenCount = 0;
@@ -205,19 +205,9 @@ public class EmployeeValidator {
             }
         }
         if (tinNumber.charAt(3) != '-' || tinNumber.charAt(7) != '-' || tinNumber.charAt(11) != '-' || hyphenCount != 3 || digitCount != 12) {
-            return "Invalid format (e.g., XXX-XXX-XXX-XXX)";  
+            return "Invalid format (e.g., 123-123-123-123)";  
         }
         return "";
     }
-    
-    
-    
-    
-    
-        
-    
-    
-    
-    
-    
+
 }

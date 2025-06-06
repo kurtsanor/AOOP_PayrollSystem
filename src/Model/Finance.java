@@ -1,5 +1,11 @@
 package Model;
 
+import Domains.EmployeeMonthlyHoursKey;
+import Domains.PayrollEntry;
+import Domains.YearPeriod;
+import java.util.List;
+import java.util.Map;
+
 public class Finance extends Employee {
       
     public Finance () {
@@ -20,7 +26,17 @@ public class Finance extends Employee {
         this.tinNumber = employee.getTinNumber();
         this.hourlyRate = employee.getHourlyRate();
         this.philhealthNumber = employee.getPhilhealthNumber();
-        this.role = employee.getRole();       
+        this.role = employee.getRole();  
+        this.supervisorID = employee.getSupervisorID();
+        this.basicSalary = employee.getBasicSalary();
+        this.riceSubsidy = employee.getRiceSubsidy();
+        this.phoneAllowance = employee.getPhoneAllowance();
+        this.clothingAllowance = employee.getClothingAllowance();
+        this.grossSemiMonthlyRate = employee.getGrossSemiMonthlyRate();
+    }
+    
+    public List<PayrollEntry> generatePayroll(List<Employee> employees, Map<EmployeeMonthlyHoursKey, Double> workHoursMap, YearPeriod period) {
+        return PayrollService.computeBatchPayroll(employees, workHoursMap, period);
     }
     
 

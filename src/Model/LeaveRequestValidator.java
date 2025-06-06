@@ -7,13 +7,14 @@ package Model;
 import Domains.LeaveBalance;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.sql.SQLException;
 
 /**
  *
  * @author keith
  */
 public class LeaveRequestValidator {
-    public static String validateStartDateWithMessage (LocalDate startDate, LocalDate endDate) {              
+    public static String getStartDateValidationMessage (LocalDate startDate, LocalDate endDate) {              
         LocalDate dateNow = LocalDate.now();
         if (startDate == null) {
             return "This is required";
@@ -30,7 +31,7 @@ public class LeaveRequestValidator {
         return "";
     }
     
-    public static String validateEndDateWithMessage (LocalDate startDate, LocalDate endDate) {                     
+    public static String getEndDateValidationMessage (LocalDate startDate, LocalDate endDate) {                     
         LocalDate dateNow = LocalDate.now();
         if (endDate == null) {
             return "This is required";
@@ -47,11 +48,11 @@ public class LeaveRequestValidator {
         return "";
     }
     
-    public static String validateRemarksWithMessage (String remarks) {
+    public static String getRemarksValidationMessage (String remarks) {
         return remarks == null || remarks.isBlank() ? "This is required" : "";
     }
     
-    public static String validateLeaveTypeWithMessage (LeaveBalance balance, String leaveType, LocalDate startDate, LocalDate endDate) {
+    public static String getLeaveTypeValidationMessage (LeaveBalance balance, String leaveType, LocalDate startDate, LocalDate endDate) {
         LocalDate dateNow = LocalDate.now();
         if (startDate == null || endDate == null || startDate.isBefore(dateNow) || endDate.isBefore(dateNow)) {
             return "";
@@ -68,5 +69,28 @@ public class LeaveRequestValidator {
                 return totalDays > balance.getPersonalLeaveCredits() ? "Insufficient personal leave credits": "";
         }
         return "";      
+    }
+    
+    public static String getOverlapLeaveDateMessage (int employeeID, LocalDate startDate, LocalDate endDate) {
+        LocalDate dateNow = LocalDate.now();
+        if (startDate == null) {
+            return "This is required";
+        }
+        if (startDate.isBefore(dateNow)) {
+            return "Date entry is outdated";
+        }
+        if (endDate == null) {
+            return "";
+        }              
+        if (startDate.isAfter(endDate)) {
+            return "Must come before end date";
+        }
+        try {
+            LeaveDAO dao = new LeaveDAO();
+            return dao.hasOverlappingApprovedLeave(employeeID, startDate, endDate) ? "Dates overlap with an approved leave" : "";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

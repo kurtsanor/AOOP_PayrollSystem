@@ -35,8 +35,8 @@ public class HoursCalculator {
             minutesWorked = ChronoUnit.MINUTES.between(timeIn, timeOut);
         } else {
             // Overnight shift:
-            long minutesUntilMidnight = ChronoUnit.MINUTES.between(timeIn, LocalTime.MAX) + 1; // till 23:59:59 + 1 minute = midnight
-            long minutesAfterMidnight = ChronoUnit.MINUTES.between(LocalTime.MIN, timeOut);    // from 00:00 to timeOut
+            long minutesUntilMidnight = ChronoUnit.MINUTES.between(timeIn, LocalTime.MAX) + 1;
+            long minutesAfterMidnight = ChronoUnit.MINUTES.between(LocalTime.MIN, timeOut);    
             minutesWorked = minutesUntilMidnight + minutesAfterMidnight;
         }
 

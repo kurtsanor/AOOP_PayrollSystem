@@ -7,7 +7,11 @@ package Jframes;
 import Domains.Payslip;
 import Domains.YearPeriod;
 import Model.Employee;
-import Model.PdfProcessor;
+import Util.PdfProcessor;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -76,7 +80,24 @@ public class JframePayslip extends javax.swing.JFrame {
     private String amountToString (double amount) {
         return String.format("%.2f", amount);
     }
-
+    
+    private void redirectToDirectory(File file) {
+        try {
+            if (Desktop.isDesktopSupported()) {         
+            Desktop desktop = Desktop.getDesktop();
+            File parentDirectory = file.getParentFile();
+            desktop.open(parentDirectory);
+        }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+    }
+    
+    private void showGeneratePayslipResult (File filePath) {
+        JOptionPane.showMessageDialog(this, filePath != null? "Pdf successfully created at: " + filePath.getAbsolutePath() : "There was a problem generating the report", filePath != null ? "Success": "Error", filePath != null ? JOptionPane.INFORMATION_MESSAGE: JOptionPane.ERROR_MESSAGE);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -586,7 +607,9 @@ public class JframePayslip extends javax.swing.JFrame {
 
     private void jButtonSavePdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSavePdfActionPerformed
         YearPeriod period = getChosenPeriod();
-        PdfProcessor.createPayslipPdf(getPayslipDetails(period));
+        File filePath = PdfProcessor.createPayslipPdf(getPayslipDetails(period));
+        showGeneratePayslipResult(filePath);
+        redirectToDirectory(filePath);
     }//GEN-LAST:event_jButtonSavePdfActionPerformed
 
     /**

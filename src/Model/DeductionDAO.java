@@ -4,7 +4,7 @@
  */
 package Model;
 
-import DatabaseConnection.DatabaseConnection;
+import Util.DatabaseConnection;
 import Domains.PagibigMatrix;
 import Domains.PhilhealthMatrix;
 import Domains.SSSMatrix;

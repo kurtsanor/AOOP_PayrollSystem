@@ -23,6 +23,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import Model.Employee;
 import Model.HR;
+import Model.LeaveDAO;
 import Model.LeaveService;
 import java.sql.SQLException;
 /**
@@ -65,6 +66,20 @@ public class JframeLeaveManagement extends javax.swing.JFrame {
             e.printStackTrace();
         }
         
+    }
+    
+    private boolean hasOverlapApprovedLeaves (int employeeID, LocalDate start, LocalDate end) {
+        try {
+            LeaveDAO dao = new LeaveDAO();
+            return dao.hasOverlappingApprovedLeave(employeeID, start, end);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    private void showOverlapLeaveError () {
+        JOptionPane.showMessageDialog(this, "Employee already has an approved leave on the selected date range");
     }
     
     private void updateLeaveCredits (int employeeID, String leaveType, int leaveDuration) {
@@ -114,6 +129,11 @@ public class JframeLeaveManagement extends javax.swing.JFrame {
                 
                 if (!hasEnoughCredits(employeeID, leaveDuration, leaveType)) {
                     showInsufficientLeaveCreditsWarning(leaveType);
+                    return;
+                }
+                
+                if (hasOverlapApprovedLeaves(employeeID, startDate, endDate)) {
+                    showOverlapLeaveError();
                     return;
                 }
                 

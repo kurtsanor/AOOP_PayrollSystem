@@ -165,23 +165,38 @@ public class JframeLeave extends javax.swing.JFrame {
         LocalDate endDate = unparsedEndDate != null ? LocalDate.parse(sqlDateFormat.format(unparsedEndDate)) : null;
         String leaveType = jComboBoxLeaveType.getSelectedItem().toString();
         
-        errorMessage = LeaveRequestValidator.validateStartDateWithMessage(startDate, endDate);
+        errorMessage = LeaveRequestValidator.getStartDateValidationMessage(startDate, endDate);
         setStartDateErorrMessage(errorMessage);
         if (!errorMessage.isBlank()) validRequest = false;
         
-        errorMessage = LeaveRequestValidator.validateEndDateWithMessage(startDate, endDate);
+        errorMessage = LeaveRequestValidator.getEndDateValidationMessage(startDate, endDate);
         setEndDateErorrMessage(errorMessage);
         if (!errorMessage.isBlank()) validRequest = false;
         
-        errorMessage = LeaveRequestValidator.validateRemarksWithMessage(jTextFieldRemarks.getText());
+        errorMessage = LeaveRequestValidator.getRemarksValidationMessage(jTextFieldRemarks.getText());
         setRemarksErorrMessage(errorMessage);
         if (!errorMessage.isBlank()) validRequest = false;
         
-        errorMessage = LeaveRequestValidator.validateLeaveTypeWithMessage(personalLeaveCredits, leaveType, startDate, endDate);
+        errorMessage = LeaveRequestValidator.getLeaveTypeValidationMessage(personalLeaveCredits, leaveType, startDate, endDate);
         setLeaveTypeErorrMessage(errorMessage);
         if (!errorMessage.isBlank()) validRequest = false;
         
+        errorMessage = LeaveRequestValidator.getLeaveTypeValidationMessage(personalLeaveCredits, leaveType, startDate, endDate);
+        setLeaveTypeErorrMessage(errorMessage);
+        if (!errorMessage.isBlank()) validRequest = false;
+        
+        errorMessage = LeaveRequestValidator.getOverlapLeaveDateMessage(loggedEmployee.getID(), startDate, endDate);
+        setDatesOverlapErrorMessage(errorMessage);
+        if (!errorMessage.isBlank()) validRequest = false;
+        
         return validRequest;
+    }
+    
+    private void setDatesOverlapErrorMessage (String message) {
+        jLabelStartDateError.setText(message);
+        jLabelStartDateError.setVisible(true);
+        jLabelEndDateError.setText(message);
+        jLabelEndDateError.setVisible(true);
     }
     
     private void setStartDateErorrMessage (String message) {
@@ -556,6 +571,7 @@ public class JframeLeave extends javax.swing.JFrame {
         jPanel5.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 2, true));
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
+        jTableLeaveHistory.setAutoCreateRowSorter(true);
         jTableLeaveHistory.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
