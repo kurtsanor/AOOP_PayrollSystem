@@ -4,9 +4,6 @@
  */
 package Jframes;
 
-import Model.HoursCalculator;
-import java.time.LocalTime;
-
 /**
  *
  * @author keith
