@@ -15,12 +15,14 @@ public class CredentialsDAO  {
              CallableStatement stmt = connection.prepareCall("{CALL credentialsGetUserID(?,?)}")) {
             stmt.setString(1, username);
             stmt.setString(2, password);
-            ResultSet rs = stmt.executeQuery();
             
-            if (rs.next()) {
-                int employeeID = rs.getInt("employeeID");
-                return employeeID;
-            }                     
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    int employeeID = rs.getInt("employeeID");
+                    return employeeID;
+                }
+            }
+                                                      
         } catch (SQLException e) {
             throw new SQLException("Failed to authenticate user",e);
         }

@@ -25,11 +25,13 @@ public class LeaveCreditsDAO {
         try (Connection connection = DatabaseConnection.getConnection();
              CallableStatement stmt = connection.prepareCall("{CALL leavecreditGetByID(?)}")) {
             stmt.setInt(1, employeeID);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new LeaveBalance(rs.getInt("employeeID"), rs.getInt("vacationCredits"), rs.getInt("medicalCredits"), rs.getInt("personalCredits"));
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new LeaveBalance(rs.getInt("employeeID"), rs.getInt("vacationCredits"), rs.getInt("medicalCredits"), rs.getInt("personalCredits"));
+                }
             }
-                      
+                                        
         } catch (SQLException e) {
             throw new SQLException("Failed to retrieve vacation leave credits", e);
         }
@@ -77,8 +79,9 @@ public class LeaveCreditsDAO {
     public List<LeaveBalance> getAllEmployeeLeaveCredits() throws SQLException {
         List<LeaveBalance> balances = new ArrayList<>();
         try (Connection connection = DatabaseConnection.getConnection();
-            CallableStatement stmt = connection.prepareCall("CALL leavecreditGetAll()")){
-            ResultSet rs = stmt.executeQuery();
+            CallableStatement stmt = connection.prepareCall("CALL leavecreditGetAll()");
+            ResultSet rs = stmt.executeQuery()){
+            
             while (rs.next()) {
                 balances.add(new LeaveBalance(rs.getInt("employeeID"), 
                         rs.getInt("vacationCredits"), 

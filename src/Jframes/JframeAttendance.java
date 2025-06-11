@@ -107,7 +107,8 @@ public class JframeAttendance extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(86, 98, 106));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jLabelSelectMonth.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelSelectMonth.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabelSelectMonth.setForeground(new java.awt.Color(0, 183, 229));
         jLabelSelectMonth.setText("Select Month");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -126,7 +127,8 @@ public class JframeAttendance extends javax.swing.JFrame {
         gridBagConstraints.gridy = 2;
         jPanel1.add(jMonthChooser, gridBagConstraints);
 
-        jLabelSelectYear.setForeground(new java.awt.Color(255, 255, 255));
+        jLabelSelectYear.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabelSelectYear.setForeground(new java.awt.Color(0, 183, 229));
         jLabelSelectYear.setText("Select Year");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;

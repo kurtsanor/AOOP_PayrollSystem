@@ -23,8 +23,9 @@ public class DeductionDAO {
     public List<SSSMatrix> getSSSMatrix () throws SQLException {
         List<SSSMatrix> matrix = new ArrayList<>();
         try (Connection con = DatabaseConnection.getConnection();
-             CallableStatement stmt = con.prepareCall("{CALL matrixGetSSS()}")){
-            ResultSet rs = stmt.executeQuery();
+            CallableStatement stmt = con.prepareCall("{CALL matrixGetSSS()}");
+            ResultSet rs = stmt.executeQuery()){
+            
             while (rs.next()) {
                 matrix.add(new SSSMatrix(
                         rs.getDouble("minSalary"), 
@@ -38,8 +39,9 @@ public class DeductionDAO {
     public List<PhilhealthMatrix> getPhilhealthMatrix () throws SQLException {
         List<PhilhealthMatrix> matrix = new ArrayList<>();
         try (Connection con = DatabaseConnection.getConnection();
-             CallableStatement stmt = con.prepareCall("{CALL matrixGetPhilhealth()}")){
-            ResultSet rs = stmt.executeQuery();
+             CallableStatement stmt = con.prepareCall("{CALL matrixGetPhilhealth()}");
+             ResultSet rs = stmt.executeQuery()) {
+            
             while (rs.next()) {
                 matrix.add(new PhilhealthMatrix(
                         rs.getDouble("minSalary"), 
@@ -55,8 +57,9 @@ public class DeductionDAO {
     public List<PagibigMatrix> getPagibigMatrix () throws SQLException {
         List<PagibigMatrix> matrix = new ArrayList<>();
         try (Connection con = DatabaseConnection.getConnection();
-             CallableStatement stmt = con.prepareCall("{CALL matrixGetPagibig()}")){
-            ResultSet rs = stmt.executeQuery();
+            CallableStatement stmt = con.prepareCall("{CALL matrixGetPagibig()}");
+            ResultSet rs = stmt.executeQuery()){
+            
             while (rs.next()) {
                 matrix.add(new PagibigMatrix(
                         rs.getDouble("minSalary"), 
@@ -71,8 +74,9 @@ public class DeductionDAO {
     public List<TaxMatrix> getTaxMatrix () throws SQLException {
         List<TaxMatrix> matrix = new ArrayList<>();
         try (Connection con = DatabaseConnection.getConnection();
-             CallableStatement stmt = con.prepareCall("{CALL matrixGetTax()}")){
-            ResultSet rs = stmt.executeQuery();
+            CallableStatement stmt = con.prepareCall("{CALL matrixGetTax()}");
+            ResultSet rs = stmt.executeQuery()){
+            
             while (rs.next()) {
                 matrix.add(new TaxMatrix(
                         rs.getDouble("minSalary"), 

@@ -25,8 +25,9 @@ public class PositionDAO {
         String query = "SELECT positionID, positionName FROM position";
         
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement pst = connection.prepareStatement(query)) {
-            ResultSet rs = pst.executeQuery();
+             PreparedStatement pst = connection.prepareStatement(query);
+             ResultSet rs = pst.executeQuery()) {
+            
             while (rs.next()) {
                 positions.add(new Position(rs.getInt("positionID"), rs.getString("positionName")));
             }

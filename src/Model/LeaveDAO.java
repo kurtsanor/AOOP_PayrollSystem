@@ -22,8 +22,9 @@ public class LeaveDAO {
         
         List <LeaveRequest> leaveRecords = new ArrayList<>();
         try (Connection connection = DatabaseConnection.getConnection();
-             CallableStatement stmt = connection.prepareCall("{CALL leavesGetAll}")) {
-            ResultSet rs = stmt.executeQuery();                                     
+            CallableStatement stmt = connection.prepareCall("{CALL leavesGetAll}");
+            ResultSet rs = stmt.executeQuery()) {
+                                                 
             while (rs.next()) {
                 LeaveRequest leaveRequest = createLeaveFromResultSet(rs);
                 leaveRecords.add(leaveRequest);
@@ -41,11 +42,14 @@ public class LeaveDAO {
         try (Connection connection = DatabaseConnection.getConnection();
              CallableStatement stmt = connection.prepareCall("{CALL leavesGetByID(?)}")) {            
             stmt.setInt(1, employeeID);
-            ResultSet rs = stmt.executeQuery();                                    
-            while (rs.next()) {
-                LeaveRequest leaveRequest = createLeaveFromResultSet(rs);
-                leaveRecords.add(leaveRequest);
-             }                                 
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    LeaveRequest leaveRequest = createLeaveFromResultSet(rs);
+                    leaveRecords.add(leaveRequest);
+                } 
+            }
+                                                                                         
         } catch (SQLException e) {
             throw new SQLException("Failed to retrieve leave records by employee id", e);
         }
@@ -59,12 +63,15 @@ public class LeaveDAO {
         try (Connection connection = DatabaseConnection.getConnection();
              CallableStatement leaveTypeStmt = connection.prepareCall("{CALL leavetypeGetIdByName(?)}")) {
             leaveTypeStmt.setString(1, leaveRequest.getLeaveType());
-            ResultSet rs = leaveTypeStmt.executeQuery();
-            if (rs.next()) {
-                leaveTypeID = rs.getInt("leaveTypeID");
-            } else {
-                return false;
+            
+            try (ResultSet rs = leaveTypeStmt.executeQuery()) {
+                if (rs.next()) {
+                    leaveTypeID = rs.getInt("leaveTypeID");
+                } else {
+                    throw new IllegalArgumentException("Unknown leave type name");
+                }
             }
+                       
         } catch (SQLException e) {
             throw new SQLException("Failed to get leave type id", e);
         }   

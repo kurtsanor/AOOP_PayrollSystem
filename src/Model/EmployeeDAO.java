@@ -19,26 +19,30 @@ public class EmployeeDAO {
     public List <Employee> getAllEmployees () throws SQLException {
         List <Employee> employees = new ArrayList<>();
         try (Connection connection = DatabaseConnection.getConnection();
-            CallableStatement stmt = connection.prepareCall("{CALL employeesGetAll()}")) {
-            ResultSet rs = stmt.executeQuery();           
+            CallableStatement stmt = connection.prepareCall("{CALL employeesGetAll()}");
+            ResultSet rs = stmt.executeQuery()) {
+                       
             while (rs.next()) {
                 Employee employee = EmployeeFactory.createEmployeeFromResultSet(rs);
                 employees.add(employee);
             }                     
         } catch (SQLException e) {
-            throw new SQLException("Failed to retrive all employees", e);
+            throw new SQLException("Failed to retrieve all employees", e);
         }       
         return employees;
     }
     
     public Employee getEmployeeByID (int employeeID) throws SQLException {
         try (Connection connection = DatabaseConnection.getConnection();
-             CallableStatement stmt = connection.prepareCall("{CALL employeesGetByID(?)}")) {            
+            CallableStatement stmt = connection.prepareCall("{CALL employeesGetByID(?)}")) {            
             stmt.setInt(1, employeeID);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return EmployeeFactory.createEmployeeFromResultSet(rs);
-            }                                              
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return EmployeeFactory.createEmployeeFromResultSet(rs);
+                }
+            }       
+                                                   
         } catch (SQLException e) {
             throw new SQLException("Failed to fetch employee info", e);
         }
@@ -231,10 +235,11 @@ public class EmployeeDAO {
         try (Connection connection = DatabaseConnection.getConnection();
              CallableStatement stmt = connection.prepareCall("{CALL statusGetID(?)}")) {
             stmt.setString(1, statusName);
-            ResultSet rs = stmt.executeQuery();
             
-            return rs.next()? rs.getInt("statusID") : -1;
-
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next()? rs.getInt("statusID") : -1;
+            }
+                     
         } catch (SQLException e) {
             throw new SQLException("Failed to retrieve status id", e);
         }

@@ -10,6 +10,22 @@
 <project name="MotorPhPayrollv2" default="default" basedir=".">
     <description>Builds, tests, and runs the project MotorPhPayrollv2.</description>
     <import file="nbproject/build-impl.xml"/>
+
+	<target name="test-junit5" depends="compile">
+    <mkdir dir="build/test-results"/>
+    <java classname="org.junit.platform.console.ConsoleLauncher" fork="true" failonerror="true">
+        <classpath>
+            <path location="build/classes"/>
+            <fileset dir="lib">
+                <include name="*.jar"/>
+            </fileset>
+        </classpath>
+        <arg value="--scan-classpath"/>
+        <arg value="--details=tree"/>
+        <arg value="--reports-dir=build/test-results"/>
+    </java>
+</target>
+
     <!--
 
     There exist several targets which are by default empty and which can be 

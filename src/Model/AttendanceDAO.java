@@ -28,14 +28,16 @@ public class AttendanceDAO {
             stmt.setInt(1, employeeID);
             stmt.setInt(2, period.getYear());
             stmt.setInt(3, period.getMonth());
-            ResultSet rs = stmt.executeQuery();
             
-            while (rs.next()) {
-                LocalDate date = rs.getDate("date").toLocalDate();
-                LocalTime timeIn = rs.getTime("timeIn").toLocalTime();
-                LocalTime timeOut = (rs.getTime("timeOut") != null) ? rs.getTime("timeOut").toLocalTime() : null;              
-                records.add(new AttendanceRecord(employeeID, date, timeIn, timeOut));                            
-            }                               
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    LocalDate date = rs.getDate("date").toLocalDate();
+                    LocalTime timeIn = rs.getTime("timeIn").toLocalTime();
+                    LocalTime timeOut = (rs.getTime("timeOut") != null) ? rs.getTime("timeOut").toLocalTime() : null;              
+                    records.add(new AttendanceRecord(employeeID, date, timeIn, timeOut));                            
+                }  
+            }
+                                                             
         } catch (SQLException e) {
             throw new SQLException("Failed to fetch attendance records", e);
         }
@@ -52,14 +54,16 @@ public class AttendanceDAO {
             stmt.setInt(1, employeeID);
             stmt.setDate(2, Date.valueOf(startDate));
             stmt.setDate(3, Date.valueOf(endDate));
-            ResultSet rs = stmt.executeQuery();
-            
-            while (rs.next()) {
-                LocalDate date = rs.getDate("date").toLocalDate();
-                LocalTime timeIn = rs.getTime("timeIn").toLocalTime();
-                LocalTime timeOut = (rs.getTime("timeOut") != null) ? rs.getTime("timeOut").toLocalTime() : null;              
-                records.add(new AttendanceRecord(employeeID, date, timeIn, timeOut));                            
-            }                               
+                        
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    LocalDate date = rs.getDate("date").toLocalDate();
+                    LocalTime timeIn = rs.getTime("timeIn").toLocalTime();
+                    LocalTime timeOut = (rs.getTime("timeOut") != null) ? rs.getTime("timeOut").toLocalTime() : null;              
+                    records.add(new AttendanceRecord(employeeID, date, timeIn, timeOut));                            
+                } 
+            }
+                                          
         } catch (SQLException e) {
             throw new SQLException("Failed to fetch attendance records", e);
         }
@@ -82,7 +86,7 @@ public class AttendanceDAO {
     public boolean saveTimeIn (int employeeID, LocalDateTime timeIn) throws SQLException {  
         
         try (Connection connection = DatabaseConnection.getConnection();
-             CallableStatement pst = connection.prepareCall("{CALL attendanceSaveTimeIn(?,?,?)}")) {                                                          
+            CallableStatement pst = connection.prepareCall("{CALL attendanceSaveTimeIn(?,?,?)}")) {                                                          
             pst.setInt(1, employeeID);
             pst.setDate(2, Date.valueOf(timeIn.toLocalDate()));
             pst.setTime(3, Time.valueOf(timeIn.toLocalTime()));
@@ -95,7 +99,7 @@ public class AttendanceDAO {
     
     public boolean saveTimeOut (int employeeID, LocalDateTime timeOut) throws SQLException {
         try (Connection connection = DatabaseConnection.getConnection();
-             CallableStatement pst = connection.prepareCall("CALL attendanceSaveTimeOut(?,?,?)")) {
+            CallableStatement pst = connection.prepareCall("CALL attendanceSaveTimeOut(?,?,?)")) {
             pst.setTime(1, Time.valueOf(timeOut.toLocalTime()));
             pst.setInt(2, employeeID);
             pst.setDate(3, Date.valueOf(timeOut.toLocalDate()));           
@@ -109,15 +113,19 @@ public class AttendanceDAO {
     public List<AttendanceRecord> getAllRecords () throws SQLException {
         List<AttendanceRecord> records = new ArrayList<>();       
         try (Connection connection = DatabaseConnection.getConnection();
-             CallableStatement stmt = connection.prepareCall("{CALL attendanceGetAll()}")) {
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                AttendanceRecord currentRecord = new AttendanceRecord(rs.getInt("employeeID"),
-                        rs.getDate("date").toLocalDate(),
-                        rs.getTime("timeIn").toLocalTime(),
-                        rs.getTime("timeOut").toLocalTime());
-                records.add(currentRecord);
-            }             
+            CallableStatement stmt = connection.prepareCall("{CALL attendanceGetAll()}")) {
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    AttendanceRecord currentRecord = new AttendanceRecord(rs.getInt("employeeID"),
+                            rs.getDate("date").toLocalDate(),
+                            rs.getTime("timeIn").toLocalTime(),
+                            rs.getTime("timeOut").toLocalTime());
+                    records.add(currentRecord);
+                } 
+            }
+            
+                        
         } catch (SQLException e) {
             throw new SQLException("Failed to retrive attendance records",e);
         }
