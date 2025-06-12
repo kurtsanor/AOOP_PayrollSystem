@@ -1,7 +1,6 @@
 com\mycompany\aoop_payrollsystem\AOOP_PayrollSystem$1.class
 CustomTable\PanelAction$4.class
 Jframes\JframeLeave.class
-Jframes\MotorPhPayrollv2$1.class
 Model\AttendanceDAO.class
 Model\LeaveCreditsDAO.class
 Jframes\JframePayslip$2.class
@@ -108,7 +107,6 @@ Domains\YearPeriod.class
 Jframes\JframeLeaveCredits$2.class
 Model\PositionDAO.class
 Jframes\JframeAttendanceManagement.class
-Jframes\MotorPhPayrollv2.class
 Jframes\JframeDashboard$4.class
 CustomTable\PanelAction$1.class
 Domains\PagibigMatrix.class

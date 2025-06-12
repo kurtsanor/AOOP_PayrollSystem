@@ -1,1 +1,6 @@
+Test\HoursCalculatorTest.class
+Test\AttendanceDAOTest.class
+Test\DeductionDAOTest.class
 Test\EmployeeTest.class
+Test\CredentialsDAOTest.class
+Test\DeductionCalculatorTest.class

@@ -54,7 +54,7 @@ public class EmployeeDAO {
         int roleID = getRoleID(employee.getRole());
         int positionID = getPositionID(employee.getPosition());
         int statusID = getStatusID(employee.getStatus());
-        
+
         try (Connection connection = DatabaseConnection.getConnection()){          
             // prevents sql queries from altering tables unless all other queries pass
             connection.setAutoCommit(false);
@@ -106,7 +106,6 @@ public class EmployeeDAO {
             stmtAllowance.setDouble(9, employee.getClothingAllowance());
             
             int allowanceAffectedRows = stmtAllowance.executeUpdate();
-            
             connection.commit();
             
             return employeeAffectedRows > 0 && salaryAffectedRows > 0 && govNumberAffectedRows > 0 && allowanceAffectedRows > 0;    
@@ -182,7 +181,7 @@ public class EmployeeDAO {
             
             connection.commit();
             
-            return employeeAffectedRows > 0 && salaryAffectedRows > 0 && govNumAffectedRows > 0;
+            return employeeAffectedRows > 0 && salaryAffectedRows > 0 && govNumAffectedRows > 0 && batchUpdateSuccessful(res);
             
         } catch (SQLException e) {
             connection.rollback();
@@ -192,6 +191,16 @@ public class EmployeeDAO {
         } catch (SQLException e) {
             throw new SQLException("Failed to edit employee record",e); 
         }
+    }
+    // helper method
+    private boolean batchUpdateSuccessful (int result []) {
+        for (int val: result) {
+            // if statement execute failed (-3), return false
+            if (val == -3) {
+                return false;
+            }
+        }
+        return true;
     }
     
     public boolean deleteEmployee (int employeeId) throws SQLException {
@@ -209,9 +218,10 @@ public class EmployeeDAO {
         try (Connection connection = DatabaseConnection.getConnection();
              CallableStatement stmt = connection.prepareCall("{CALL rolesGetID(?)}")) {
             stmt.setString(1, roleName);
-            ResultSet rs = stmt.executeQuery();
             
-            return rs.next()? rs.getInt("roleID") : -1;
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next()? rs.getInt("roleID") : -1;
+            }
 
         } catch (SQLException e) {
             throw new SQLException("Failed to retrieve role id", e);
@@ -222,9 +232,10 @@ public class EmployeeDAO {
         try (Connection connection = DatabaseConnection.getConnection();
              CallableStatement stmt = connection.prepareCall("{CALL positionGetID(?)}")) {
             stmt.setString(1, positionName);
-            ResultSet rs = stmt.executeQuery();
             
-            return rs.next()? rs.getInt("positionID") : -1;
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next()? rs.getInt("positionID") : -1;
+            }
 
         } catch (SQLException e) {
             throw new SQLException("Failed to retrieve position id", e);

@@ -27,10 +27,8 @@ import com.itextpdf.layout.property.HorizontalAlignment;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
 import com.itextpdf.layout.property.VerticalAlignment;
-import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
 import java.util.logging.Level;
@@ -143,14 +141,17 @@ public class PdfProcessor {
                 document.add(summary);
                 
                 document.add(new Paragraph("\n\nThis is a system generated payslip.").setTextAlignment(TextAlignment.CENTER));
-                               
+                        
+                return new File(filePath);
+                
             } catch (MalformedURLException ex) {
                 Logger.getLogger(PdfProcessor.class.getName()).log(Level.SEVERE, null, ex);
-            }                    
+            }     
+            
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }    
-        return new File(filePath);
+        return null;
     }
     
     private static String amountToString (double amount) {
@@ -258,12 +259,13 @@ public class PdfProcessor {
                                   
             document.close();
                        
+            return new File(filePath);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (MalformedURLException ex) {
             Logger.getLogger(PdfProcessor.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return new File(filePath);
+        return null;
     }
     
     private static void populateSummaryTable (Table table, PayrollSummary summary) {

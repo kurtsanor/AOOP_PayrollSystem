@@ -17,15 +17,11 @@ public class CredentialsDAO  {
             stmt.setString(2, password);
             
             try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    int employeeID = rs.getInt("employeeID");
-                    return employeeID;
-                }
+                return rs.next()? rs.getInt("employeeID") : -1;
             }
                                                       
         } catch (SQLException e) {
             throw new SQLException("Failed to authenticate user",e);
         }
-        return -1; // return -1 if the credentials is incorrect
     }         
 }
