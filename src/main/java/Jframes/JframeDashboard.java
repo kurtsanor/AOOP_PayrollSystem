@@ -488,7 +488,10 @@ public class JframeDashboard extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanelLeft.add(jPanel3, gridBagConstraints);
 
+        jButtonAttendance.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButtonAttendance.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/calendar.png"))); // NOI18N
         jButtonAttendance.setText("Attendance");
+        jButtonAttendance.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jButtonAttendance.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAttendanceActionPerformed(evt);
@@ -503,7 +506,10 @@ public class JframeDashboard extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanelLeft.add(jButtonAttendance, gridBagConstraints);
 
+        jButtonPayslip.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButtonPayslip.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/salary.png"))); // NOI18N
         jButtonPayslip.setText("Payslip");
+        jButtonPayslip.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jButtonPayslip.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonPayslipActionPerformed(evt);
@@ -518,7 +524,10 @@ public class JframeDashboard extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanelLeft.add(jButtonPayslip, gridBagConstraints);
 
+        jButtonLeave.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButtonLeave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/leave.png"))); // NOI18N
         jButtonLeave.setText("Leave");
+        jButtonLeave.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jButtonLeave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonLeaveActionPerformed(evt);
@@ -533,7 +542,10 @@ public class JframeDashboard extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanelLeft.add(jButtonLeave, gridBagConstraints);
 
+        jButtonEmployeeManagement.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButtonEmployeeManagement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/user.png"))); // NOI18N
         jButtonEmployeeManagement.setText("Employee Management");
+        jButtonEmployeeManagement.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jButtonEmployeeManagement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonEmployeeManagementActionPerformed(evt);
@@ -548,7 +560,10 @@ public class JframeDashboard extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanelLeft.add(jButtonEmployeeManagement, gridBagConstraints);
 
+        jButtonAttendanceManagement.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButtonAttendanceManagement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/calendar.png"))); // NOI18N
         jButtonAttendanceManagement.setText("Attendance Management");
+        jButtonAttendanceManagement.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jButtonAttendanceManagement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAttendanceManagementActionPerformed(evt);
@@ -563,7 +578,10 @@ public class JframeDashboard extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanelLeft.add(jButtonAttendanceManagement, gridBagConstraints);
 
+        jButtonLeaveManagement.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButtonLeaveManagement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/personWcalendar.png"))); // NOI18N
         jButtonLeaveManagement.setText("Leave Management");
+        jButtonLeaveManagement.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jButtonLeaveManagement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonLeaveManagementActionPerformed(evt);
@@ -578,7 +596,10 @@ public class JframeDashboard extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanelLeft.add(jButtonLeaveManagement, gridBagConstraints);
 
+        jButtonPayroll.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButtonPayroll.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/salary.png"))); // NOI18N
         jButtonPayroll.setText("Payroll");
+        jButtonPayroll.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jButtonPayroll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonPayrollActionPerformed(evt);
@@ -625,7 +646,10 @@ public class JframeDashboard extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 1, 2);
         jPanelLeft.add(jPanelLeaveOverviewChart, gridBagConstraints);
 
-        jButtonLeaveCreditsManagement.setText("Leave Credits Management");
+        jButtonLeaveCreditsManagement.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButtonLeaveCreditsManagement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/statistics.png"))); // NOI18N
+        jButtonLeaveCreditsManagement.setText("Adjust Leave Credits");
+        jButtonLeaveCreditsManagement.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jButtonLeaveCreditsManagement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonLeaveCreditsManagementActionPerformed(evt);
@@ -914,6 +938,8 @@ public class JframeDashboard extends javax.swing.JFrame {
         jPanel18.setBackground(new java.awt.Color(0, 51, 102));
         jPanel18.setLayout(new java.awt.BorderLayout());
 
+        jCalendar1.setBackground(new java.awt.Color(255, 255, 255));
+        jCalendar1.setDecorationBackgroundColor(new java.awt.Color(255, 255, 255));
         jCalendar1.setTodayButtonText("");
         jPanel18.add(jCalendar1, java.awt.BorderLayout.CENTER);
 

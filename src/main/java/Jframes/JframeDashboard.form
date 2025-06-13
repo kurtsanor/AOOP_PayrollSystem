@@ -228,7 +228,14 @@
         </Container>
         <Component class="javax.swing.JButton" name="jButtonAttendance">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="12" style="1"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/Images/calendar.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Attendance"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonAttendanceActionPerformed"/>
@@ -241,7 +248,14 @@
         </Component>
         <Component class="javax.swing.JButton" name="jButtonPayslip">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="12" style="1"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/Images/salary.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Payslip"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonPayslipActionPerformed"/>
@@ -254,7 +268,14 @@
         </Component>
         <Component class="javax.swing.JButton" name="jButtonLeave">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="12" style="1"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/Images/leave.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Leave"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonLeaveActionPerformed"/>
@@ -267,7 +288,14 @@
         </Component>
         <Component class="javax.swing.JButton" name="jButtonEmployeeManagement">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="12" style="1"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/Images/user.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Employee Management"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonEmployeeManagementActionPerformed"/>
@@ -280,7 +308,14 @@
         </Component>
         <Component class="javax.swing.JButton" name="jButtonAttendanceManagement">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="12" style="1"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/Images/calendar.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Attendance Management"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonAttendanceManagementActionPerformed"/>
@@ -293,7 +328,14 @@
         </Component>
         <Component class="javax.swing.JButton" name="jButtonLeaveManagement">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="12" style="1"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/Images/personWcalendar.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Leave Management"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonLeaveManagementActionPerformed"/>
@@ -306,7 +348,14 @@
         </Component>
         <Component class="javax.swing.JButton" name="jButtonPayroll">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="12" style="1"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/Images/salary.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Payroll"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonPayrollActionPerformed"/>
@@ -371,7 +420,14 @@
         </Container>
         <Component class="javax.swing.JButton" name="jButtonLeaveCreditsManagement">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Leave Credits Management"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="12" style="1"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/Images/statistics.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Adjust Leave Credits"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonLeaveCreditsManagementActionPerformed"/>
@@ -977,6 +1033,12 @@
               <SubComponents>
                 <Component class="com.toedter.calendar.JCalendar" name="jCalendar1">
                   <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                    </Property>
+                    <Property name="decorationBackgroundColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                    </Property>
                     <Property name="todayButtonText" type="java.lang.String" value=""/>
                   </Properties>
                   <Constraints>

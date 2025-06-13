@@ -72,19 +72,7 @@ public class LeaveRequestValidator {
     }
     
     public static String getOverlapLeaveDateMessage (int employeeID, LocalDate startDate, LocalDate endDate) {
-        LocalDate dateNow = LocalDate.now();
-        if (startDate == null) {
-            return "This is required";
-        }
-        if (startDate.isBefore(dateNow)) {
-            return "Date entry is outdated";
-        }
-        if (endDate == null) {
-            return "";
-        }              
-        if (startDate.isAfter(endDate)) {
-            return "Must come before end date";
-        }
+        
         try {
             LeaveDAO dao = new LeaveDAO();
             return dao.hasOverlappingApprovedLeave(employeeID, startDate, endDate) ? "Dates overlap with an approved leave" : "";

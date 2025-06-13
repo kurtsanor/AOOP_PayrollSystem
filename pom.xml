@@ -45,6 +45,12 @@
             <version>1.5.3</version>
         </dependency>
         
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>3.4</version> <!-- latest stable as of June 2025 -->
+        </dependency>
+        
     </dependencies>
     
     <build>

@@ -157,6 +157,7 @@ public class JframeLeave extends javax.swing.JFrame {
     private boolean validLeaveRequest () {
         hideErrorLables();
         boolean validRequest = true;
+        boolean datesHasErrors = false;
         String errorMessage;
         
         Date unparsedStartDate = jDateChooserStartDate.getDate();       
@@ -167,11 +168,17 @@ public class JframeLeave extends javax.swing.JFrame {
         
         errorMessage = LeaveRequestValidator.getStartDateValidationMessage(startDate, endDate);
         setStartDateErorrMessage(errorMessage);
-        if (!errorMessage.isBlank()) validRequest = false;
+        if (!errorMessage.isBlank()) {
+            validRequest = false;
+            datesHasErrors = true;
+        }
         
         errorMessage = LeaveRequestValidator.getEndDateValidationMessage(startDate, endDate);
         setEndDateErorrMessage(errorMessage);
-        if (!errorMessage.isBlank()) validRequest = false;
+        if (!errorMessage.isBlank()) {
+            validRequest = false;
+            datesHasErrors = true;
+        }
         
         errorMessage = LeaveRequestValidator.getRemarksValidationMessage(jTextFieldRemarks.getText());
         setRemarksErorrMessage(errorMessage);
@@ -185,10 +192,12 @@ public class JframeLeave extends javax.swing.JFrame {
         setLeaveTypeErorrMessage(errorMessage);
         if (!errorMessage.isBlank()) validRequest = false;
         
-        errorMessage = LeaveRequestValidator.getOverlapLeaveDateMessage(loggedEmployee.getID(), startDate, endDate);
-        setDatesOverlapErrorMessage(errorMessage);
-        if (!errorMessage.isBlank()) validRequest = false;
-        
+        if (!datesHasErrors) {
+            errorMessage = LeaveRequestValidator.getOverlapLeaveDateMessage(loggedEmployee.getID(), startDate, endDate);
+            setDatesOverlapErrorMessage(errorMessage);
+            if (!errorMessage.isBlank()) validRequest = false;
+        }
+             
         return validRequest;
     }
     
@@ -643,10 +652,12 @@ public class JframeLeave extends javax.swing.JFrame {
         gridBagConstraints.weighty = 1.0;
         jPanel1.add(jPanel4, gridBagConstraints);
 
-        jButtonBackToDashboard.setBackground(new java.awt.Color(100, 110, 120));
+        jButtonBackToDashboard.setBackground(new java.awt.Color(86, 98, 106));
         jButtonBackToDashboard.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButtonBackToDashboard.setForeground(new java.awt.Color(255, 255, 255));
-        jButtonBackToDashboard.setText("Back To Dashboard");
+        jButtonBackToDashboard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/back.png"))); // NOI18N
+        jButtonBackToDashboard.setText(" Back To Dashboard");
+        jButtonBackToDashboard.setBorder(null);
         jButtonBackToDashboard.setFocusable(false);
         jButtonBackToDashboard.setPreferredSize(new java.awt.Dimension(131, 35));
         jButtonBackToDashboard.addActionListener(new java.awt.event.ActionListener() {

@@ -159,10 +159,12 @@ public class JframePayslip extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(86, 98, 106));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jButtonBackToDashboard.setBackground(new java.awt.Color(100, 110, 120));
+        jButtonBackToDashboard.setBackground(new java.awt.Color(86, 98, 106));
         jButtonBackToDashboard.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButtonBackToDashboard.setForeground(new java.awt.Color(255, 255, 255));
-        jButtonBackToDashboard.setText("Back To Dashboard");
+        jButtonBackToDashboard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/back.png"))); // NOI18N
+        jButtonBackToDashboard.setText(" Back To Dashboard");
+        jButtonBackToDashboard.setBorder(null);
         jButtonBackToDashboard.setFocusable(false);
         jButtonBackToDashboard.setPreferredSize(new java.awt.Dimension(75, 35));
         jButtonBackToDashboard.addActionListener(new java.awt.event.ActionListener() {

@@ -175,10 +175,12 @@ public class JframePayroll extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(86, 98, 106));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jButton1.setBackground(new java.awt.Color(100, 110, 120));
+        jButton1.setBackground(new java.awt.Color(86, 98, 106));
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Back To Dashboard");
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/back.png"))); // NOI18N
+        jButton1.setText(" Back To Dashboard");
+        jButton1.setBorder(null);
         jButton1.setFocusable(false);
         jButton1.setPreferredSize(new java.awt.Dimension(75, 35));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -242,8 +244,6 @@ public class JframePayroll extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(8, 0, 8, 8);
         jPanel3.add(jButtonGenerate, gridBagConstraints);
 
-        jButtonSavePdf.setBackground(new java.awt.Color(100, 110, 120));
-        jButtonSavePdf.setForeground(new java.awt.Color(255, 255, 255));
         jButtonSavePdf.setText("Save PDF");
         jButtonSavePdf.setEnabled(false);
         jButtonSavePdf.addActionListener(new java.awt.event.ActionListener() {

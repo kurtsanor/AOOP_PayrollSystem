@@ -217,10 +217,12 @@ public class JframeEmpManagement extends javax.swing.JFrame {
         jPanelBg.setBackground(new java.awt.Color(86, 98, 106));
         jPanelBg.setLayout(new java.awt.GridBagLayout());
 
-        jButtonDashboard.setBackground(new java.awt.Color(100, 110, 120));
+        jButtonDashboard.setBackground(new java.awt.Color(86, 98, 106));
         jButtonDashboard.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButtonDashboard.setForeground(new java.awt.Color(255, 255, 255));
-        jButtonDashboard.setText("Back to Dashboard");
+        jButtonDashboard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/back.png"))); // NOI18N
+        jButtonDashboard.setText(" Back to Dashboard");
+        jButtonDashboard.setBorder(null);
         jButtonDashboard.setFocusable(false);
         jButtonDashboard.setPreferredSize(new java.awt.Dimension(146, 35));
         jButtonDashboard.addActionListener(new java.awt.event.ActionListener() {
@@ -309,6 +311,7 @@ public class JframeEmpManagement extends javax.swing.JFrame {
         jPanel3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 2, true));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
+        jTableEmployeeList.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         jTableEmployeeList.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

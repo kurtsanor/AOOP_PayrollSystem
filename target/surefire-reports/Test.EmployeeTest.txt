@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: Test.EmployeeTest
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.824 s <<< FAILURE! - in Test.EmployeeTest
-Test.EmployeeTest.testDeleteEmployeByID  Time elapsed: 0.061 s  <<< FAILURE!
+Tests run: 5, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.735 s <<< FAILURE! - in Test.EmployeeTest
+Test.EmployeeTest.testDeleteEmployeByID  Time elapsed: 0.052 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: Employees should be deleted ==> expected: <true> but was: <false>
 	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
 	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
