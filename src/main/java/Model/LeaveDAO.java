@@ -136,5 +136,47 @@ public class LeaveDAO {
             throw new SQLException(e);
         }
     }
+    
+    public int getPendingLeaveCountByEmployeeID(int employeeID) throws SQLException {       
+        try (Connection connection = DatabaseConnection.getConnection();
+             CallableStatement stmt = connection.prepareCall("CALL leavesGetPendingCount(?)")) {
+            stmt.setInt(1, employeeID);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next()? rs.getInt("count"): -1;
+            }
+            
+        } catch (SQLException e) {
+            throw new SQLException("Failed to get pending leave count", e);
+        }
+    }
+    
+    public int getApprovedLeaveCountByEmployeeID(int employeeID) throws SQLException {       
+        try (Connection connection = DatabaseConnection.getConnection();
+             CallableStatement stmt = connection.prepareCall("CALL leavesGetApprovedCount(?)")) {
+            stmt.setInt(1, employeeID);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next()? rs.getInt("count"): -1;
+            }
+            
+        } catch (SQLException e) {
+            throw new SQLException("Failed to get approved leave count", e);
+        }
+    }
+    
+    public int getDeniedLeaveCountByEmployeeID(int employeeID) throws SQLException {       
+        try (Connection connection = DatabaseConnection.getConnection();
+             CallableStatement stmt = connection.prepareCall("CALL leavesGetDeniedCount(?)")) {
+            stmt.setInt(1, employeeID);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next()? rs.getInt("count"): -1;
+            }
+            
+        } catch (SQLException e) {
+            throw new SQLException("Failed to get denied leave count", e);
+        }
+    }
   
 }

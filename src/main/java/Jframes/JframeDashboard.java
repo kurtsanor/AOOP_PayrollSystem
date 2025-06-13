@@ -17,11 +17,24 @@ import Model.HoursCalculator;
 import Model.IT;
 import Model.RegularEmployee;
 import Domains.AttendanceRecord;
+import Model.LeaveDAO;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 import java.sql.SQLException;
+import java.time.LocalTime;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.data.UnknownKeyException;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
 
 
 /**
@@ -42,8 +55,9 @@ public class JframeDashboard extends javax.swing.JFrame {
         initImages();
         loadEmployeeInformation(employeeID);
         configureRoleBasedButtons(loggedEmployee);
-        populateLabelsWithInfo(loggedEmployee);        
-        setWorkHoursValue();
+        populateLabelsWithInfo(loggedEmployee);        ;
+        setUpWorkHoursChart();
+        setUpLeaveStatusOverviewChart();
         populateAttendanceLogsTable();
     }
     
@@ -96,16 +110,8 @@ public class JframeDashboard extends javax.swing.JFrame {
         Image img2= logoIcon2.getImage().getScaledInstance(jLabel8.getWidth(), jLabel8.getHeight(), Image.SCALE_SMOOTH);
         logoIcon2 = new ImageIcon(img2);
         jLabel8.setIcon(logoIcon2);
+                  
         
-        ImageIcon logoIcon = new ImageIcon(getClass().getResource("/images/www (1).png"));
-        Image img = logoIcon.getImage().getScaledInstance(jLabel4.getWidth(), jLabel4.getHeight()+50, Image.SCALE_SMOOTH);
-        logoIcon = new ImageIcon(img);
-        jLabel4.setIcon(logoIcon);             
-        
-        ImageIcon logoIcon3 = new ImageIcon(getClass().getResource("/images/linegraph.png"));
-        Image img3 = logoIcon3.getImage().getScaledInstance(jLabelWorkHours.getWidth()+680, jLabelWorkHours.getHeight(), Image.SCALE_SMOOTH);
-        logoIcon3 = new ImageIcon(img3);
-        jLabelWorkHours.setIcon(logoIcon3); 
     }
     
     // set jLabels to employee information
@@ -138,18 +144,86 @@ public class JframeDashboard extends javax.swing.JFrame {
         return new YearPeriod(year, month);
     }
     
-    private double getTotalMonthlyHours () {              
-        AttendanceDAO dao = new AttendanceDAO();
-        YearPeriod period = getMonthPeriod();
+    private void setUpWorkHoursChart() {
+        try {
+            AttendanceDAO dao = new AttendanceDAO();
+            YearPeriod period = getMonthPeriod();
+            List<AttendanceRecord> attendance = dao.getAttendanceByIdAndPeriod(loggedEmployee.getID(), period);
+            
+            DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+            for (AttendanceRecord record: attendance) {
+                String rowKey = "Work Hours";
+                String columnKey = record.getDate().toString();
+                               
+//                dataset.addValue(HoursCalculator.calculateDailyHours(record.getTimeIn(), record.getTimeOut()), "Work Hours", record.getDate());
+                double currentHours = HoursCalculator.calculateDailyHours(record.getTimeIn(), record.getTimeOut());
+                Number existingValue = null;
+                try {
+                    existingValue = dataset.getValue(rowKey, columnKey);
+                } catch (UnknownKeyException e) {
+                }
+                
+                double totalHours = (existingValue != null ? existingValue.doubleValue() : 0.0) + currentHours;
+                dataset.setValue(totalHours, rowKey, columnKey);
+            }
+            
+            JFreeChart chart = ChartFactory.createBarChart(
+                "",
+                "Date",
+                "Hours Worked",
+                dataset,
+                PlotOrientation.VERTICAL,
+                false,
+                true,
+                false
+            );
+            chart.getCategoryPlot().setBackgroundPaint(new Color(255,255,255));
+            BarRenderer renderer = (BarRenderer) chart.getCategoryPlot().getRenderer();
+            renderer.setSeriesPaint(0, new Color(0,183,229));
+            ChartPanel chartPanel = new ChartPanel(chart);
+            jPanelWorkHoursChart.add(chartPanel, BorderLayout.CENTER);
+                    
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         
-        return HoursCalculator.calculateTotalHoursByPeriod(loggedEmployee.getID(), period, dao);      
-    }
+    }   
     
-    private void setWorkHoursValue () {
-        double hoursWorked = getTotalMonthlyHours();
-        int hours = HoursCalculator.getHours(hoursWorked);
-        int minutes = HoursCalculator.getMinutes(hoursWorked);
-        jLabelWorkHours.setText(String.valueOf(hours + " Hours and " + minutes + " Minutes"));       
+    private void setUpLeaveStatusOverviewChart() {
+        
+        try {
+            
+            LeaveDAO dao = new LeaveDAO();
+            int pendingCount = dao.getPendingLeaveCountByEmployeeID(loggedEmployee.getID());
+            int approvedCount = dao.getApprovedLeaveCountByEmployeeID(loggedEmployee.getID());
+            int deniedCount = dao.getDeniedLeaveCountByEmployeeID(loggedEmployee.getID());
+            
+            DefaultPieDataset<String> dataset = new DefaultPieDataset<>();
+            dataset.setValue("Approved", approvedCount);
+            dataset.setValue("Pending", pendingCount);
+            dataset.setValue("Denied", deniedCount);
+            
+            JFreeChart pieChart = ChartFactory.createPieChart(
+                "",
+                dataset,
+                true,   // include legend
+                true,   // tooltips
+                false   // URLs
+            );
+            
+            PiePlot plot = (PiePlot) pieChart.getPlot();
+            plot.setSectionPaint("Approved", new Color(153, 221, 238));
+            plot.setSectionPaint("Pending", new Color(0, 183, 229));
+            plot.setSectionPaint("Denied", new Color(0, 102, 128));
+            plot.setBackgroundPaint(new Color(255,255,255));
+            
+            ChartPanel pieChartPanel = new ChartPanel(pieChart);
+            jPanelLeaveOverviewChart.add(pieChartPanel, BorderLayout.CENTER);
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
     }
     
     public void timeIn () {
@@ -241,8 +315,7 @@ public class JframeDashboard extends javax.swing.JFrame {
         jButtonPayroll = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
+        jPanelLeaveOverviewChart = new javax.swing.JPanel();
         jButtonLeaveCreditsManagement = new javax.swing.JButton();
         jPanelRight = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
@@ -295,7 +368,7 @@ public class JframeDashboard extends javax.swing.JFrame {
         jPanel15 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         jPanel16 = new javax.swing.JPanel();
-        jLabelWorkHours = new javax.swing.JLabel();
+        jPanelWorkHoursChart = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -503,7 +576,7 @@ public class JframeDashboard extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 183, 229));
-        jLabel2.setText(" TIMELINE | EVENTS");
+        jLabel2.setText(" LEAVE STATUS OVERVIEW");
         jLabel2.setPreferredSize(new java.awt.Dimension(89, 35));
         jPanel4.add(jLabel2, java.awt.BorderLayout.CENTER);
 
@@ -516,14 +589,8 @@ public class JframeDashboard extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanelLeft.add(jPanel4, gridBagConstraints);
 
-        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel5.setLayout(new java.awt.BorderLayout());
-
-        jLabel4.setMaximumSize(new java.awt.Dimension(100, 70));
-        jLabel4.setMinimumSize(new java.awt.Dimension(100, 70));
-        jLabel4.setPreferredSize(new java.awt.Dimension(100, 100));
-        jPanel5.add(jLabel4, java.awt.BorderLayout.CENTER);
-
+        jPanelLeaveOverviewChart.setBackground(new java.awt.Color(255, 255, 255));
+        jPanelLeaveOverviewChart.setLayout(new java.awt.BorderLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 12;
@@ -533,7 +600,7 @@ public class JframeDashboard extends javax.swing.JFrame {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 1, 2);
-        jPanelLeft.add(jPanel5, gridBagConstraints);
+        jPanelLeft.add(jPanelLeaveOverviewChart, gridBagConstraints);
 
         jButtonLeaveCreditsManagement.setText("Leave Credits Management");
         jButtonLeaveCreditsManagement.addActionListener(new java.awt.event.ActionListener() {
@@ -855,7 +922,7 @@ public class JframeDashboard extends javax.swing.JFrame {
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel14.setText(" TOTAL WORK HOURS THIS MONTH");
+        jLabel14.setText(" DAILY WORK HOURS THIS MONTH");
         jPanel15.add(jLabel14, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -869,18 +936,14 @@ public class JframeDashboard extends javax.swing.JFrame {
         jPanel16.setPreferredSize(new java.awt.Dimension(469, 130));
         jPanel16.setLayout(new java.awt.GridBagLayout());
 
-        jLabelWorkHours.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabelWorkHours.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelWorkHours.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/www (1).png"))); // NOI18N
-        jLabelWorkHours.setText("2 Hours 35 Minutes");
-        jLabelWorkHours.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jLabelWorkHours.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        jPanelWorkHoursChart.setBackground(new java.awt.Color(204, 204, 204));
+        jPanelWorkHoursChart.setLayout(new java.awt.BorderLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 0.01;
-        gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 6);
-        jPanel16.add(jLabelWorkHours, gridBagConstraints);
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(6, 6, 2, 6);
+        jPanel16.add(jPanelWorkHoursChart, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -984,7 +1047,6 @@ public class JframeDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -1006,7 +1068,6 @@ public class JframeDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelSssNumber;
     private javax.swing.JLabel jLabelStatus;
     private javax.swing.JLabel jLabelTin;
-    private javax.swing.JLabel jLabelWorkHours;
     private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
@@ -1021,15 +1082,16 @@ public class JframeDashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JPanel jPanelLeaveOverviewChart;
     private javax.swing.JPanel jPanelLeft;
     private javax.swing.JPanel jPanelMid;
     private javax.swing.JPanel jPanelRight;
     private javax.swing.JPanel jPanelTop;
+    private javax.swing.JPanel jPanelWorkHoursChart;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTableAttendanceLogs;
