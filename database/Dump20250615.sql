@@ -125,7 +125,7 @@ CREATE TABLE `credentials` (
 
 LOCK TABLES `credentials` WRITE;
 /*!40000 ALTER TABLE `credentials` DISABLE KEYS */;
-INSERT INTO `credentials` VALUES (1,10001,'Garcia','123',NULL),(2,10002,'Lim','123',NULL),(3,10003,'Aquino','123',NULL),(4,10004,'Reyes','123',NULL),(5,10005,'Hernandez','123',NULL),(6,10006,'Villanueva','123','EVUAVCQI66HLS6SQ'),(7,10007,'San Jose B','123',NULL),(8,10008,'Romualdez A','123',NULL),(9,10009,'Atienza','123',NULL),(10,10010,'Alvaro','123',NULL),(11,10011,'Salcedo','123',NULL),(12,10012,'Lopez','123',NULL),(13,10013,'Farala','123',NULL),(14,10014,'Martinez','123',NULL),(15,10015,'Romualdez F','123',NULL),(17,10017,'De Leon','123',NULL),(18,10018,'San Jose','123',NULL),(19,10019,'Rosario','123',NULL),(20,10020,'Bautista','123',NULL),(21,10021,'Lazaro','123',NULL),(22,10022,'Delos Santos','123',NULL),(23,10023,'Del Rosario','123',NULL),(24,10024,'Santos','123',NULL),(25,10025,'Tolentino','123',NULL);
+INSERT INTO `credentials` VALUES (1,10001,'Garcia','123',NULL),(2,10002,'Lim','123',NULL),(3,10003,'Aquino','123',NULL),(4,10004,'Reyes','123',NULL),(5,10005,'Hernandez','123',NULL),(6,10006,'Villanueva','123','XXVGVSAA46IT67EN'),(7,10007,'San Jose B','123',NULL),(8,10008,'Romualdez A','123',NULL),(9,10009,'Atienza','123',NULL),(10,10010,'Alvaro','123',NULL),(11,10011,'Salcedo','123',NULL),(12,10012,'Lopez','123',NULL),(13,10013,'Farala','123',NULL),(14,10014,'Martinez','123',NULL),(15,10015,'Romualdez F','123',NULL),(17,10017,'De Leon','123',NULL),(18,10018,'San Jose','123',NULL),(19,10019,'Rosario','123',NULL),(20,10020,'Bautista','123',NULL),(21,10021,'Lazaro','123',NULL),(22,10022,'Delos Santos','123',NULL),(23,10023,'Del Rosario','123',NULL),(24,10024,'Santos','123',NULL),(25,10025,'Tolentino','123',NULL);
 /*!40000 ALTER TABLE `credentials` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -828,6 +828,25 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `credentialsHas2FAEnabled`(IN in_employeeID int)
 BEGIN
 SELECT 1 FROM credentials WHERE employeeID = in_employeeID AND totpSecret IS NOT NULL;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `credentialsRemove2FA` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `credentialsRemove2FA`(IN in_employeeID int)
+BEGIN 
+UPDATE credentials SET totpSecret = NULL WHERE employeeID = in_employeeID;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1640,4 +1659,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-15 15:57:09
+-- Dump completed on 2025-06-15 16:49:23
