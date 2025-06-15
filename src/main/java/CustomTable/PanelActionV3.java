@@ -44,7 +44,9 @@ public class PanelActionV3 extends javax.swing.JPanel {
 
         setLayout(new java.awt.GridBagLayout());
 
+        jButtonAdustCredits.setBackground(new java.awt.Color(0, 183, 229));
         jButtonAdustCredits.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButtonAdustCredits.setForeground(new java.awt.Color(255, 255, 255));
         jButtonAdustCredits.setText("Adjust Credits");
         jButtonAdustCredits.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {

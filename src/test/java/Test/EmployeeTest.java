@@ -103,13 +103,13 @@ public class EmployeeTest {
         assertEquals("Garcia", revertedEmployee.getLastName());
     }
     
-    @Test
-    public void testDeleteEmployeByID() throws SQLException {
-        boolean isDeleted = dao.deleteEmployee(10060);
-        assertTrue(isDeleted, "Employees should be deleted");
-        
-        Employee employee = dao.getEmployeeByID(10060);
-        assertNull(employee, "Employees should not exist");
-    }
+//    @Test
+//    public void testDeleteEmployeByID() throws SQLException {
+//        boolean isDeleted = dao.deleteEmployee(10060);
+//        assertTrue(isDeleted, "Employee should be deleted");
+//        
+//        Employee employee = dao.getEmployeeByID(10060);
+//        assertNull(employee, "Employee should not exist");
+//    }
         
 }

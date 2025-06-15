@@ -117,10 +117,11 @@ public class AttendanceDAO {
             
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
+                    Time timeOut = rs.getTime("timeOut");
                     AttendanceRecord currentRecord = new AttendanceRecord(rs.getInt("employeeID"),
                             rs.getDate("date").toLocalDate(),
                             rs.getTime("timeIn").toLocalTime(),
-                            rs.getTime("timeOut").toLocalTime());
+                            timeOut != null? timeOut.toLocalTime(): null);
                     records.add(currentRecord);
                 } 
             }
