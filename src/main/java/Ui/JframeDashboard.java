@@ -5,8 +5,6 @@
 package Ui;
 
 import Domains.YearPeriod;
-import java.awt.Image;
-import javax.swing.ImageIcon;
 import Model.Employee;
 import Model.EmployeeDAO;
 import java.time.LocalDate;
@@ -18,6 +16,7 @@ import Model.IT;
 import Model.RegularEmployee;
 import Domains.AttendanceRecord;
 import Domains.LeaveBalance;
+import Model.CredentialsDAO;
 import Model.LeaveCreditsDAO;
 import Model.LeaveDAO;
 import java.awt.BorderLayout;
@@ -25,7 +24,6 @@ import java.awt.Color;
 import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 import java.sql.SQLException;
-import java.time.LocalTime;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.ChartFactory;
@@ -305,6 +303,10 @@ public class JframeDashboard extends javax.swing.JFrame {
                 record.getTimeOut()};
     }
     
+    private void showRemove2FAResult(boolean isRemoved) {
+        JOptionPane.showMessageDialog(this, isRemoved? "2FA has been disabled sucessfully": "Error disabling 2FA", isRemoved ? "Success" : "Error", isRemoved ? JOptionPane.INFORMATION_MESSAGE: JOptionPane.ERROR_MESSAGE );
+    }
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -322,9 +324,9 @@ public class JframeDashboard extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jButton12 = new javax.swing.JButton();
-        jButton13 = new javax.swing.JButton();
-        jButton16 = new javax.swing.JButton();
+        jButtonEnable2FA = new javax.swing.JButton();
+        jButtonChangePassword = new javax.swing.JButton();
+        jButtonEditProfile = new javax.swing.JButton();
         jButtonAttendance = new javax.swing.JButton();
         jButtonPayslip = new javax.swing.JButton();
         jButtonLeave = new javax.swing.JButton();
@@ -434,11 +436,11 @@ public class JframeDashboard extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(21, 36, 46));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
-        jButton12.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton12.setText("Enable 2FA");
-        jButton12.addActionListener(new java.awt.event.ActionListener() {
+        jButtonEnable2FA.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButtonEnable2FA.setText("Enable 2FA");
+        jButtonEnable2FA.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton12ActionPerformed(evt);
+                jButtonEnable2FAActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -446,13 +448,13 @@ public class JframeDashboard extends javax.swing.JFrame {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel3.add(jButton12, gridBagConstraints);
+        jPanel3.add(jButtonEnable2FA, gridBagConstraints);
 
-        jButton13.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton13.setText("Change my password");
-        jButton13.addActionListener(new java.awt.event.ActionListener() {
+        jButtonChangePassword.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButtonChangePassword.setText("Change my password");
+        jButtonChangePassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton13ActionPerformed(evt);
+                jButtonChangePasswordActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -462,10 +464,10 @@ public class JframeDashboard extends javax.swing.JFrame {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel3.add(jButton13, gridBagConstraints);
+        jPanel3.add(jButtonChangePassword, gridBagConstraints);
 
-        jButton16.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton16.setText("Edit my profile");
+        jButtonEditProfile.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButtonEditProfile.setText("Edit my profile");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -473,7 +475,7 @@ public class JframeDashboard extends javax.swing.JFrame {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel3.add(jButton16, gridBagConstraints);
+        jPanel3.add(jButtonEditProfile, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1054,14 +1056,31 @@ public class JframeDashboard extends javax.swing.JFrame {
         new JframeLeaveCredits(loggedEmployee).setVisible(true);
     }//GEN-LAST:event_jButtonLeaveCreditsManagementActionPerformed
 
-    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+    private void jButtonChangePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonChangePasswordActionPerformed
         new JDialogChangePassword(this, true, loggedEmployee.getID()).setVisible(true);
-    }//GEN-LAST:event_jButton13ActionPerformed
+    }//GEN-LAST:event_jButtonChangePasswordActionPerformed
 
-    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+    private void jButtonEnable2FAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEnable2FAActionPerformed
         // TODO add your handling code here:
-        new JDialog2FA(this, true, loggedEmployee.getID()).setVisible(true);
-    }//GEN-LAST:event_jButton12ActionPerformed
+        try {
+            CredentialsDAO dao = new CredentialsDAO();
+            boolean has2FA = dao.has2FAEnabled(loggedEmployee.getID());
+            
+            if (has2FA) {
+                int option = JOptionPane.showConfirmDialog(this, "You already have 2FA enabled. Do you want to disable it?","Select an option", JOptionPane.YES_NO_OPTION);
+                if (option == JOptionPane.YES_OPTION) {
+                    boolean isRemoved = dao.remove2FA(loggedEmployee.getID());
+                    showRemove2FAResult(isRemoved);
+                }
+                return;
+            }
+            new JDialog2FA(this, true, loggedEmployee.getID()).setVisible(true);
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+    }//GEN-LAST:event_jButtonEnable2FAActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1069,14 +1088,14 @@ public class JframeDashboard extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton13;
-    private javax.swing.JButton jButton16;
     private javax.swing.JButton jButtonAttendance;
     private javax.swing.JButton jButtonAttendanceManagement;
+    private javax.swing.JButton jButtonChangePassword;
     private javax.swing.JButton jButtonClockIn;
     private javax.swing.JButton jButtonClockOut;
+    private javax.swing.JButton jButtonEditProfile;
     private javax.swing.JButton jButtonEmployeeManagement;
+    private javax.swing.JButton jButtonEnable2FA;
     private javax.swing.JButton jButtonLeave;
     private javax.swing.JButton jButtonLeaveCreditsManagement;
     private javax.swing.JButton jButtonLeaveManagement;

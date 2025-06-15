@@ -86,4 +86,15 @@ public class CredentialsDAO  {
             throw new SQLException("Failed to check has 2FA enabled", e);
         }
     }
+    
+    public boolean remove2FA(int employeeID) throws SQLException {
+        try (Connection connection = DatabaseConnection.getConnection();
+             CallableStatement stmt = connection.prepareCall("CALL credentialsRemove2FA(?)")) {
+             stmt.setInt(1, employeeID);
+             
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new SQLException("Failed to remove 2FA", e);
+        }
+    }
 }
