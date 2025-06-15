@@ -30,7 +30,11 @@ public class CredentialsDAO  {
              CallableStatement stmt = connection.prepareCall("CALL credentialsCheckEmployeePassword(?,?)")) {
             stmt.setInt(1, employeeID);
             stmt.setString(2, password);
-            return stmt.executeQuery().next();
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+            
         } catch (SQLException e) {
             throw new SQLException("Failed to check employee password", e);
         }

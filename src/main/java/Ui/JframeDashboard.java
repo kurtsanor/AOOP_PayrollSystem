@@ -437,7 +437,9 @@ public class JframeDashboard extends javax.swing.JFrame {
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         jButtonEnable2FA.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButtonEnable2FA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/shield.png"))); // NOI18N
         jButtonEnable2FA.setText("Enable 2FA");
+        jButtonEnable2FA.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jButtonEnable2FA.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonEnable2FAActionPerformed(evt);
@@ -451,7 +453,9 @@ public class JframeDashboard extends javax.swing.JFrame {
         jPanel3.add(jButtonEnable2FA, gridBagConstraints);
 
         jButtonChangePassword.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButtonChangePassword.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/key.png"))); // NOI18N
         jButtonChangePassword.setText("Change my password");
+        jButtonChangePassword.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jButtonChangePassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonChangePasswordActionPerformed(evt);
@@ -467,7 +471,9 @@ public class JframeDashboard extends javax.swing.JFrame {
         jPanel3.add(jButtonChangePassword, gridBagConstraints);
 
         jButtonEditProfile.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButtonEditProfile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/pencil.png"))); // NOI18N
         jButtonEditProfile.setText("Edit my profile");
+        jButtonEditProfile.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
