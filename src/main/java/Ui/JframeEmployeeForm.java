@@ -9,12 +9,12 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 import Model.Employee;
-import Model.EmployeeValidator;
+import Service.EmployeeValidator;
 import Model.HR;
-import Model.PayrollCalculator;
-import Model.PositionDAO;
+import Service.PayrollCalculator;
+import Dao.PositionDAO;
 import Model.RegularEmployee;
-import Domains.Position;
+import Model.Position;
 import java.sql.SQLException;
 import java.util.List;
 

@@ -3,12 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Test;
-import Domains.YearPeriod;
-import Model.AttendanceDAO;
+import Model.YearPeriod;
+import Dao.AttendanceDAO;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import Model.HoursCalculator;
+import Service.HoursCalculator;
 import java.time.LocalTime;
 /**
  *

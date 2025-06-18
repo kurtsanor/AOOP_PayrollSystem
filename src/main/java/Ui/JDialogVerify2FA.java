@@ -4,8 +4,8 @@
  */
 package Ui;
 
-import Model.CredentialsDAO;
-import Model.TwoFactorAuthService;
+import Dao.CredentialsDAO;
+import Service.TwoFactorAuthService;
 import java.awt.Frame;
 import java.sql.SQLException;
 

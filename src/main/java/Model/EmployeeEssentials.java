@@ -4,10 +4,6 @@
  */
 package Model;
 
-import Domains.AttendanceRecord;
-import Domains.LeaveRequest;
-import Domains.Payslip;
-import Domains.YearPeriod;
 import java.time.LocalDateTime;
 import java.util.List;
 

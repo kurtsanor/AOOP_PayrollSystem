@@ -4,7 +4,7 @@
  */
 package Ui;
 
-import Domains.AttendanceRecord;
+import Model.AttendanceRecord;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -12,10 +12,10 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
-import Model.AttendanceDAO;
+import Dao.AttendanceDAO;
 import Model.Employee;
 import Model.HR;
-import Model.HoursCalculator;
+import Service.HoursCalculator;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

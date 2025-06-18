@@ -4,9 +4,9 @@
  */
 package Model;
 
-import Domains.AttendanceRecord;
-import Domains.LeaveRequest;
-import Domains.YearPeriod;
+import Dao.AttendanceDAO;
+import Dao.EmployeeDAO;
+import Dao.LeaveDAO;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;

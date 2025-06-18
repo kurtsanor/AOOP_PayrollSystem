@@ -4,14 +4,14 @@
  */
 package Ui;
 
-import Domains.AttendanceRecord;
-import Domains.YearPeriod;
+import Model.AttendanceRecord;
+import Model.YearPeriod;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import Model.Employee;
-import Model.HoursCalculator;
+import Service.HoursCalculator;
 
 /**
  *

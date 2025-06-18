@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package Ui;
-import Model.CredentialsDAO;
+import Dao.CredentialsDAO;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 /**
@@ -25,12 +25,12 @@ public class JDialogChangePassword extends javax.swing.JDialog {
     
     private boolean checkIfEmptyFields() {
         boolean isValid = true;
-        if (jTextFieldCurrentPassword.getText().isBlank()) {
+        if (jPasswordFieldCurrent.getPassword().length < 1) {
             jLabelCurrentPasswordError.setText("This is required");
             jLabelCurrentPasswordError.setVisible(true);
             isValid = false;
         }
-        if (jTextFieldNewPassword.getText().isBlank()) {
+        if (jPasswordFieldNew.getPassword().length < 1) {
             jLabelNewPasswordError.setText("This is required");
             jLabelNewPasswordError.setVisible(true);
             isValid = false;
@@ -59,14 +59,14 @@ public class JDialogChangePassword extends javax.swing.JDialog {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextFieldCurrentPassword = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextFieldNewPassword = new javax.swing.JTextField();
         jButtonChangePassword = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabelCurrentPasswordError = new javax.swing.JLabel();
         jLabelNewPasswordError = new javax.swing.JLabel();
+        jPasswordFieldCurrent = new javax.swing.JPasswordField();
+        jPasswordFieldNew = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -79,15 +79,6 @@ public class JDialogChangePassword extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(40, 35, 5, 35);
         jPanel1.add(jLabel1, gridBagConstraints);
-
-        jTextFieldCurrentPassword.setPreferredSize(new java.awt.Dimension(71, 35));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 35, 0, 35);
-        jPanel1.add(jTextFieldCurrentPassword, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
@@ -108,20 +99,6 @@ public class JDialogChangePassword extends javax.swing.JDialog {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(15, 35, 5, 0);
         jPanel1.add(jLabel4, gridBagConstraints);
-
-        jTextFieldNewPassword.setPreferredSize(new java.awt.Dimension(71, 35));
-        jTextFieldNewPassword.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldNewPasswordActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 35, 0, 35);
-        jPanel1.add(jTextFieldNewPassword, gridBagConstraints);
 
         jButtonChangePassword.setBackground(new java.awt.Color(0, 183, 229));
         jButtonChangePassword.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -164,15 +141,34 @@ public class JDialogChangePassword extends javax.swing.JDialog {
         gridBagConstraints.gridy = 7;
         jPanel1.add(jLabelNewPasswordError, gridBagConstraints);
 
+        jPasswordFieldCurrent.setPreferredSize(new java.awt.Dimension(90, 35));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 35, 0, 35);
+        jPanel1.add(jPasswordFieldCurrent, gridBagConstraints);
+
+        jPasswordFieldNew.setPreferredSize(new java.awt.Dimension(90, 35));
+        jPasswordFieldNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jPasswordFieldNewActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 35, 0, 35);
+        jPanel1.add(jPasswordFieldNew, gridBagConstraints);
+
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jTextFieldNewPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNewPasswordActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldNewPasswordActionPerformed
 
     private void jButtonChangePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonChangePasswordActionPerformed
         // TODO add your handling code here:
@@ -183,14 +179,14 @@ public class JDialogChangePassword extends javax.swing.JDialog {
         
         try {
             CredentialsDAO dao = new CredentialsDAO();
-            String currentPassword = jTextFieldCurrentPassword.getText().trim();
+            String currentPassword = new String (jPasswordFieldCurrent.getPassword());
             boolean isCorrectPassword = dao.isEmployeePasswordCorrect(employeeID, currentPassword);
             if (!isCorrectPassword) {
                 jLabelCurrentPasswordError.setText("Incorrect password");
                 jLabelCurrentPasswordError.setVisible(true);
                 return;               
             }
-            String newPassword = jTextFieldNewPassword.getText().trim();          
+            String newPassword = new String (jPasswordFieldNew.getPassword());          
             boolean isPasswordChangeSuccess = dao.updatePasswordByEmployeeID(employeeID, newPassword);
             showResult(isPasswordChangeSuccess);
             this.dispose();
@@ -198,6 +194,10 @@ public class JDialogChangePassword extends javax.swing.JDialog {
             e.printStackTrace();
         }
     }//GEN-LAST:event_jButtonChangePasswordActionPerformed
+
+    private void jPasswordFieldNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordFieldNewActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPasswordFieldNewActionPerformed
 
     /**
      * @param args the command line arguments
@@ -212,7 +212,7 @@ public class JDialogChangePassword extends javax.swing.JDialog {
     private javax.swing.JLabel jLabelCurrentPasswordError;
     private javax.swing.JLabel jLabelNewPasswordError;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextFieldCurrentPassword;
-    private javax.swing.JTextField jTextFieldNewPassword;
+    private javax.swing.JPasswordField jPasswordFieldCurrent;
+    private javax.swing.JPasswordField jPasswordFieldNew;
     // End of variables declaration//GEN-END:variables
 }

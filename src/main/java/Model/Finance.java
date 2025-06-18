@@ -1,8 +1,6 @@
 package Model;
 
-import Domains.EmployeeMonthlyHoursKey;
-import Domains.PayrollEntry;
-import Domains.YearPeriod;
+import Service.PayrollService;
 import java.util.List;
 import java.util.Map;
 

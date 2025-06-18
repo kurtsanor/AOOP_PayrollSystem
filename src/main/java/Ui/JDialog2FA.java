@@ -4,8 +4,8 @@
  */
 package Ui;
 
-import Model.CredentialsDAO;
-import Model.TwoFactorAuthService;
+import Dao.CredentialsDAO;
+import Service.TwoFactorAuthService;
 import Util.QRCodeGenerator;
 import com.google.zxing.WriterException;
 import java.awt.image.BufferedImage;

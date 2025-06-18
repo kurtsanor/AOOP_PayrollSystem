@@ -4,8 +4,8 @@
  */
 package Ui;
 
-import Domains.Payslip;
-import Domains.YearPeriod;
+import Model.Payslip;
+import Model.YearPeriod;
 import Model.Employee;
 import Util.PdfProcessor;
 import java.awt.Desktop;

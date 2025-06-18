@@ -4,7 +4,7 @@
  */
 package Ui;
 
-import Model.CredentialsDAO;
+import Dao.CredentialsDAO;
 import java.sql.SQLException;
 
 /**

@@ -4,11 +4,11 @@
  */
 package Util;
 
-import Domains.PayrollEntry;
-import Domains.PayrollSummary;
-import Domains.Payslip;
-import Domains.YearPeriod;
-import Model.PayrollCalculator;
+import Model.PayrollEntry;
+import Model.PayrollSummary;
+import Model.Payslip;
+import Model.YearPeriod;
+import Service.PayrollCalculator;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.colors.DeviceRgb;

@@ -7,8 +7,8 @@ package Ui;
 import CustomTable.TableActionCellEditorV2;
 import CustomTable.TableActionCellRendererV2;
 import CustomTable.TableActionEventV2;
-import Domains.LeaveRequest;
-import Model.AttendanceDAO;
+import Model.LeaveRequest;
+import Dao.AttendanceDAO;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -23,8 +23,8 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import Model.Employee;
 import Model.HR;
-import Model.LeaveDAO;
-import Model.LeaveService;
+import Dao.LeaveDAO;
+import Service.LeaveService;
 import java.sql.SQLException;
 /**
  *

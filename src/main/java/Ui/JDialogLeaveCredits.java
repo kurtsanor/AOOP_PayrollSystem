@@ -3,8 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package Ui;
-import Domains.LeaveBalance;
-import Model.LeaveCreditsDAO;
+import Model.LeaveBalance;
+import Dao.LeaveCreditsDAO;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 /**

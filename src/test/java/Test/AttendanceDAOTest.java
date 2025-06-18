@@ -4,9 +4,9 @@
  */
 package Test;
 
-import Domains.AttendanceRecord;
-import Domains.YearPeriod;
-import Model.AttendanceDAO;
+import Model.AttendanceRecord;
+import Model.YearPeriod;
+import Dao.AttendanceDAO;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import java.sql.SQLException;

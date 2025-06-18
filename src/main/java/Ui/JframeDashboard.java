@@ -4,21 +4,21 @@
  */
 package Ui;
 
-import Domains.YearPeriod;
+import Model.YearPeriod;
 import Model.Employee;
-import Model.EmployeeDAO;
+import Dao.EmployeeDAO;
 import java.time.LocalDate;
-import Model.AttendanceDAO;
+import Dao.AttendanceDAO;
 import Model.Finance;
 import Model.HR;
-import Model.HoursCalculator;
+import Service.HoursCalculator;
 import Model.IT;
 import Model.RegularEmployee;
-import Domains.AttendanceRecord;
-import Domains.LeaveBalance;
-import Model.CredentialsDAO;
-import Model.LeaveCreditsDAO;
-import Model.LeaveDAO;
+import Model.AttendanceRecord;
+import Model.LeaveBalance;
+import Dao.CredentialsDAO;
+import Dao.LeaveCreditsDAO;
+import Dao.LeaveDAO;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.time.LocalDateTime;

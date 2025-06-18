@@ -5,7 +5,7 @@
 package Test;
 
 import Model.Employee;
-import Model.EmployeeDAO;
+import Dao.EmployeeDAO;
 import Model.RegularEmployee;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -32,7 +32,7 @@ public class EmployeeTest {
     public void testGetEmployeeByID() throws SQLException {
         Employee employee = dao.getEmployeeByID(10001);
         assertEquals( "Garcia", employee.getLastName());
-        assertEquals(employee.getHourlyRate(), 535.71);
+        assertEquals(535.71, employee.getHourlyRate());
         assertNotNull(employee);
     }
     
@@ -85,7 +85,7 @@ public class EmployeeTest {
         originalEmployee.getPhoneAllowance(),
         originalEmployee.getClothingAllowance(),
         originalEmployee.getGrossSemiMonthlyRate());
-        
+
         // edit selected employee details
         boolean isEditSuccessful = dao.editEmployee(10001, updatedEmployee);
         assertTrue(isEditSuccessful, "Employee should be edited");

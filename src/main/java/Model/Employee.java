@@ -1,9 +1,10 @@
 package Model;
 
-import Domains.AttendanceRecord;
-import Domains.LeaveRequest;
-import Domains.Payslip;
-import Domains.YearPeriod;
+import Service.PayrollCalculator;
+import Service.HoursCalculator;
+import Service.DeductionCalculator;
+import Dao.AttendanceDAO;
+import Dao.LeaveDAO;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;

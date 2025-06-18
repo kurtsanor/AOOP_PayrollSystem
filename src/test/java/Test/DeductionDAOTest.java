@@ -3,11 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Test;
-import Domains.PagibigMatrix;
-import Domains.PhilhealthMatrix;
-import Domains.SSSMatrix;
-import Domains.TaxMatrix;
-import Model.DeductionDAO;
+import Model.PagibigMatrix;
+import Model.PhilhealthMatrix;
+import Model.SSSMatrix;
+import Model.TaxMatrix;
+import Dao.DeductionDAO;
 import java.sql.SQLException;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;

@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Test;
-import Model.CredentialsDAO;
+import Dao.CredentialsDAO;
 import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
@@ -58,6 +58,9 @@ public class CredentialsDAOTest {
     public void testGetTotpSecretByEmployeeID() throws SQLException {
         String totpSecret = dao.getTotpSecretByEmployeeID(10006);
         assertNotNull(totpSecret, "Employee should have a totp secret");
+        
+        String totpSecret2 = dao.getTotpSecretByEmployeeID(10001);
+        assertNull(totpSecret2, "This employee should not have a totpSecret");
     }
     
     @Test
@@ -78,5 +81,28 @@ public class CredentialsDAOTest {
         
         String finalTotp = dao.getTotpSecretByEmployeeID(employeeID);
         assertEquals(originalTotp, finalTotp, "final totp should be equal to the original one");
+    }
+    
+    @Test
+    public void testRemove2FA() throws SQLException {
+        int employeeID = 10006;
+        String totpSecret = dao.getTotpSecretByEmployeeID(employeeID);
+        assertNotNull(totpSecret, "totpSecret should contain the secret");
+        
+        boolean isRemoved = dao.remove2FA(employeeID);
+        assertTrue(isRemoved, "totp secret should be removed");
+        
+        // check if totp is removed to confirm
+        String totpAfterRemove = dao.getTotpSecretByEmployeeID(employeeID);
+        assertNull(totpAfterRemove, "This should be null or empty");
+        
+        // reinsert the original totp
+        boolean isInserted = dao.updateTotpSecret(employeeID, totpSecret);
+        assertTrue(isInserted, "totp should be inserted successfully");
+        
+        String latestTotp = dao.getTotpSecretByEmployeeID(employeeID);
+        assertNotNull(latestTotp, "Should not be null");
+        
+        
     }
 }

@@ -4,17 +4,17 @@
  */
 package Ui;
 
-import Model.AttendanceProcessor;
+import Service.AttendanceProcessor;
 import Model.Employee;
-import Model.EmployeeDAO;
+import Dao.EmployeeDAO;
 import Model.Finance;
-import Model.PayrollCalculator;
-import Model.PayrollService;
-import Domains.EmployeeMonthlyHoursKey;
-import Domains.PayrollEntry;
-import Domains.PayrollSummary;
-import Domains.YearPeriod;
-import Model.AttendanceDAO;
+import Service.PayrollCalculator;
+import Service.PayrollService;
+import Model.EmployeeMonthlyHoursKey;
+import Model.PayrollEntry;
+import Model.PayrollSummary;
+import Model.YearPeriod;
+import Dao.AttendanceDAO;
 import Util.PdfProcessor;
 import java.awt.Desktop;
 import java.io.File;

@@ -4,8 +4,8 @@
  */
 package Ui;
 
-import Domains.LeaveBalance;
-import Domains.LeaveRequest;
+import Model.LeaveBalance;
+import Model.LeaveRequest;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,8 +16,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import Model.Employee;
-import Model.LeaveCreditsDAO;
-import Model.LeaveRequestValidator;
+import Dao.LeaveCreditsDAO;
+import Service.LeaveRequestValidator;
 import java.sql.SQLException;
 
 /**
