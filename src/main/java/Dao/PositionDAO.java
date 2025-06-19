@@ -6,6 +6,7 @@ package Dao;
 
 import Util.DatabaseConnection;
 import Model.Position;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.util.List;
 import java.sql.SQLException;
@@ -22,11 +23,10 @@ public class PositionDAO {
     
     public List<Position> getAllPositions () throws SQLException {
         List<Position> positions = new ArrayList<>();
-        String query = "SELECT positionID, positionName FROM position";
         
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement pst = connection.prepareStatement(query);
-             ResultSet rs = pst.executeQuery()) {
+             CallableStatement stmt = connection.prepareCall("CALL positionGetAll()");
+             ResultSet rs = stmt.executeQuery()) {
             
             while (rs.next()) {
                 positions.add(new Position(rs.getInt("positionID"), rs.getString("positionName")));

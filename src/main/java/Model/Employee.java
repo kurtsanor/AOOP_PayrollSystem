@@ -5,6 +5,7 @@ import Service.HoursCalculator;
 import Service.DeductionCalculator;
 import Dao.AttendanceDAO;
 import Dao.LeaveDAO;
+import Service.PayrollService;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -118,34 +119,7 @@ public abstract class Employee implements EmployeeEssentials {
     
     @Override
     public Payslip viewPersonalSalary (YearPeriod period) {
-            AttendanceDAO attendanceDB = new AttendanceDAO();
-            double empWorkHours = HoursCalculator.calculateTotalHoursByPeriod(getID(), period, attendanceDB);
-            double empBasicSalary = getHourlyRate() * empWorkHours;
-            double totalAllowance = getRiceSubsidy() + getPhoneAllowance() + getClothingAllowance();
-            double grossPay = PayrollCalculator.getGrossSalary(empBasicSalary, totalAllowance);
-            double taxableIncome = PayrollCalculator.getTaxableIncome(grossPay);
-            double sssDeduction = DeductionCalculator.getSssContribution(grossPay);
-            double philhealthDeduction = DeductionCalculator.getPhilhealthContribution(grossPay);
-            double taxDeduction = DeductionCalculator.getTaxContribution(taxableIncome);
-            double pagibigDeduction = DeductionCalculator.getPagibigContribution(grossPay);
-            double netPay = PayrollCalculator.getNetSalary(grossPay);
-           
-            Payslip payslip = new Payslip(
-                this, 
-                period,
-                empWorkHours,
-                empBasicSalary, 
-                sssDeduction, 
-                philhealthDeduction, 
-                taxDeduction, 
-                pagibigDeduction,
-                grossPay,    
-                netPay,
-                getRiceSubsidy(),
-                getPhoneAllowance(),
-                getClothingAllowance());
-            
-            return payslip;                   
+        return PayrollService.calculateSalary(this, period);
     }
     
     @Override

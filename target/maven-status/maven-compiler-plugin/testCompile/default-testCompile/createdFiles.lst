@@ -1,7 +1,10 @@
+Test\LeaveDAOTest$1.class
 Test\AttendanceDAOTest.class
 Test\DeductionDAOTest.class
-Test\EmployeeTest.class
 Test\DeductionCalculatorTest.class
+Test\EmployeeDAOTest.class
 Test\HoursCalculatorTest.class
+Test\PositionDAOTest.class
 Test\CredentialsDAOTest.class
 Test\LeaveDAOTest.class
+Test\LeaveCreditsDAOTest.class

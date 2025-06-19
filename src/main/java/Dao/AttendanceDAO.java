@@ -134,11 +134,12 @@ public class AttendanceDAO {
     }
     
     public boolean insertLeaveAttendance(int employeeID, LocalDate start, LocalDate end) throws SQLException {
+        // if an employee's leave is approved, it is equivalent to 1 day of work (8 hours)
         LocalTime timeIn = LocalTime.of(8, 0);
         LocalTime timeOut = LocalTime.of(16, 0);
         try (Connection connection = DatabaseConnection.getConnection();
              CallableStatement stmt = connection.prepareCall("CALL attendanceInsertLeaveAttendance(?, ?, ?, ?)")){
-            
+            // loop through the start and end dates and insert 8 hours for each date
             for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) {
                 stmt.setInt(1, employeeID);
                 stmt.setDate(2, Date.valueOf(date));

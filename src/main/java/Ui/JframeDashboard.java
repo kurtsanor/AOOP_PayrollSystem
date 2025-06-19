@@ -474,6 +474,11 @@ public class JframeDashboard extends javax.swing.JFrame {
         jButtonEditProfile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/pencil.png"))); // NOI18N
         jButtonEditProfile.setText("Edit my profile");
         jButtonEditProfile.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButtonEditProfile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditProfileActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -1087,6 +1092,11 @@ public class JframeDashboard extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_jButtonEnable2FAActionPerformed
+
+    private void jButtonEditProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditProfileActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jButtonEditProfileActionPerformed
 
     /**
      * @param args the command line arguments

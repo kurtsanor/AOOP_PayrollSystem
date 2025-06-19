@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
  *
  * @author admin
  */
-public class EmployeeTest {
+public class EmployeeDAOTest {
     
     private static EmployeeDAO dao;
     

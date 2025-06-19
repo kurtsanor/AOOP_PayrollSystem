@@ -4,11 +4,13 @@
  */
 package Service;
 
+import Dao.AttendanceDAO;
 import Model.EmployeeMonthlyHoursKey;
 import Model.PayrollEntry;
 import Model.PayrollSummary;
 import Model.YearPeriod;
 import Model.Employee;
+import Model.Payslip;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -64,6 +66,37 @@ public class PayrollService {
         }
         
         return new PayrollSummary(totalGrossIncome, totalSSS, totalPhilhealth, totalPagibig, totalTax, totalNetPay);
+    }
+    
+    public static Payslip calculateSalary(Employee employee, YearPeriod period) {
+        AttendanceDAO attendanceDB = new AttendanceDAO();
+            double empWorkHours = HoursCalculator.calculateTotalHoursByPeriod(employee.getID(), period, attendanceDB);
+            double empBasicSalary = employee.getHourlyRate() * empWorkHours;
+            double totalAllowance = employee.getRiceSubsidy() + employee.getPhoneAllowance() + employee.getClothingAllowance();
+            double grossPay = PayrollCalculator.getGrossSalary(empBasicSalary, totalAllowance);
+            double taxableIncome = PayrollCalculator.getTaxableIncome(grossPay);
+            double sssDeduction = DeductionCalculator.getSssContribution(grossPay);
+            double philhealthDeduction = DeductionCalculator.getPhilhealthContribution(grossPay);
+            double taxDeduction = DeductionCalculator.getTaxContribution(taxableIncome);
+            double pagibigDeduction = DeductionCalculator.getPagibigContribution(grossPay);
+            double netPay = PayrollCalculator.getNetSalary(grossPay);
+           
+            Payslip payslip = new Payslip(
+                employee, 
+                period,
+                empWorkHours,
+                empBasicSalary, 
+                sssDeduction, 
+                philhealthDeduction, 
+                taxDeduction, 
+                pagibigDeduction,
+                grossPay,    
+                netPay,
+                employee.getRiceSubsidy(),
+                employee.getPhoneAllowance(),
+                employee.getClothingAllowance());
+            
+            return payslip;
     }
     
 }

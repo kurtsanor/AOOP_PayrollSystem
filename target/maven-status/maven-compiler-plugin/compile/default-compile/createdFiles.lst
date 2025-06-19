@@ -6,6 +6,7 @@ Service\PayrollCalculator.class
 Ui\JframePayslip$3.class
 Ui\JframeEmpManagement$1.class
 Service\EmployeeFactory.class
+Ui\JframeDashboard$15.class
 Ui\JframeAttendanceManagement.class
 Ui\JframeDashboard$12.class
 Model\YearPeriod.class
