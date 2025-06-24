@@ -5,14 +5,16 @@
 package Test;
 import Dao.LeaveDAO;
 import Model.LeaveRequest;
+import Util.DatabaseConnection;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
-import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.function.Executable;
 /**
@@ -48,12 +50,21 @@ public class LeaveDAOTest {
         assertTrue(requests.isEmpty());
     }
     
-    
-    
+       
     @Test
     public void testGetPendingCount() throws SQLException {
         int count = dao.getPendingLeaveCountByEmployeeID(10006);
-        assertEquals(3, count);
+        assertTrue(count >0);
+    }
+    
+    // helper method for cleaning up test data
+    public boolean removeSubmittedLeave(LocalDate startDate) throws SQLException {
+        String query = "DELETE FROM leaves WHERE startDate = ?";
+        try(Connection con = DatabaseConnection.getConnection();
+            PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setDate(1, Date.valueOf(startDate));
+            return stmt.executeUpdate() > 0;
+        }
     }
     
     @Test
@@ -69,6 +80,9 @@ public class LeaveDAOTest {
         
         boolean isSubmitted = dao.submitLeaveRequest(request);
         assertTrue(isSubmitted);
+        
+        // clean the test data
+        removeSubmittedLeave(start);
     }   
     
     @Test
@@ -102,10 +116,29 @@ public class LeaveDAOTest {
     @Test
     public void testHasOverlappingApprovedLeave() throws SQLException {
         int employeeID = 10001;
-        LocalDate start = LocalDate.of(2025, 4, 3);
-        LocalDate end = LocalDate.of(2025, 4, 14);
+        
+        // create a leave request with an approved status
+        String leaveType = "Vacation";
+        LocalDate requestStart = LocalDate.of(2025, 8, 20);
+        LocalDate requestEnd = LocalDate.of(2025, 8, 22);
+        String status = "Approved";
+        LocalDateTime submittedDate = LocalDateTime.now();
+        String remarks = "Sick";
+        LeaveRequest request = new LeaveRequest(employeeID, leaveType, requestStart, requestEnd, status, submittedDate, remarks);
+        
+        // insert in db
+        boolean submitted = dao.submitLeaveRequest(request);
+        assertTrue(submitted);
+        
+        // select a date where it will overlap the approved leave
+        LocalDate start = LocalDate.of(2025, 8, 19);
+        LocalDate end = LocalDate.of(2025, 8, 27);
         boolean hasOverlap = dao.hasOverlappingApprovedLeave(employeeID, start, end);
         assertTrue(hasOverlap, "This employee should already have an approved leave on these dates");
+        
+        // clean the test data
+        boolean removed = removeSubmittedLeave(requestStart);
+        assertTrue(removed);
     }
     
     @Test

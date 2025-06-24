@@ -4,6 +4,7 @@
  */
 package Test;
 import Dao.CredentialsDAO;
+import Service.TwoFactorAuthService;
 import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
@@ -15,22 +16,23 @@ import org.junit.jupiter.api.Test;
 public class CredentialsDAOTest {
     
     private static CredentialsDAO dao;
+    private static int employeeID;
     
     @BeforeAll
     public static void setUp() {
         dao = new CredentialsDAO();
+        employeeID = 10001;
     }
     
     @Test
     public void testGetAuthenticatedID() throws SQLException {
         int authenticatedEmployeeID = dao.getAuthenticatedID("Garcia", "123");
-        assertEquals(10001, authenticatedEmployeeID);
+        assertEquals(employeeID, authenticatedEmployeeID);
         assertTrue(authenticatedEmployeeID != -1, "Employe id of Garcia should not be -1");
     }
     
     @Test
     public void testIsEmployeePasswordCorrect() throws SQLException {
-        int employeeID = 10001;
         String password = "123";
         boolean isCorrect = dao.isEmployeePasswordCorrect(employeeID, password);
         assertTrue(isCorrect, "Password should be correct (123)");
@@ -39,7 +41,6 @@ public class CredentialsDAOTest {
     @Test
     public void testUpdatePasswordByEmployeeID() throws SQLException {
         String originalPassword = "123";
-        int employeeID = 10001;
         String newPassword = "newpassword";
         boolean isUpdated = dao.updatePasswordByEmployeeID(employeeID, newPassword);
         assertTrue(isUpdated, "Password should be updated");
@@ -50,22 +51,44 @@ public class CredentialsDAOTest {
     
     @Test
     public void testHas2FAEnabled() throws SQLException {
-        boolean isEnabled = dao.has2FAEnabled(10006);
+        //enable 2fa for the employee
+        String totpSecret =  TwoFactorAuthService.generateSecretKey();
+        boolean updated  = dao.updateTotpSecret(employeeID, totpSecret);
+        assertTrue(updated);
+        
+        // test if enabled
+        boolean isEnabled = dao.has2FAEnabled(employeeID);
         assertTrue(isEnabled, "Employee should have enabled 2fa");
+        
+        // remove  the totp secret after testing
+        boolean removed = dao.remove2FA(employeeID);
+        assertTrue(removed);
     }
     
     @Test
     public void testGetTotpSecretByEmployeeID() throws SQLException {
-        String totpSecret = dao.getTotpSecretByEmployeeID(10006);
-        assertNotNull(totpSecret, "Employee should have a totp secret");
+        //enable 2fa for the employee
+        String totpSecret =  TwoFactorAuthService.generateSecretKey();
+        boolean updated  = dao.updateTotpSecret(employeeID, totpSecret);
+        assertTrue(updated);
         
-        String totpSecret2 = dao.getTotpSecretByEmployeeID(10001);
-        assertNull(totpSecret2, "This employee should not have a totpSecret");
+        // check if totp secret exists after enabling
+        String secret = dao.getTotpSecretByEmployeeID(employeeID);
+        assertNotNull(secret);
+        assertTrue(!secret.isBlank());
+        
+        // remove  the totp secret after testing
+        boolean removed = dao.remove2FA(employeeID);
+        assertTrue(removed);
     }
     
     @Test
-    public void updateTotpSecret() throws SQLException {
-        int employeeID = 10006;
+    public void testUpdateTotpSecret() throws SQLException {
+        //enable 2fa for the employee
+        String totpSecret =  TwoFactorAuthService.generateSecretKey();
+        boolean updated  = dao.updateTotpSecret(employeeID, totpSecret);
+        assertTrue(updated);
+        
         String originalTotp = dao.getTotpSecretByEmployeeID(employeeID);
         assertNotNull(originalTotp, "Employee should have a totp secret");
         
@@ -81,28 +104,33 @@ public class CredentialsDAOTest {
         
         String finalTotp = dao.getTotpSecretByEmployeeID(employeeID);
         assertEquals(originalTotp, finalTotp, "final totp should be equal to the original one");
+        
+        // remove after testing
+        boolean removed = dao.remove2FA(employeeID);
+        assertTrue(removed);
     }
     
     @Test
     public void testRemove2FA() throws SQLException {
-        int employeeID = 10006;
-        String totpSecret = dao.getTotpSecretByEmployeeID(employeeID);
-        assertNotNull(totpSecret, "totpSecret should contain the secret");
+        //enable 2fa for the employee
+        String totpSecret =  TwoFactorAuthService.generateSecretKey();
+        boolean updated  = dao.updateTotpSecret(employeeID, totpSecret);
+        assertTrue(updated);
         
-        boolean isRemoved = dao.remove2FA(employeeID);
-        assertTrue(isRemoved, "totp secret should be removed");
+        // check if secret exist
+        String secret = dao.getTotpSecretByEmployeeID(employeeID);
+        assertNotNull(secret);
+        assertTrue(!secret.isBlank());
         
-        // check if totp is removed to confirm
-        String totpAfterRemove = dao.getTotpSecretByEmployeeID(employeeID);
-        assertNull(totpAfterRemove, "This should be null or empty");
-        
-        // reinsert the original totp
-        boolean isInserted = dao.updateTotpSecret(employeeID, totpSecret);
-        assertTrue(isInserted, "totp should be inserted successfully");
-        
-        String latestTotp = dao.getTotpSecretByEmployeeID(employeeID);
-        assertNotNull(latestTotp, "Should not be null");
-        
-        
+        // test the remove
+       boolean removed = dao.remove2FA(employeeID);
+        assertTrue(removed);
+       
+       // confirm if the secret isremvoed from the employee
+       String secretAfterRemoving = dao.getTotpSecretByEmployeeID(employeeID);
+       assertNull(secretAfterRemoving);
     }
+    
+
+        
 }

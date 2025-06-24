@@ -1,8 +1,5 @@
 package Model;
 
-import Service.PayrollCalculator;
-import Service.HoursCalculator;
-import Service.DeductionCalculator;
 import Dao.AttendanceDAO;
 import Dao.LeaveDAO;
 import Service.PayrollService;

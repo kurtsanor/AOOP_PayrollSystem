@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import Service.DeductionCalculator;
+import Service.PayrollCalculator;
 /**
  *
  * @author admin
@@ -35,14 +36,33 @@ public class DeductionCalculatorTest {
     
     @Test
     public void testGetTaxContribution() {
-        double sss = DeductionCalculator.getSssContribution(SALARY);
-        double philhealth = DeductionCalculator.getPhilhealthContribution(SALARY);
-        double pagibig = DeductionCalculator.getPagibigContribution(SALARY);
-        
-        double taxableIncome = SALARY - (sss + philhealth + pagibig);
+        double taxableIncome = PayrollCalculator.getTaxableIncome(SALARY);
         
         double contribution = DeductionCalculator.getTaxContribution(taxableIncome);
         assertEquals(513.4, contribution);
+    }
+    @Test
+    public void testSSSContributionInvalidSalary() {
+        double contribution = DeductionCalculator.getSssContribution(-1000);
+        assertEquals(-1, contribution, "Negative salary should return -1 from SSS");
+    }
+
+    @Test
+    public void testPhilhealthContributionInvalidSalary() {
+        double contribution = DeductionCalculator.getPhilhealthContribution(-1000);
+        assertEquals(-1, contribution, "Negative salary should return -1 from PhilHealth");
+    }
+
+    @Test
+    public void testTaxContributionInvalidSalary() {
+        double contribution = DeductionCalculator.getTaxContribution(-10000);
+        assertEquals(-1, contribution, "Negative salary should return -1 from Tax");
+    }
+
+    @Test
+    public void testPagibigContributionZero() {
+        double contribution = DeductionCalculator.getPagibigContribution(0);
+        assertEquals(0, contribution, "Zero salary should return 0 Pag-IBIG");
     }
         
 }

@@ -21,10 +21,13 @@ import Dao.LeaveCreditsDAO;
 import Dao.LeaveDAO;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Desktop;
+import java.net.URI;
 import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 import java.sql.SQLException;
 import java.util.List;
+import javax.swing.ToolTipManager;
 import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -48,7 +51,8 @@ public class JframeDashboard extends javax.swing.JFrame {
      */
     private Employee loggedEmployee;
     private DefaultTableModel attendancetbl;
-    public JframeDashboard(int employeeID) {
+    public JframeDashboard(int employeeID) {       
+        ToolTipManager.sharedInstance().setInitialDelay(0); // set delay of tooltips to appear to 0ms
         initComponents();
         attendancetbl = (DefaultTableModel) jTableAttendanceLogs.getModel();
         setExtendedState(MAXIMIZED_BOTH);
@@ -326,7 +330,7 @@ public class JframeDashboard extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jButtonEnable2FA = new javax.swing.JButton();
         jButtonChangePassword = new javax.swing.JButton();
-        jButtonEditProfile = new javax.swing.JButton();
+        jButtonAboutMotorPh = new javax.swing.JButton();
         jButtonAttendance = new javax.swing.JButton();
         jButtonPayslip = new javax.swing.JButton();
         jButtonLeave = new javax.swing.JButton();
@@ -470,13 +474,13 @@ public class JframeDashboard extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         jPanel3.add(jButtonChangePassword, gridBagConstraints);
 
-        jButtonEditProfile.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButtonEditProfile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/pencil.png"))); // NOI18N
-        jButtonEditProfile.setText("Edit my profile");
-        jButtonEditProfile.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jButtonEditProfile.addActionListener(new java.awt.event.ActionListener() {
+        jButtonAboutMotorPh.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButtonAboutMotorPh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/info.png"))); // NOI18N
+        jButtonAboutMotorPh.setText("About MotorPH");
+        jButtonAboutMotorPh.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButtonAboutMotorPh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonEditProfileActionPerformed(evt);
+                jButtonAboutMotorPhActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -486,7 +490,7 @@ public class JframeDashboard extends javax.swing.JFrame {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        jPanel3.add(jButtonEditProfile, gridBagConstraints);
+        jPanel3.add(jButtonAboutMotorPh, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1093,10 +1097,14 @@ public class JframeDashboard extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jButtonEnable2FAActionPerformed
 
-    private void jButtonEditProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditProfileActionPerformed
+    private void jButtonAboutMotorPhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAboutMotorPhActionPerformed
         // TODO add your handling code here:
-        
-    }//GEN-LAST:event_jButtonEditProfileActionPerformed
+        try {
+        Desktop.getDesktop().browse(new URI("https://sites.google.com/mmdc.mcl.edu.ph/motorph/about-us?authuser=0"));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_jButtonAboutMotorPhActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1104,12 +1112,12 @@ public class JframeDashboard extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonAboutMotorPh;
     private javax.swing.JButton jButtonAttendance;
     private javax.swing.JButton jButtonAttendanceManagement;
     private javax.swing.JButton jButtonChangePassword;
     private javax.swing.JButton jButtonClockIn;
     private javax.swing.JButton jButtonClockOut;
-    private javax.swing.JButton jButtonEditProfile;
     private javax.swing.JButton jButtonEmployeeManagement;
     private javax.swing.JButton jButtonEnable2FA;
     private javax.swing.JButton jButtonLeave;
