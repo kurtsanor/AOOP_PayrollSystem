@@ -54,9 +54,9 @@ public class EmployeeDAOTest {
                 "Regular",
                 LocalDate.of(2003, 05, 23),
                 "Default Address",
-                "123-123-123",
-                "123",
-                "123", "123", 123, "123", "IT", 10001, 123, 123, 123, 123, 123);
+                "123-456-789", 
+                "12-1234567-1",
+                "123456789123", "123-123-123-123", 123, "123456789123", "IT", 10001, 123, 123, 123, 123, 123);
     }
 
     @Test
@@ -172,6 +172,97 @@ public class EmployeeDAOTest {
 
         Employee deletedEmployee = dao.getEmployeeByID(lastInsertedId);
         assertNull(deletedEmployee, "Employee should not exist");
+    }
+    
+    @Test
+    public void testDuplicatedPhoneNumber() throws SQLException {
+        // create a dummy employee with a phone number of "123-456-789"
+        Employee employee = createDummyEmployee();
+        boolean inserted = dao.addEmployee(employee);
+        assertTrue(inserted);
+        
+        String phoneNumber = "123-456-789";
+        
+        boolean isExisting = dao.isExistingPhoneNumber(phoneNumber, null);
+        assertTrue(isExisting);
+        
+        // delete the dummy data employee
+        int lastInsertedId = getLastInsertedEmployeeID();
+        boolean deleted = dao.deleteEmployee(lastInsertedId);
+        assertTrue(deleted);
+    }
+    
+    @Test
+    public void testDuplicatedSssNumber() throws SQLException {
+        // create a dummy employee with an sss number of "12-1234567-1"
+        Employee employee = createDummyEmployee();
+        boolean inserted = dao.addEmployee(employee);
+        assertTrue(inserted);
+        
+        String sssNumber = "12-1234567-1";
+        
+        boolean isExisting = dao.isExistingSssNumber(sssNumber, null);
+        assertTrue(isExisting);
+        
+        // delete the dummy data employee
+        int lastInsertedId = getLastInsertedEmployeeID();
+        boolean deleted = dao.deleteEmployee(lastInsertedId);
+        assertTrue(deleted);
+        
+    }
+    
+    @Test
+    public void testDuplicatedPhilhealthNumber() throws SQLException {
+        // create a dummy employee with a philhealth number of "123456789123"
+        Employee employee = createDummyEmployee();
+        boolean inserted = dao.addEmployee(employee);
+        assertTrue(inserted);
+        
+        String philhealthNumber = "123456789123";
+        
+        boolean isExisting = dao.isExistingPhilhealthNumber(philhealthNumber, null);
+        assertTrue(isExisting);
+        
+        // delete the dummy data employee
+        int lastInsertedId = getLastInsertedEmployeeID();
+        boolean deleted = dao.deleteEmployee(lastInsertedId);
+        assertTrue(deleted);
+    }
+    
+    @Test
+    public void testDuplicatedPagibigNumber() throws SQLException {
+        // create a dummy employee with a pagibig number of "123456789123"
+        Employee employee = createDummyEmployee();
+        boolean inserted = dao.addEmployee(employee);
+        assertTrue(inserted);
+        
+        String pagibigNumber = "123456789123";
+        
+        boolean isExisting = dao.isExistingPagibigNumber(pagibigNumber, null);
+        assertTrue(isExisting);
+        
+        // delete the dummy data employee
+        int lastInsertedId = getLastInsertedEmployeeID();
+        boolean deleted = dao.deleteEmployee(lastInsertedId);
+        assertTrue(deleted);
+    }
+    
+    @Test
+    public void testDuplicatedTinNumber() throws SQLException {
+        // create a dummy employee with a Tin number of "123-123-123-123"
+        Employee employee = createDummyEmployee();
+        boolean inserted = dao.addEmployee(employee);
+        assertTrue(inserted);
+        
+        String tinNumber = "123-123-123-123";
+        
+        boolean isExisting = dao.isExistingTinNumber(tinNumber, null);
+        assertTrue(isExisting);
+        
+        // delete the dummy data employee
+        int lastInsertedId = getLastInsertedEmployeeID();
+        boolean deleted = dao.deleteEmployee(lastInsertedId);
+        assertTrue(deleted);
     }
 
     // helper method for test data clean up

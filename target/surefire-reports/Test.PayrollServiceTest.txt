@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: Test.PayrollServiceTest
 -------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.023 s - in Test.PayrollServiceTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.013 s - in Test.PayrollServiceTest

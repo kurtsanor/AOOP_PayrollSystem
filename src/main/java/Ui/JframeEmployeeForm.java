@@ -28,7 +28,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
      * Creates new form JframeEmployeeForm
      */
     private Employee loggedEmployee;
-    private int employeeIdToEdit;
+    private Integer employeeIdToEdit;
     private boolean isAdding;
     private HR hrEmployee;
     private SimpleDateFormat dateFormat;
@@ -188,7 +188,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         if (!errorMessage.isBlank()) { validEmployee = false;}
         setBirthdayErrorMessage(errorMessage);
         
-        errorMessage = EmployeeValidator.validatePhoneNumberWithMessage(jTextFieldPhoneNumber.getText());
+        errorMessage = EmployeeValidator.validatePhoneNumberWithMessage(jTextFieldPhoneNumber.getText(), employeeIdToEdit);
         if (!errorMessage.isBlank()) { validEmployee = false;}
         setPhoneNumberErrorMessage(errorMessage);
         
@@ -220,19 +220,19 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         if (!errorMessage.isBlank()) { validEmployee = false;}
         setPhoneAllowanceErrorMessage(errorMessage);
         
-        errorMessage = EmployeeValidator.validateSssNumber(jTextFieldSssNumber.getText());
+        errorMessage = EmployeeValidator.validateSssNumber(jTextFieldSssNumber.getText(), employeeIdToEdit);
         if (!errorMessage.isBlank()) { validEmployee = false;}
         setSssNumberErrorMessage(errorMessage);
         
-        errorMessage = EmployeeValidator.validatePhilhealthWithMessage(jTextFieldPhilhealthNumber.getText());
+        errorMessage = EmployeeValidator.validatePhilhealthWithMessage(jTextFieldPhilhealthNumber.getText(), employeeIdToEdit);
         if (!errorMessage.isBlank()) { validEmployee = false;}
         setPhilhealthErrorMessage(errorMessage);
         
-        errorMessage = EmployeeValidator.validatePagibigWithMessage(jTextFieldPagibigNumber.getText());
+        errorMessage = EmployeeValidator.validatePagibigWithMessage(jTextFieldPagibigNumber.getText(), employeeIdToEdit);
         if (!errorMessage.isBlank()) { validEmployee = false;}
         setPagibigErrorMessage(errorMessage);
         
-        errorMessage = EmployeeValidator.validateTinWithMessage(jTextFieldTinNumber.getText());
+        errorMessage = EmployeeValidator.validateTinWithMessage(jTextFieldTinNumber.getText(), employeeIdToEdit);
         if (!errorMessage.isBlank()) { validEmployee = false;}
         setTinErrorMessage(errorMessage);
          

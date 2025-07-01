@@ -5,7 +5,6 @@
 package com.mycompany.aoop_payrollsystem;
 
 import Ui.JframeLogin;
-import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;

@@ -4,6 +4,8 @@
  */
 package Service;
 
+import Dao.EmployeeDAO;
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 /**
@@ -17,10 +19,14 @@ public class EmployeeValidator {
     private static final int PHILHEALTH_NUMBER_MAX_CHAR = 12;
     private static final int PAGIBIG_NUMBER_MAX_CHAR = 12;
     private static final int TIN_NUMBER_MAX_CHAR = 15;
+    private static final int NAME_MAX_CHAR = 50;
     
     public static String validateFirstNameWithMessage (String firstName) {
         if (firstName == null || firstName.trim().isBlank()) {
             return "This is required";
+        }
+        if (firstName.length() > NAME_MAX_CHAR) {
+            return "Cannot exceed more than " + NAME_MAX_CHAR + " characters";
         }
         if (containsNumbers(firstName)) {
             return "Name cannot contain numbers";
@@ -40,6 +46,9 @@ public class EmployeeValidator {
     public static String validateLastNameWithMessage (String lastName) {
         if (lastName == null || lastName.trim().isBlank()) {
             return "This is required";
+        }
+        if (lastName.length() > NAME_MAX_CHAR) {
+            return "Cannot exceed more than " + NAME_MAX_CHAR + " characters";
         }
         if (containsNumbers(lastName)) {
             return "Name cannot contain numbers";
@@ -65,7 +74,7 @@ public class EmployeeValidator {
     
     
     
-    public static String validatePhoneNumberWithMessage (String phoneNumber) {
+    public static String validatePhoneNumberWithMessage (String phoneNumber, Integer excludeEmployeeID) {
         if (phoneNumber == null || phoneNumber.isBlank()) {
             return "This is required";
         }
@@ -88,11 +97,26 @@ public class EmployeeValidator {
         if (phoneNumber.charAt(3) != '-' || phoneNumber.charAt(7) != '-' || hyphenCount != 2 || digitCount != 9) {
             return "Invalid format (e.g., 123-123-123)";
         }
+        
+        if (isExistingPhoneNumber(phoneNumber, excludeEmployeeID)) {
+            return "Phone number already exists";
+        }
+        
         return "";
     }
     
+    private static boolean isExistingPhoneNumber(String phoneNumber, Integer excludeEmployeeID) {
+        try {
+            EmployeeDAO dao = new EmployeeDAO();
+            return dao.isExistingPhoneNumber(phoneNumber, excludeEmployeeID);
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }     
+    }
     
-    
+       
     public static String validateAddressWithMessage (String address) {
         if (address == null || address.isBlank()) {
             return "This is required";
@@ -119,7 +143,7 @@ public class EmployeeValidator {
     
     
     
-    public static String validateSssNumber (String sssNumber) {
+    public static String validateSssNumber (String sssNumber, Integer excludeEmployeeID) {
         if (sssNumber == null || sssNumber.isBlank()) {
             return "This is required";
         }
@@ -143,12 +167,26 @@ public class EmployeeValidator {
         if (sssNumber.charAt(2) != '-' || sssNumber.charAt(10) != '-' || hyphenCount != 2 || digitCount != 10) {
             return "Invalid format (e.g., 12-1234567-1)";
         }
+        
+        if (isExistingSssNumber(sssNumber, excludeEmployeeID)) {
+            return "SSS number already exists";
+        }
+        
         return "";
     }
     
-    
-    
-    public static String validatePhilhealthWithMessage (String philhealthNumber) {
+    private static boolean isExistingSssNumber(String sssNumber, Integer excludeEmployeeID) {
+        try {
+            EmployeeDAO dao = new EmployeeDAO();
+            return dao.isExistingSssNumber(sssNumber, excludeEmployeeID);
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }     
+    }
+   
+    public static String validatePhilhealthWithMessage (String philhealthNumber, Integer excludeEmployeeID) {
         if (philhealthNumber == null || philhealthNumber.isBlank()) {
             return "This is required";
         }
@@ -162,10 +200,26 @@ public class EmployeeValidator {
                return "Must contain digits only";
            }
         }
+        
+        if (isExistingPhilhealthNumber(philhealthNumber, excludeEmployeeID)) {
+            return "Philhealth number already exists";
+        }
+        
         return "";
     }
     
-    public static String validatePagibigWithMessage (String pagibigNumber) {
+    private static boolean isExistingPhilhealthNumber(String philhealthNumber, Integer excludeEmployeeID) {
+        try {
+            EmployeeDAO dao = new EmployeeDAO();
+            return dao.isExistingPhilhealthNumber(philhealthNumber, excludeEmployeeID);
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }     
+    }
+    
+    public static String validatePagibigWithMessage (String pagibigNumber, Integer excludeEmployeeID) {
         if (pagibigNumber == null || pagibigNumber.isBlank()) {
             return "This is required";
         }
@@ -179,11 +233,27 @@ public class EmployeeValidator {
                return "Must contain digits only";
            }
         }
+        
+        if (isExistingPagibigNumber(pagibigNumber, excludeEmployeeID)) {
+            return "Pagibig number already exist";
+        }
+        
         return "";
     }
     
+    private static boolean isExistingPagibigNumber(String pagibigNumber, Integer excludeEmployeeID) {
+        try {
+            EmployeeDAO dao = new EmployeeDAO();
+            return dao.isExistingPagibigNumber(pagibigNumber, excludeEmployeeID);
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }     
+    }
     
-    public static String validateTinWithMessage (String tinNumber) {
+    
+    public static String validateTinWithMessage (String tinNumber, Integer excludeEmployeeID) {
         if (tinNumber == null || tinNumber.isBlank()) {
             return "This is required";
         }
@@ -207,7 +277,23 @@ public class EmployeeValidator {
         if (tinNumber.charAt(3) != '-' || tinNumber.charAt(7) != '-' || tinNumber.charAt(11) != '-' || hyphenCount != 3 || digitCount != 12) {
             return "Invalid format (e.g., 123-123-123-123)";  
         }
+        
+        if (isExistingTinNumber(tinNumber, excludeEmployeeID)) {
+            return "TIN already exists";
+        }
+        
         return "";
+    }
+    
+    private static boolean isExistingTinNumber(String tinNumber, Integer excludeEmployeeID) {
+        try {
+            EmployeeDAO dao = new EmployeeDAO();
+            return dao.isExistingTinNumber(tinNumber, excludeEmployeeID);
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }     
     }
 
 }

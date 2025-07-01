@@ -258,4 +258,79 @@ public class EmployeeDAO {
         }
     } 
     
+    public boolean isExistingPhoneNumber(String phoneNumber, Integer excludeEmployeeID) throws SQLException {
+        try(Connection connection = DatabaseConnection.getConnection();
+            CallableStatement stmt = connection.prepareCall("CALL employeesIsExistingPhoneNumber(?,?)")) {
+            stmt.setString(1, phoneNumber);
+            stmt.setObject(2, excludeEmployeeID, Types.INTEGER);
+            
+            try(ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+            
+        } catch (SQLException e) {
+            throw new SQLException("Failed to check existing phone number", e);
+        }
+    }
+    
+    public boolean isExistingSssNumber(String sssNumber, Integer excludeEmployeeID) throws SQLException {
+        try(Connection connection = DatabaseConnection.getConnection();
+            CallableStatement stmt = connection.prepareCall("CALL govNumIsExistingSss(?,?)")) {
+            stmt.setString(1, sssNumber);
+            stmt.setObject(2, excludeEmployeeID, Types.INTEGER);
+            
+            try(ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+            
+        } catch (SQLException e) {
+            throw new SQLException("Failed to check existing sss number", e);
+        }
+    }
+    
+    public boolean isExistingPhilhealthNumber(String philhealthNumber, Integer excludeEmployeeID) throws SQLException {
+        try(Connection connection = DatabaseConnection.getConnection();
+            CallableStatement stmt = connection.prepareCall("CALL govNumIsExistingPhilhealth(?,?)")) {
+            stmt.setString(1, philhealthNumber);
+            stmt.setObject(2, excludeEmployeeID, Types.INTEGER);
+            
+            try(ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+            
+        } catch (SQLException e) {
+            throw new SQLException("Failed to check existing philhealth number", e);
+        }
+    }
+    
+    public boolean isExistingPagibigNumber(String pagibigNumber, Integer excludeEmployeeID) throws SQLException {
+        try(Connection connection = DatabaseConnection.getConnection();
+            CallableStatement stmt = connection.prepareCall("CALL govNumIsExistingPagibig(?,?)")) {
+            stmt.setString(1, pagibigNumber);
+            stmt.setObject(2, excludeEmployeeID, Types.INTEGER);
+            
+            try(ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+            
+        } catch (SQLException e) {
+            throw new SQLException("Failed to check existing pagibig number", e);
+        }
+    }
+    
+    public boolean isExistingTinNumber(String tinNumber, Integer excludeEmployeeID) throws SQLException {
+        try(Connection connection = DatabaseConnection.getConnection();
+            CallableStatement stmt = connection.prepareCall("CALL govNumIsExistingTin(?,?)")) {
+            stmt.setString(1, tinNumber);
+            stmt.setObject(2, excludeEmployeeID, Types.INTEGER);
+            
+            try(ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+            
+        } catch (SQLException e) {
+            throw new SQLException("Failed to check existing TIN number", e);
+        }
+    }
+    
 }

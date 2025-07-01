@@ -19,7 +19,7 @@ public class DeductionCalculator {
     private static List<PhilhealthMatrix> philhealthMatrix;
     private static List<PagibigMatrix> pagibigMatrix;
     private static List<TaxMatrix> taxMatrix;
-    
+         
     static {
         try {
             

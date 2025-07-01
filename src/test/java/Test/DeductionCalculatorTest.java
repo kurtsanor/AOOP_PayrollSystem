@@ -46,7 +46,7 @@ public class DeductionCalculatorTest {
         double contribution = DeductionCalculator.getSssContribution(-1000);
         assertEquals(-1, contribution, "Negative salary should return -1 from SSS");
     }
-
+    
     @Test
     public void testPhilhealthContributionInvalidSalary() {
         double contribution = DeductionCalculator.getPhilhealthContribution(-1000);
