@@ -86,7 +86,7 @@ public class EmployeeValidatorTest {
 
     @Test
     public void testValidateSssNumber_Valid() {
-        assertEquals("", EmployeeValidator.validateSssNumber("12-1234567-1,", null));
+        assertEquals("", EmployeeValidator.validateSssNumber("12-1234567-1", null));
     }
 
     @Test
