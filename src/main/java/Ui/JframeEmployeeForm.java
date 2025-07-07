@@ -17,6 +17,7 @@ import Model.RegularEmployee;
 import Model.Position;
 import java.sql.SQLException;
 import java.util.List;
+import javax.swing.JTextField;
 
 /**
  *
@@ -43,6 +44,7 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         initHrUser(loggedEmployee);
         populatecomboBoxWithPositions();
         populatecomboBoxWithEmployees();
+        configureDateChoosers();
     }
     // constructor for editing employee
     public JframeEmployeeForm (Employee loggedEmployee, int employeeIdToEdit) {
@@ -58,7 +60,11 @@ public class JframeEmployeeForm extends javax.swing.JFrame {
         populatecomboBoxWithPositions();
         populatecomboBoxWithEmployees();
         populateTextFields();
-        
+        configureDateChoosers();
+    }
+    
+    private void configureDateChoosers () {
+        ((JTextField) jDateChooserBirthday.getDateEditor().getUiComponent()).setEditable(false);
     }
     
     private void populatecomboBoxWithPositions() {
